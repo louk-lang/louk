@@ -65,7 +65,7 @@ Keys are shorthands that become common directives:
 
 `submit` becomes `v-on:submit`
 
-Keys starting with v-, including custom directives, will be left unchanged:
+Keys starting with `v-``, including custom directives, will be left unchanged:
 
 `v-show` becomes `v-show`
 
@@ -89,7 +89,7 @@ Escape characters are used to indicate static content, which Vue will render lit
 
 Some attributes have optional special escape characters:
 
-`.center` becomes `class="Center"`
+`.center` becomes `class="center"`
 
 `#install` becomes `id="install"`
 

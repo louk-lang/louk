@@ -1,7 +1,7 @@
-#Louk
+# Louk
 Vue without the HTML
 
-##Intro
+## Intro
 
 Vue is a beautiful technology, but it’s always felt a bit awkward crammed into old-school HTML. Louk is a tailor-made shorthand and preprocessor that hides the wonky stuff and lets Vue shine.
 
@@ -9,7 +9,7 @@ The key is that most things are interpreted as dynamic Vue entities (bound conte
 
 Louk runs on Node, and can compile standalone markup into HTML files (via command line or task runners like gulp) or embedded markup in single file templates (via module loaders such as webpack).
 
-##Installation
+## Installation
 
 ## Notation
 

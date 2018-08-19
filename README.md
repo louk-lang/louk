@@ -54,26 +54,36 @@ div string
 
 ### Keys
 Keys are shorthands that become common directives:
+
 `for` becomes `v-for`
+
 `if` becomes `v-if`
+
 `model` becomes `v-model`
+
 `click` becomes `v-on:click`
+
 `submit` becomes `v-on:submit`
 
 Keys starting with v-, including custom directives, will be left unchanged:
+
 `v-show` becomes `v-show`
+
 `v-custom` becomes `v-custom`
 
 All other keys become bound attributes:
+
 `class` becomes `v-bind:class`
+
 `href` becomes `v-bind:href`
+
 etc...
 
 ### Static content
 
 Escape characters are used to indicate static content, which Vue will render literally. Text can be escaped with a tilde:
 
-`~p Hello world!` Becomes `<p>Hello world!</p>`
+`~p Hello world!` becomes `<p>Hello world!</p>`
 
 `~type: text/css` becomes `type="text/css"`
 

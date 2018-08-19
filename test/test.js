@@ -42,5 +42,17 @@ describe("Louk", function(){
     it("should handle multiple consecutive closures", function(){
         assert.equal(louk('a\n\tb\n\t\tc\nd'),'<a><b><c></c></b></a><d></d>')
     })
+    it("should return an element with static content", function(){
+        assert.equal(louk('a\nclick: b'),'<a v-on:click="b"></a>')
+    })
+    it("should return an element with a click binding", function(){
+        assert.equal(louk('a\nclick: b'),'<a v-on:click="b"></a>')
+    })
+    it.skip("should return a self-closing element", function(){
+        assert.equal(louk('a|'),'<a/>')
+    })
+    it.skip("should return an element with static content", function(){
+        assert.equal(louk('a\n@b'),'<a href="b">')
+    })
 
 })

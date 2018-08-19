@@ -74,9 +74,11 @@ function objectifyLines(content){
 
     for(var index = 0; index < content.length; index++){
         var value = content[index]
-        objectifiedLines.push({
-            "raw":value
-        })
+        if(value != ""){
+            objectifiedLines.push({
+                "raw":value
+            })
+        }
     }
 
     return objectifiedLines
@@ -197,7 +199,9 @@ function assignMatches(content){
 
     for(var index = 0; index < remainingElements.length; index++){
         var value = remainingElements[index]
-        endElement.preceding.push((closingTag(value)))
+        if(value){
+            endElement.preceding.push((closingTag(value)))
+        }
     }
 
     //Add the special end element to the end

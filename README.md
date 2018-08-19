@@ -1,54 +1,58 @@
 # Louk
-Vue without the HTML
+_Vue without the HTML_
 
 ## Intro
 
 Vue is a beautiful technology, but it’s always felt a bit awkward crammed into old-school HTML. Louk is a tailor-made shorthand and preprocessor that hides the wonky stuff and lets Vue shine.
 
-The key is that most things are interpreted as dynamic Vue entities (bound content and properties) by default, while anything else is escaped with a single character. This means markup like {{ }} and v- become unnecessary, as it’s just assumed. It also supports inline HTML, for when that’s needed.
+The key is that most things are interpreted as dynamic Vue entities (bound content and properties) by default, while anything else is escaped with a single character. This means markup like `{{ }}` and `v-` become unnecessary, as it’s just assumed.
 
-Louk runs on Node, and can compile standalone markup into HTML files (via command line or task runners like gulp) or embedded markup in single file templates (via module loaders such as webpack).
+Louk runs on Node, and can compile standalone markup into HTML files (via task runners like gulp) or embedded markup in single file components (via module loaders such as webpack).
 
 ## Installation
+```sh
+$ npm install louk -D
+```
+If using with webpack, you will also want to install the [Louk Loader](https://github.com/agorischek/louk-loader).
 
 ## Notation
 
 ### Elements and attributes
 
 Elements are followed by a space, and nested elements are indented. Elements are closed when a new element is encountered at the same indentation level, or when the end of the file is reached.
-```
+```html
+//louk
+h1
 div
-div
-    span
-```
-...becomes...
-```
-<div></div><div><span></span></div>
-```
-Attributes are followed by a colon and a space, and must follow their corresponding element on separate lines
-```
-for:
-```
-...becomes...
-```
-v-for=
-```
-### Dynamic stuff
+    a
 
-
-By default, Louk converts most things into Vue reactive placeholders and directives.
-
-#### Content
-Document content placeholders get surrounded by curly brackets:
-```
-element string
-```
-...becomes...
-```
-<element>{{string}}</element>
+//html
+<h1></h1>
+<div>
+    <a></a>
+</div>
 ```
 
-#### Keys
+Attributes are followed by a colon and a space, and must follow their corresponding element on separate lines.
+```html
+//louk
+for: item in items
+
+//html
+v-for="item in items"
+```
+### Dynamic content
+
+By default, Louk converts most things into Vue reactive placeholders and directives. Document content placeholders get surrounded by curly brackets.
+```html
+//louk
+div string
+
+//html
+<div>{{string}}</div>
+```
+
+### Keys
 Keys are shorthands that become common directives:
 `for` becomes `v-for`
 `if` becomes `v-if`
@@ -65,32 +69,28 @@ All other keys become bound attributes:
 `href` becomes `v-bind:href`
 etc...
 
-### Static stuff
+### Static content
 
-Escape characters are used to indicate static, non-Vue content. Some attributes have optional special escape characters:
-
-`.center` becomes `class=“Center”`
-
-`#install` becomes `id=“install”`
-
-`@logo.png` becomes `src=“logo.png”` or `href=“logo.png”`
-
-Everything else can be escaped with a tilde:
+Escape characters are used to indicate static content, which Vue will render literally. Text can be escaped with a tilde:
 
 `~p Hello world!` Becomes `<p>Hello world!</p>`
 
-`~type: text/css` becomes `type=“text/css”`
+`~type: text/css` becomes `type="text/css"`
 
-Self closing elements are indicated with a pipe
-```
+Some attributes have optional special escape characters:
+
+`.center` becomes `class="Center"`
+
+`#install` becomes `id="install"`
+
+`@logo.png` becomes `src="logo.png"` or `href="logo.png"`
+
+Self closing elements are indicated with a pipe.
+```html
+//louk
 br|
 .class: full
-```
-...becomes...
-```
-<br class=“full” />
-```
-### Comments
-Comments can be escaped with a single / for one line or /// for multi line.
 
-HTML can be included inline as long as it starts its own line. Inline HTML continues across lines until a matching closing tag is reached.
+//html
+<br class="full" />
+```

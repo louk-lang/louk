@@ -144,6 +144,7 @@ function assignMatches(content){
 
     for(var index = 0; index < content.length; index++){
         var value = content[index]
+        var currentLevelElement = ""
 
         //The level of indentation we're currently working at
         level = value.indent
@@ -156,7 +157,8 @@ function assignMatches(content){
 
         //If there's already an element for insertion at this level, that means there's a previous element to close.
         if(elementsForInsertion[level]){
-            elements[index].preceding.push(closingTag(elementsForInsertion[level]))
+            //We hold on to this element and push it into the preceding list later.
+            currentLevelElement = elementsForInsertion[level]
             delete elementsForInsertion[level]
         }
 
@@ -169,16 +171,15 @@ function assignMatches(content){
 
         //If the current level is less than the maximum level, that means we've outdented, and therefore have multiple necessary closing elements
         while(level < maxLevel){
-
             //There might not be an element for insertion at this level, as some elements are self-closing
             if(elementsForInsertion[maxLevel]){
                 elements[index].preceding.push(closingTag(elementsForInsertion[maxLevel]))
                 delete elementsForInsertion[maxLevel]
             }
-            maxLevel = maxLevel - 1
+            maxLevel--
         }
 
-        elements[index].preceding.reverse();
+        elements[index].preceding.push(closingTag(currentLevelElement))
 
     }
 
@@ -227,7 +228,6 @@ function insertMatches(content){
             elements.push(value)
         }
 
-//        write(elements[index].attributes)
     }
 
     return elements

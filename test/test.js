@@ -39,4 +39,8 @@ describe("Louk", function(){
     it("should return a double nested element with a trailing line", function(){
         assert.equal(louk('a\n\tb\n\t\tc\n'),'<a><b><c></c></b></a>')
     })
+    it("should handle multiple consecutive closures", function(){
+        assert.equal(louk('a\n\tb\n\t\tc\nd'),'<a><b><c></c></b></a><d></d>')
+    })
+
 })

@@ -1,0 +1,12 @@
+{
+  "name": "louk",
+  "version": "0.1.0",
+  "description": "Vue shorthand",
+  "main": "louk-node.js",
+  "scripts": {},
+  "author": "Alex Gorischek",
+  "license": "ISC",
+  "dependencies": {
+    "underscore": "^1.9.1"
+  }
+}

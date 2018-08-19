@@ -1,0 +1,5 @@
+div
+#content
+	h1 welcome
+	div tagline
+	.highlight

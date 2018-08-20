@@ -1,6 +1,6 @@
 const _ = require("underscore")
 const fs = require('fs');
-var log = true
+var log = false
 
 require.extensions['.louk'] = function (module, filename) {
     module.exports = fs.readFileSync(filename, 'utf8');

@@ -333,9 +333,6 @@ function determineClassification(content){
     else if(content.crux == "."){
         classification = "attribute"
     }
-    else if(content.crux == "@"){
-        classification = "attribute"
-    }
     else if(content.crux.match(/^:/)){
         classification = "attribute"
     }
@@ -384,7 +381,7 @@ function determineSelfClosing(content){
 }
 
 var staticSuffixPattern = /[~|]/
-var staticCruxPattern = /[@#\.]/
+var staticCruxPattern = /[#\.]/
 //Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue) or statically (as plain HTML)
 function determineInterpretation(content){
     var interpretation
@@ -421,11 +418,11 @@ function determineCrux(content){
     var crux = ""
     var processed = []
 
-    var shorthandCruxPattern = /^([\.#@])/
+    var shorthandCruxPattern = /^([\.#])/
     var modifiedCruxPattern = /^(.+) /
     var plainCruxPattern = /^(.+)/
 
-    //Looks for shorthands such as ".", "#", and "@".
+    //Looks for shorthands such as "." and "#".
     //If any of those are at the beginning of the line, we conclusively know what the line represents.
     //This pattern should NOT include colons, since a colon must be associated with additional characters to form a crux.
     if(content.unindented.match(shorthandCruxPattern)){
@@ -452,8 +449,8 @@ function determineCrux(content){
 //Figures out what tag a tag is and what attribute an attribute is
 function determineFill(content){
     var fill = ""
-    if(content.crux.match(/[\.#@]/)){
-        fill = content.unindented.match(/^[\.#@](.*)/)[1]
+    if(content.crux.match(/[\.#]/)){
+        fill = content.unindented.match(/^[\.#](.*)/)[1]
     }
     else if(content.unindented.match(/^.+?\s.+/)){
         fill = content.unindented.match(/^.+?\s(.+)/)[1]
@@ -470,9 +467,6 @@ function determineKey(content){
     }
     else if(content.crux == "#"){
         key = "id"
-    }
-    else if(content.crux == "@"){
-        key = "href"
     }
     else if(content.unindented.match(/[~]*(\w+)/)){
         key = content.unindented.match(/[~]*(\w+)/)[1]

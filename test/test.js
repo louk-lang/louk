@@ -60,25 +60,6 @@ describe("Louk New Grammar", function(){
     })
 })
 
-describe("Louk Old Grammar", function(){
-    it("should return an element with static content", function(){
-        assert.equal(louk('~a b'),'<a>b</a>')
-    })
-    it("should return an attribute with static content", function(){
-        assert.equal(louk('a\n~b: c'),'<a b="c"></a>')
-    })
-    it("should return an attribute with dynamic content", function(){
-        assert.equal(louk('a\nb: c'),'<a v-bind:b="c"></a>')
-    })
-    it("should return an element with a for statement", function(){
-        assert.equal(louk('a\nfor: b'),'<a v-for="b"></a>')
-    })
-    it("should return an element with a click binding", function(){
-        assert.equal(louk('a\nclick: b'),'<a v-on:click="b"></a>')
-    })
-})
-
-
 describe("Louk Not Implemented", function(){
     it("should return an element with a click binding", function(){
         assert.equal(louk('a\n:if b'),'<a v-if="b"></a>')

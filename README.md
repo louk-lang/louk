@@ -3,7 +3,7 @@ _Vue without the HTML_
 
 ## Intro
 
-Vue is a beautiful technology, but it’s always felt a bit awkward crammed into old-school HTML. Louk is a tailor-made shorthand and preprocessor that hides the wonky stuff and lets Vue shine.
+Vue is a beautiful technology, but it’s always felt a bit awkward crammed into old-school HTML. Louk is a tailor-made notation and preprocessor that hides the wonky stuff and lets Vue shine.
 
 The key is that most things are interpreted as dynamic Vue entities (bound content and properties) by default, while anything else is escaped with a single character. This means markup like `{{ }}` and `v-` become unnecessary, as it’s just assumed.
 
@@ -13,13 +13,13 @@ Louk runs on Node, and can compile standalone markup into HTML files (via task r
 ```sh
 $ npm install louk -D
 ```
-If using with webpack, you will also want to install the [Louk Loader](https://github.com/agorischek/louk-loader).
+If using with webpack, you'll also want to install the [Louk Loader](https://github.com/agorischek/louk-loader).
 
 ## Notation
 
 ### Elements and attributes
 
-Elements are followed by a space, and nested elements are indented. Elements are closed when a new element is encountered at the same indentation level, or when the end of the file is reached.
+Elements are followed by a space or new line, and nested elements are indented. Elements are closed when a new element is encountered at the same indentation level, or when the end of the file is reached.
 ```html
 //louk
 h1
@@ -33,17 +33,18 @@ div
 </div>
 ```
 
-Attributes are followed by a colon and a space, and must follow their corresponding element on separate lines.
+Attributes are preceded by a colon, and must follow their corresponding element on separate lines:
 ```html
 //louk
-for: item in items
+li
+:for item in items
 
 //html
-v-for="item in items"
+<li v-for="item in items"></li>
 ```
 ### Dynamic content
 
-By default, Louk converts most things into Vue reactive placeholders and directives. Document content placeholders get surrounded by curly brackets.
+Document content placeholders get surrounded by curly brackets:
 ```html
 //louk
 div string
@@ -52,40 +53,41 @@ div string
 <div>{{string}}</div>
 ```
 
-### Keys
-Keys are shorthands that become common directives:
+### Directives
 
-`for` becomes `v-for`
+Common directives have shorthands:
 
-`if` becomes `v-if`
+`:for` becomes `v-for`
 
-`model` becomes `v-model`
+`:if` becomes `v-if`
 
-`click` becomes `v-on:click`
+`:model` becomes `v-model`
 
-`submit` becomes `v-on:submit`
+`:click` becomes `v-on:click`
 
-Keys starting with `v-``, including custom directives, will be left unchanged:
+`:submit` becomes `v-on:submit`
 
-`v-show` becomes `v-show`
+Directives starting with `v-`, including custom directives, will be left unchanged:
 
-`v-custom` becomes `v-custom`
+`:v-show` becomes `v-show`
 
-All other keys become bound attributes:
+`:v-custom` becomes `v-custom`
 
-`class` becomes `v-bind:class`
+All other directives become bound attributes:
 
-`href` becomes `v-bind:href`
+`:class` becomes `v-bind:class`
+
+`:href` becomes `v-bind:href`
 
 etc...
 
 ### Static content
 
-Escape characters are used to indicate static content, which Vue will render literally. Text can be escaped with a tilde:
+A tilde following an element or directive escapes it, telling Vue to treat it as static content:
 
-`~p Hello world!` becomes `<p>Hello world!</p>`
+`p~ Hello world!` becomes `<p>Hello world!</p>`
 
-`~type: text/css` becomes `type="text/css"`
+`:type~ text/css` becomes `type="text/css"`
 
 Some attributes have optional special escape characters:
 
@@ -93,9 +95,7 @@ Some attributes have optional special escape characters:
 
 `#install` becomes `id="install"`
 
-`@htts://github.com` becomes `href="htts://github.com"`
-
-Self closing elements are indicated with a pipe.
+Self closing elements are followed with a pipe:
 ```html
 //louk
 br|

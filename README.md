@@ -93,7 +93,7 @@ Some attributes have optional special escape characters:
 
 `#install` becomes `id="install"`
 
-`@logo.png` becomes `src="logo.png"` or `href="logo.png"`
+`@htts://github.com` becomes `href="htts://github.com"`
 
 Self closing elements are indicated with a pipe.
 ```html

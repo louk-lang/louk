@@ -79,14 +79,14 @@ describe("Louk New Grammar", function(){
 // })
 
 
-// describe("Louk Not Implemented", function(){
-//     it("should return an element with a click binding", function(){
-//         assert.equal(louk('a\nif: b'),'<a v-if="b"></a>')
-//     })
-//     it("should return a self-closing element", function(){
-//         assert.equal(louk('a|'),'<a />')
-//     })
-//     it("should return an href via shorthand", function(){
-//         assert.equal(louk('a\n@b'),'<a href="b">')
-//     })
-// })
+describe("Louk Not Implemented", function(){
+    it("should return an element with a click binding", function(){
+        assert.equal(louk('a\nif: b'),'<a v-if="b"></a>')
+    })
+    it("should return a self-closing element", function(){
+        assert.equal(louk('a|'),'<a />')
+    })
+    it("should return an href via shorthand", function(){
+        assert.equal(louk('a\n@b'),'<a href="b">')
+    })
+})

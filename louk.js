@@ -267,7 +267,7 @@ function generateHTML(content){
                         attribute = "v-for"
                     }
                     else if(key == "if"){
-                        attribute = "v-for"
+                        attribute = "v-if"
                     }
                     else if(key.match(/^click/)){
                         attribute = "v-on:" + key

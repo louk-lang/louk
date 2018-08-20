@@ -60,7 +60,4 @@ describe("Louk", function(){
     it("should return a self-closing element", function(){
         assert.equal(louk('a|'),'<a />')
     })
-    it("should return an href via shorthand", function(){
-        assert.equal(louk('a\n@b'),'<a href="b"></a>')
-    })
 })

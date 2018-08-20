@@ -99,7 +99,7 @@ Self closing elements are followed with a pipe:
 ```html
 //louk
 br|
-.class: full
+.full
 
 //html
 <br class="full" />

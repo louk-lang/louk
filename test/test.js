@@ -2,7 +2,7 @@ const louk = require("../louk.js")
 const chai = require("chai")
 const assert = chai.assert
 
-describe("Louk Unchanged", function(){
+describe("Louk", function(){
     it("should return a simple element", function(){
         assert.equal(louk('a'),'<a></a>')
     })
@@ -39,10 +39,6 @@ describe("Louk Unchanged", function(){
     it("should handle multiple consecutive closures", function(){
         assert.equal(louk('a\n\tb\n\t\tc\nd'),'<a><b><c></c></b></a><d></d>')
     })
-
-})
-
-describe("Louk New Grammar", function(){
     it("should return an element with static content", function(){
         assert.equal(louk('a~ b'),'<a>b</a>')
     })
@@ -58,9 +54,6 @@ describe("Louk New Grammar", function(){
     it("should return an element with a click binding", function(){
         assert.equal(louk('a\n:click b'),'<a v-on:click="b"></a>')
     })
-})
-
-describe("Louk Not Implemented", function(){
     it("should return an element with a click binding", function(){
         assert.equal(louk('a\n:if b'),'<a v-if="b"></a>')
     })

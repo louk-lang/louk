@@ -1,6 +1,6 @@
 const _ = require("underscore")
 const fs = require('fs');
-var log = false
+var log = true
 
 require.extensions['.louk'] = function (module, filename) {
     module.exports = fs.readFileSync(filename, 'utf8');
@@ -94,9 +94,10 @@ function determineProperties(content){
         lines[index].index = index
         lines[index].indent = indentInfo[0]
         lines[index].unindented = indentInfo[1]
-        lines[index].adornment = determineAdornment(value)
-        lines[index].selfClosing = determineSelfClosing(lines[index])
         lines[index].crux = determineCrux(lines[index])
+        lines[index].prefix = determinePrefix(lines[index])
+        lines[index].suffix = determineSuffix(lines[index])
+        lines[index].selfClosing = determineSelfClosing(lines[index])
         lines[index].classification = determineClassification(lines[index])
         lines[index].key = determineKey(lines[index])
         lines[index].interpretation = determineInterpretation(lines[index])
@@ -325,15 +326,22 @@ function generateHTML(content){
 //Determines whether each line represents an attribute or a tag
 function determineClassification(content){
     var classification = ""
-    if(content.adornment.match(/#/)){
+    if(content.crux.match(/#/)){
         classification = "attribute"
     }
-    else if(content.adornment.match(/\./)){
+    else if(content.crux.match(/\./)){
         classification = "attribute"
     }
-    else if(content.crux.match(/:$/)){
+    else if(content.crux.match(/@/)){
         classification = "attribute"
     }
+    else if(content.crux.match(/:/)){
+        classification = "attribute"
+    }
+    // This match applies only to the old grammar.
+    // else if(content.crux.match(/:$/)){
+    //     classification = "attribute"
+    // }
     else{
         classification = "tag"
 
@@ -342,28 +350,60 @@ function determineClassification(content){
 }
 
 //Checks whether there is a special character like a ~, which affects parsing of the line
-function determineAdornment(content){
-    var adornment = ""
+function determinePrefix(content){
+    var prefix = ""
     var matches = content.unindented.match(/([~\.#|]*)\w+/)
     if(matches){
-        adornment = matches[1]
+        prefix = matches[1]
     }
-    return adornment
+    return prefix
+}
+
+function determineSuffix(content){
+    var suffix = ""
+    var matches = ""
+    var suffixPattern = /([~|])$/
+
+    console.log(content.crux)
+    if(content.crux){
+        matches = content.crux.match(suffixPattern)
+    }
+
+    console.log(matches)
+    if(matches){
+        console.log(matches[1])
+        suffix = matches[1]
+    }
+    console.log(suffix)
+    return suffix
 }
 
 function determineSelfClosing(content){
     var selfClosing = false
-    if(content.adornment.match(/\|/)){
+    console.log(content.suffix)
+    if(content.suffix == "|"){
         selfClosing = true
     }
+    else {
+        selfClosing = false
+    }
+    console.log(selfClosing)
     return selfClosing
 }
 
+var staticSuffixPattern = /[~|]/
+var staticPrefixPattern = /[@#.]/
 //Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue) or statically (as plain HTML)
 function determineInterpretation(content){
-    var interpretation = "dynamic"
-    if(content.adornment.match(/[~#\.]/)){
+    var interpretation
+    if(content.suffix.match(staticSuffixPattern)){
         interpretation = "static"
+    }
+    else if(content.prefix.match(staticPrefixPattern)){
+        interpretation = "static"
+    }
+    else{
+        interpretation = "dynamic"
     }
     return interpretation
 }
@@ -380,26 +420,54 @@ function determineIndent(content){
 }
 
 //Figures out the crux, which is the indicator of what a line represents.
+//The crux potentially includes an element tag, a prefix, a suffix, and/or a key shorthand.
+//Crucially, the crux is always what is explicitly present in the source, regardless of what is eventually inferred.
+//It is nearly the same as any content before the first space, with the exception of shorthands like "#".
+//For example, these are all valid cruxes:     div     ~div     ~class:     #     .
 function determineCrux(content){
     var crux = ""
-    var value = ""
+    console.log(content.unindented)
     var processed = []
-    if(content.unindented.match(/^[.#]/)){
-        crux = content.unindented.match(/^([.#])/)[1]
+
+    var shorthandCruxPattern = /^([\.#@])/
+    var modifiedCruxPattern = /^(.+) /
+    var plainCruxPattern = /^(.+)/
+
+    //Looks for shorthands such as ".", "#", and "@".
+    //If any of those are at the beginning of the line, we conclusively know what the line represents.
+    //This pattern should NOT include colons, since a colon must be associated with additional characters to form a crux.
+    if(content.unindented.match(shorthandCruxPattern)){
+        crux = content.unindented.match(shorthandCruxPattern)[1]
+        console.log(crux)
     }
-    else if(content.unindented.match(/^[~\.#]?\w+?:?\s.+/)){
-        crux = content.unindented.match(/^([~\.#]?\w+?:?)\s.+/)[1]
+
+    else if(content.unindented.match(modifiedCruxPattern)){
+        console.log(content.unindented)
+        crux = content.unindented.match(modifiedCruxPattern)[1]
+        console.log(crux)
     }
+
+    else if(content.unindented.match(plainCruxPattern)){
+        console.log(content.unindented)
+        crux = content.unindented.match(plainCruxPattern)[1]
+        console.log(crux)
+    }
+
+    //If none of those match, then the crux is simply the undindented content.
+    //In practice, this final block should never be hit.
     else{
         crux = content.unindented
+        console.log(crux)
     }
+
+    console.log(crux)
     return crux
 }
 
 //Figures out what tag a tag is and what attribute an attribute is
 function determineFill(content){
     var fill = ""
-    if(content.adornment.match(/[\.#]/)){
+    if(content.prefix.match(/[\.#]/)){
         fill = content.unindented.match(/^[#\.](.*)/)[1]
     }
     else if(content.unindented.match(/^.+?\s.+/)){
@@ -412,11 +480,16 @@ function determineFill(content){
 //For example, converts "#" to "id"
 function determineKey(content){
     var key = ""
-    if(content.adornment.match(/\./)){
+    console.log(content.crux)
+    console.log(content.prefix)
+    if(content.crux == "."){
         key = "class"
     }
-    else if(content.adornment.match(/#/)){
+    else if(content.crux == "#"){
         key = "id"
+    }
+    else if(content.crux == "@"){
+        key = "href"
     }
     else if(content.unindented.match(/[~]*(\w+)/)){
         key = content.unindented.match(/[~]*(\w+)/)[1]
@@ -424,6 +497,7 @@ function determineKey(content){
     else{
         key = null
     }
+    console.log(key)
     return key
 }
 
@@ -433,3 +507,11 @@ function closingTag(content){
     element.position = "closing"
     return element
 }
+
+
+
+//Looks for ":" as well as strings that would represent elements/attributes.
+// else if(content.unindented.match(/^[:\.#]?\w+?:?\s.+/)){
+//     crux = content.unindented.match(/^([:\.#]?\w+?:?)\s.+/)[1]
+//     console.log(crux)
+// }

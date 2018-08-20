@@ -354,7 +354,6 @@ function determinePrefix(content){
     if(matches){
         prefix = matches[1]
     }
-    console.log(prefix)
     return prefix
 }
 
@@ -363,30 +362,24 @@ function determineSuffix(content){
     var matches = ""
     var suffixPattern = /([~|])$/
 
-    console.log(content.crux)
     if(content.crux){
         matches = content.crux.match(suffixPattern)
     }
 
-    console.log(matches)
     if(matches){
-        console.log(matches[1])
         suffix = matches[1]
     }
-    console.log(suffix)
     return suffix
 }
 
 function determineSelfClosing(content){
     var selfClosing = false
-    console.log(content.suffix)
     if(content.suffix == "|"){
         selfClosing = true
     }
     else {
         selfClosing = false
     }
-    console.log(selfClosing)
     return selfClosing
 }
 
@@ -395,9 +388,6 @@ var staticCruxPattern = /[@#\.]/
 //Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue) or statically (as plain HTML)
 function determineInterpretation(content){
     var interpretation
-    console.log(content)
-    console.log(content.suffix)
-    console.log(content.prefix)
 
     if(content.suffix.match(staticSuffixPattern)){
         interpretation = "static"
@@ -408,7 +398,6 @@ function determineInterpretation(content){
     else{
         interpretation = "dynamic"
     }
-    console.log(interpretation)
     return interpretation
 }
 
@@ -430,7 +419,6 @@ function determineIndent(content){
 //For example, these are all valid cruxes:     div     ~div     ~class:     #     .
 function determineCrux(content){
     var crux = ""
-    console.log(content.unindented)
     var processed = []
 
     var shorthandCruxPattern = /^([\.#@])/
@@ -442,44 +430,34 @@ function determineCrux(content){
     //This pattern should NOT include colons, since a colon must be associated with additional characters to form a crux.
     if(content.unindented.match(shorthandCruxPattern)){
         crux = content.unindented.match(shorthandCruxPattern)[1]
-        console.log(crux)
     }
 
     else if(content.unindented.match(modifiedCruxPattern)){
-        console.log(content.unindented)
         crux = content.unindented.match(modifiedCruxPattern)[1]
-        console.log(crux)
     }
 
     else if(content.unindented.match(plainCruxPattern)){
-        console.log(content.unindented)
         crux = content.unindented.match(plainCruxPattern)[1]
-        console.log(crux)
     }
 
     //If none of those match, then the crux is simply the undindented content.
     //In practice, this final block should never be hit.
     else{
         crux = content.unindented
-        console.log(crux)
     }
 
-    console.log(crux)
     return crux
 }
 
 //Figures out what tag a tag is and what attribute an attribute is
 function determineFill(content){
     var fill = ""
-    console.log(content.crux)
     if(content.crux.match(/[\.#@]/)){
         fill = content.unindented.match(/^[\.#@](.*)/)[1]
-        console.log(fill)
     }
     else if(content.unindented.match(/^.+?\s.+/)){
         fill = content.unindented.match(/^.+?\s(.+)/)[1]
     }
-    console.log(fill)
     return fill
 }
 
@@ -487,8 +465,6 @@ function determineFill(content){
 //For example, converts "#" to "id"
 function determineKey(content){
     var key = ""
-    console.log(content.crux)
-    console.log(content.prefix)
     if(content.crux == "."){
         key = "class"
     }
@@ -504,7 +480,6 @@ function determineKey(content){
     else{
         key = null
     }
-    console.log(key)
     return key
 }
 
@@ -514,11 +489,3 @@ function closingTag(content){
     element.position = "closing"
     return element
 }
-
-
-
-//Looks for ":" as well as strings that would represent elements/attributes.
-// else if(content.unindented.match(/^[:\.#]?\w+?:?\s.+/)){
-//     crux = content.unindented.match(/^([:\.#]?\w+?:?)\s.+/)[1]
-//     console.log(crux)
-// }

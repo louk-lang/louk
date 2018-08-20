@@ -2,7 +2,7 @@
   "name": "louk",
   "version": "0.1.0",
   "description": "Vue shorthand",
-  "main": "louk.js",
+  "main": "louk-node.js",
   "scripts": {
     "test": "mocha"
   },

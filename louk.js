@@ -326,22 +326,19 @@ function generateHTML(content){
 //Determines whether each line represents an attribute or a tag
 function determineClassification(content){
     var classification = ""
-    if(content.crux.match(/#/)){
+
+    if(content.crux == "#"){
         classification = "attribute"
     }
-    else if(content.crux.match(/\./)){
+    else if(content.crux == "."){
         classification = "attribute"
     }
-    else if(content.crux.match(/@/)){
+    else if(content.crux == "@"){
         classification = "attribute"
     }
-    else if(content.crux.match(/:/)){
+    else if(content.crux.match(/^:/)){
         classification = "attribute"
     }
-    // This match applies only to the old grammar.
-    // else if(content.crux.match(/:$/)){
-    //     classification = "attribute"
-    // }
     else{
         classification = "tag"
 
@@ -352,10 +349,12 @@ function determineClassification(content){
 //Checks whether there is a special character like a ~, which affects parsing of the line
 function determinePrefix(content){
     var prefix = ""
-    var matches = content.unindented.match(/([~\.#|]*)\w+/)
+    var prefixPattern = /(:).*\w+/
+    var matches = content.crux.match(prefixPattern)
     if(matches){
         prefix = matches[1]
     }
+    console.log(prefix)
     return prefix
 }
 
@@ -392,19 +391,24 @@ function determineSelfClosing(content){
 }
 
 var staticSuffixPattern = /[~|]/
-var staticPrefixPattern = /[@#.]/
+var staticCruxPattern = /[@#\.]/
 //Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue) or statically (as plain HTML)
 function determineInterpretation(content){
     var interpretation
+    console.log(content)
+    console.log(content.suffix)
+    console.log(content.prefix)
+
     if(content.suffix.match(staticSuffixPattern)){
         interpretation = "static"
     }
-    else if(content.prefix.match(staticPrefixPattern)){
+    else if(content.crux.match(staticCruxPattern)){
         interpretation = "static"
     }
     else{
         interpretation = "dynamic"
     }
+    console.log(interpretation)
     return interpretation
 }
 
@@ -467,12 +471,15 @@ function determineCrux(content){
 //Figures out what tag a tag is and what attribute an attribute is
 function determineFill(content){
     var fill = ""
-    if(content.prefix.match(/[\.#]/)){
-        fill = content.unindented.match(/^[#\.](.*)/)[1]
+    console.log(content.crux)
+    if(content.crux.match(/[\.#@]/)){
+        fill = content.unindented.match(/^[\.#@](.*)/)[1]
+        console.log(fill)
     }
     else if(content.unindented.match(/^.+?\s.+/)){
         fill = content.unindented.match(/^.+?\s(.+)/)[1]
     }
+    console.log(fill)
     return fill
 }
 

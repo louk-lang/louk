@@ -56,7 +56,7 @@ ul
     -for item in items
 
 //html
-<ul v-bind="focus">
+<ul v-bind:class="focus">
     <li v-for="item in items"></li>
 </ul>
 ```
@@ -98,7 +98,7 @@ Attributes can be made static by escaping with a leading tilde.
 
 `~type text/css` becomes `type="text/css"`
 
-Additionally, the `class` and `id` attributes have escape shorthands.
+Additionally, classes and IDs can be made static by escaping with a leading period or pound sign, respectively.
 
 `.center` becomes `class="center"`
 

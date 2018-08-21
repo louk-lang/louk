@@ -17,34 +17,25 @@ If using with webpack, you'll also want to install the [Louk Loader](https://git
 
 ## Notation
 
-### Elements and attributes
+### Elements & Content
 
-Elements are followed by a space or new line, and nested elements are indented. Elements are closed when a new element is encountered at the same indentation level, or when the end of the file is reached.
+Elements are denoted by their tags as the first visible characters on a line. Nested elements are indented, and closing tags are implied. Self closing elements are followed with a pipe.
+
 ```html
 //louk
 h1
 div
-    a
+    br|
 
 //html
 <h1></h1>
 <div>
-    <a></a>
+    <br />
 </div>
 ```
 
-Attributes are preceded by a colon, and must follow their corresponding element on separate lines:
-```html
-//louk
-li
-:for item in items
+Element content follows the tag on the same line, separated by a space. Content is interpreted as dynamic by default.
 
-//html
-<li v-for="item in items"></li>
-```
-### Dynamic content
-
-Document content placeholders get surrounded by curly brackets:
 ```html
 //louk
 div string
@@ -53,13 +44,28 @@ div string
 <div>{{string}}</div>
 ```
 
-### Directives
+### Directives & Attributes
 
-Common directives have shorthands:
+Directives and other attributes are denoted by a leading colon, and follow their corresponding element on separate lines.
 
-`:for` becomes `v-for`
+```html
+//louk
+ul
+:if items
+    li
+    :for item in items
+
+//html
+<ul v-if="items">
+    <li v-for="item in items"></li>
+</ul>
+```
+
+Key directives have shorthands:
 
 `:if` becomes `v-if`
+
+`:for` becomes `v-for`
 
 `:model` becomes `v-model`
 
@@ -67,40 +73,25 @@ Common directives have shorthands:
 
 `:submit` becomes `v-on:submit`
 
-Directives starting with `v-`, including custom directives, will be left unchanged:
+All other attributes are simply bound:
 
-`:v-show` becomes `v-show`
-
-`:v-custom` becomes `v-custom`
-
-All other directives become bound attributes:
+`:id` becomes `v-bind:id`
 
 `:class` becomes `v-bind:class`
 
 `:href` becomes `v-bind:href`
 
-etc...
 
-### Static content
+### Statics
 
-A tilde following an element or directive escapes it, telling Vue to treat it as static content:
+Content and attributes can be made static by escaping with a trailing tilde.
 
 `p~ Hello world!` becomes `<p>Hello world!</p>`
 
 `:type~ text/css` becomes `type="text/css"`
 
-Some attributes have optional special escape characters:
+Additionally, some attributes have escape shorthands.
 
 `.center` becomes `class="center"`
 
 `#install` becomes `id="install"`
-
-Self closing elements are followed with a pipe:
-```html
-//louk
-br|
-.full
-
-//html
-<br class="full" />
-```

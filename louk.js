@@ -115,7 +115,6 @@ function assignAttributes(content){
 
     for(var index = 0; index < content.length; index++){
         var value = content[index]
-        console.log(value)
         if(value.classification == "tag"){
             if(index > 0){
                 elements.push(currentTag)
@@ -246,7 +245,7 @@ function generateHTML(content){
     }
     for(var index = 0; index < content.length; index++){
     var value = content[index]
-        console.log(value.attributes)
+
         //Generate opening tags
         if(value.position == "opening" && value.key != null){
 
@@ -260,9 +259,6 @@ function generateHTML(content){
                 //If the attribute should be interpretted dynamically...
                 if(value.interpretation == "dynamic"){
 
-
-                    console.log(value)
-                    console.log(key)
                     if(value.directiveType == "simple"){
                         attribute = "v-" + key
                     }
@@ -270,26 +266,6 @@ function generateHTML(content){
                         attribute = "v-on:" + key
                     }
                     else if(value.directiveType == "bind"){
-                        attribute = "v-bind:" + key
-                    }
-
-
-                    //Some cruxes have special mappings to Vue, which are handled here
-                    // if(key == "for"){
-                    //     attribute = "v-for"
-                    // }
-                    // else if(key == "if"){
-                    //     attribute = "v-if"
-                    // }
-                    // else if(key.match(/^click/)){
-                    //     attribute = "v-on:" + key
-                    // }
-                    // else if(shorthand[key]){
-                    //     attribute = shorthand[key]
-                    // }
-
-                    //v-bind is the default Vue translation for any attributes that don't have special handling
-                    else{
                         attribute = "v-bind:" + key
                     }
                 }
@@ -368,12 +344,10 @@ function determineClassification(content){
 function determinePrefix(content){
     var prefix = ""
     var prefixPattern = /([~:@-]).*\w+/
-    console.log(content.crux)
     var matches = content.crux.match(prefixPattern)
     if(matches){
         prefix = matches[1]
     }
-    console.log(prefix)
     return prefix
 }
 
@@ -422,7 +396,6 @@ function determineInterpretation(content){
     else{
         interpretation = "dynamic"
     }
-    console.log(interpretation)
     return interpretation
 }
 
@@ -477,21 +450,16 @@ function determineCrux(content){
 //Figures out what tag a tag is and what attribute an attribute is
 function determineFill(content){
     var fill = ""
-    console.log(content.crux)
-    console.log(content.unindented.match(/^.+?\s.+/))
-
     if(content.crux.match(/[\.#]/)){
         fill = content.unindented.match(/^[\.#](.*)/)[1]
     }
     else if(content.unindented.match(/^.+?\s.+/)){
         fill = content.unindented.match(/^.+?\s(.+)/)[1]
     }
-    console.log(fill)
     return fill
 }
 
 function determineDirectiveType(content){
-    console.log(content.prefix)
     var directiveType = ""
     if(content.prefix == "-"){
         directiveType = "simple"
@@ -511,10 +479,6 @@ function determineDirectiveType(content){
 function determineKey(content){
     var key = ""
     var keyPattern = /[~]*([A-Za-z\.]+)/
-    console.log(content)
-    console.log(content.prefix)
-    console.log()
-    console.log(content.unindented.match(keyPattern)[1])
 
         if(content.crux == "."){
             key = "class"
@@ -528,8 +492,6 @@ function determineKey(content){
         else{
             key = null
         }
-        console.log(key)
-
 
     return key
 }

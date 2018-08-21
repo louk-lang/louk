@@ -240,10 +240,6 @@ function generateHTML(content){
 
     //TODO: Allow extended handlers like specific keyboard shortcuts
     var shorthand = {
-        for: "v-for",
-        if: "v-if",
-        click: "v-on:click",
-        submit: "v-on:submit"
     }
 
     for(var index = 0; index < content.length; index++){
@@ -261,6 +257,10 @@ function generateHTML(content){
 
                 //If the attribute should be interpretted dynamically...
                 if(value.interpretation == "dynamic"){
+
+
+                    console.log(value)
+
 
                     //Some cruxes have special mappings to Vue, which are handled here
                     if(key == "for"){
@@ -333,6 +333,15 @@ function determineClassification(content){
     else if(content.crux == "."){
         classification = "attribute"
     }
+    else if(content.prefix == "~"){
+        classification = "attribute"
+    }
+    else if(content.prefix == "-"){
+        classification = "attribute"
+    }
+    else if(content.prefix == "@"){
+        classification = "attribute"
+    }
     else if(content.crux.match(/^:/)){
         classification = "attribute"
     }
@@ -346,11 +355,13 @@ function determineClassification(content){
 //Checks whether there is a special character like a ~, which affects parsing of the line
 function determinePrefix(content){
     var prefix = ""
-    var prefixPattern = /(:).*\w+/
+    var prefixPattern = /([~:@-]).*\w+/
+    console.log(content.crux)
     var matches = content.crux.match(prefixPattern)
     if(matches){
         prefix = matches[1]
     }
+    console.log(prefix)
     return prefix
 }
 
@@ -382,6 +393,7 @@ function determineSelfClosing(content){
 
 var staticSuffixPattern = /[~|]/
 var staticCruxPattern = /[#\.]/
+var staticPrefixPattern = /[~]/
 //Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue) or statically (as plain HTML)
 function determineInterpretation(content){
     var interpretation
@@ -392,9 +404,13 @@ function determineInterpretation(content){
     else if(content.crux.match(staticCruxPattern)){
         interpretation = "static"
     }
+    else if(content.crux.match(staticPrefixPattern)){
+        interpretation = "static"
+    }
     else{
         interpretation = "dynamic"
     }
+    console.log(interpretation)
     return interpretation
 }
 
@@ -449,12 +465,16 @@ function determineCrux(content){
 //Figures out what tag a tag is and what attribute an attribute is
 function determineFill(content){
     var fill = ""
+    console.log(content.crux)
+    console.log(content.unindented.match(/^.+?\s.+/))
+
     if(content.crux.match(/[\.#]/)){
         fill = content.unindented.match(/^[\.#](.*)/)[1]
     }
     else if(content.unindented.match(/^.+?\s.+/)){
         fill = content.unindented.match(/^.+?\s(.+)/)[1]
     }
+    console.log(fill)
     return fill
 }
 

@@ -46,34 +46,31 @@ div string
 
 ### Directives & Attributes
 
-Directives and other attributes are denoted by a leading colon, and follow their corresponding element on separate lines.
+Directives and other attributes are denoted by prefixes and follow their corresponding element on separate lines.
 
 ```html
 //louk
 ul
-:if items
+:class focus
     li
-    :for item in items
+    -for item in items
 
 //html
-<ul v-if="items">
+<ul v-bind="focus">
     <li v-for="item in items"></li>
 </ul>
 ```
 
-Key directives have shorthands:
+Simple directives are denoted by a leading hyphen.
 
-`:if` becomes `v-if`
+`-if` becomes `v-if`
 
-`:for` becomes `v-for`
+`-for` becomes `v-for`
 
-`:model` becomes `v-model`
+`-model` becomes `v-model`
 
-`:click` becomes `v-on:click`
 
-`:submit` becomes `v-on:submit`
-
-All other attributes are simply bound:
+Binding directives are indicated by a leading colon.
 
 `:id` becomes `v-bind:id`
 
@@ -82,15 +79,26 @@ All other attributes are simply bound:
 `:href` becomes `v-bind:href`
 
 
+Action directives are denoted by a leading at sign.
+
+`@click` becomes `v-on:click`
+
+`@submit` becomes `v-on:submit`
+
+`@keyup.enter` becomes `v-on:keyup.enter`
+
+
 ### Escaping & Statics
 
-Content and attributes can be made static by escaping with a trailing tilde.
+Content can be made static by escaping with a trailing tilde.
 
 `p~ Hello world!` becomes `<p>Hello world!</p>`
 
-`:type~ text/css` becomes `type="text/css"`
+Attributes can be made static by escaping with a leading tilde.
 
-Additionally, some attributes have escape shorthands.
+`~type text/css` becomes `type="text/css"`
+
+Additionally, the `class` and `id` attributes have escape shorthands.
 
 `.center` becomes `class="center"`
 

@@ -2,7 +2,7 @@ const louk = require("../louk.js")
 const chai = require("chai")
 const assert = chai.assert
 
-describe("Louk", function(){
+describe("Louk Current", function(){
     it("should return a simple element", function(){
         assert.equal(louk('a'),'<a></a>')
     })
@@ -42,22 +42,41 @@ describe("Louk", function(){
     it("should return an element with static content", function(){
         assert.equal(louk('a~ b'),'<a>b</a>')
     })
-    it("should return an attribute with static content", function(){
-        assert.equal(louk('a\n:b~ c'),'<a b="c"></a>')
+    it("should return a self-closing element", function(){
+        assert.equal(louk('a|'),'<a />')
     })
     it("should return an attribute with dynamic content", function(){
         assert.equal(louk('a\n:b c'),'<a v-bind:b="c"></a>')
     })
+})
+
+describe("Louk New Grammar", function(){
+    it("should return an attribute with static content", function(){
+        assert.equal(louk('a\n~b c'),'<a b="c"></a>')
+    })
+    it("should return an element with a simple directive", function(){
+        assert.equal(louk('a\n-if b'),'<a v-if="b"></a>')
+    })
+    it("should return an element with a for statement", function(){
+        assert.equal(louk('a\n-for b'),'<a v-for="b"></a>')
+    })
+    it("should return an element with a action directive", function(){
+        assert.equal(louk('a\n@click b'),'<a v-on:click="b"></a>')
+    })
+
+})
+
+describe("Louk Previous Grammar", function(){
     it("should return an element with a for statement", function(){
         assert.equal(louk('a\n:for b'),'<a v-for="b"></a>')
     })
-    it("should return an element with a click binding", function(){
-        assert.equal(louk('a\n:click b'),'<a v-on:click="b"></a>')
+    it("should return an attribute with static content", function(){
+        assert.equal(louk('a\n:b~ c'),'<a b="c"></a>')
     })
-    it("should return an element with a click binding", function(){
+    it("should return an element with a simple directive", function(){
         assert.equal(louk('a\n:if b'),'<a v-if="b"></a>')
     })
-    it("should return a self-closing element", function(){
-        assert.equal(louk('a|'),'<a />')
+    it("should return an element with a click binding", function(){
+        assert.equal(louk('a\n:click b'),'<a v-on:click="b"></a>')
     })
 })

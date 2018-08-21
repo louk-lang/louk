@@ -258,7 +258,6 @@ function generateHTML(content){
 
                 //If the attribute should be interpretted dynamically...
                 if(value.interpretation == "dynamic"){
-
                     if(value.directiveType == "simple"){
                         attribute = "v-" + key
                     }
@@ -477,7 +476,7 @@ function determineDirectiveType(content){
 //Other valid keys are "if", "for", "click", and "keyup.enter"
 function determineKey(content){
     var key = ""
-    var keyPattern = /[~]*([A-Za-z\.]+)/
+    var keyPattern = /[~:@-]*([A-Za-z\.0-9-]+)[\w\n]*/
 
         if(content.crux == "."){
             key = "class"
@@ -491,8 +490,8 @@ function determineKey(content){
         else{
             key = null
         }
-
-    return key
+        console.log(key)
+        return key
 }
 
 //Adds property to indicate that the element is a closing tag

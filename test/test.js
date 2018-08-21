@@ -6,6 +6,12 @@ describe("Louk Current", function(){
     it("should return a simple element", function(){
         assert.equal(louk('a'),'<a></a>')
     })
+    it("should return a simple header element", function(){
+        assert.equal(louk('h1'),'<h1></h1>')
+    })
+    it("should return a simple img element", function(){
+        assert.equal(louk('img'),'<img></img>')
+    })
     it("should return two peer elements", function(){
         assert.equal(louk('a\nb'),'<a></a><b></b>')
     })
@@ -48,9 +54,6 @@ describe("Louk Current", function(){
     it("should return an attribute with dynamic content", function(){
         assert.equal(louk('a\n:b c'),'<a v-bind:b="c"></a>')
     })
-})
-
-describe("Louk New Grammar", function(){
     it("should return an attribute with static content", function(){
         assert.equal(louk('a\n~b c'),'<a b="c"></a>')
     })
@@ -65,6 +68,9 @@ describe("Louk New Grammar", function(){
     })
     it.skip("should return an element with a action directive", function(){
         assert.equal(louk('a\n@keyup.enter b'),'<a v-on:keyup.enter="b"></a>')
+    })
+    it("should return an element with a action directive", function(){
+        assert.equal(louk('a\n@click b'),'<a v-on:click="b"></a>')
     })
 
 })

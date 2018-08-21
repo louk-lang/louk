@@ -70,7 +70,7 @@ Simple directives are denoted by a leading hyphen.
 `-model` becomes `v-model`
 
 
-Binding directives are indicated by a leading colon.
+Binding directives are denoted by a leading colon.
 
 `:id` becomes `v-bind:id`
 
@@ -90,15 +90,15 @@ Action directives are denoted by a leading at sign.
 
 ### Escaping & Statics
 
-Content can be made static by escaping with a trailing tilde.
+Content can be made static by escaping the tag with a trailing tilde.
 
 `p~ Hello world!` becomes `<p>Hello world!</p>`
 
-Attributes can be made static by escaping with a leading tilde.
+Attributes can be made static by escaping the attribute name with a leading tilde.
 
 `~type text/css` becomes `type="text/css"`
 
-Additionally, classes and IDs can be made static by escaping with a leading period or pound sign, respectively.
+Additionally, classes and IDs can be made static by escaping the attribute value with a leading period or pound sign, respectively.
 
 `.center` becomes `class="center"`
 

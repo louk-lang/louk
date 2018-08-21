@@ -5,7 +5,7 @@ _Vue without the HTML_
 
 Vue is a beautiful technology, but it’s always felt a bit awkward crammed into old-school HTML. Louk is a tailor-made notation and preprocessor that hides the wonky stuff and lets Vue shine.
 
-The key is that most things are interpreted as dynamic Vue entities (bound content and properties) by default, while anything else is escaped with a single character. This means markup like `{{ }}` and `v-` become unnecessary, as it’s just assumed.
+The key is that most things are interpreted as dynamic Vue entities (bound content and attributes) by default, while anything else is escaped with a single character. This means markup like `{{ }}` and `v-` become unnecessary, as it’s just assumed.
 
 Louk runs on Node, and can compile standalone markup into HTML files (via task runners like gulp) or embedded markup in single file components (via module loaders such as webpack).
 

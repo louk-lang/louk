@@ -240,9 +240,6 @@ function insertMatches(content){
 function generateHTML(content){
     var html = ""
 
-    //TODO: Allow extended handlers like specific keyboard shortcuts
-    var shorthand = {
-    }
     for(var index = 0; index < content.length; index++){
     var value = content[index]
 
@@ -377,7 +374,7 @@ function determineSelfClosing(content){
 }
 
 var staticTagSuffixPattern = /[~|]/
-var staticCruxPattern = /[#\.]/
+var staticCruxPattern = /^[#\.]/
 var staticAttributePrefixPattern = /[~]/
 //Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue) or statically (as plain HTML)
 function determineInterpretation(content){
@@ -387,6 +384,7 @@ function determineInterpretation(content){
     }
     else if(content.crux.match(staticCruxPattern)){
         interpretation = "static"
+
     }
     else if(content.classification == "attribute" && content.prefix.match(staticAttributePrefixPattern)){
         interpretation = "static"
@@ -448,7 +446,7 @@ function determineCrux(content){
 //Figures out what tag a tag is and what attribute an attribute is
 function determineFill(content){
     var fill = ""
-    if(content.crux.match(/[\.#]/)){
+    if(content.crux.match(/^[\.#]/)){
         fill = content.unindented.match(/^[\.#](.*)/)[1]
     }
     else if(content.unindented.match(/^.+?\s.+/)){
@@ -490,7 +488,6 @@ function determineKey(content){
         else{
             key = null
         }
-        console.log(key)
         return key
 }
 

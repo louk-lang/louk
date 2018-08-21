@@ -66,7 +66,7 @@ describe("Louk Current", function(){
     it("should return an element with a action directive", function(){
         assert.equal(louk('a\n@click b'),'<a v-on:click="b"></a>')
     })
-    it.skip("should return an element with a action directive", function(){
+    it.only("should return an element with a action directive", function(){
         assert.equal(louk('a\n@keyup.enter b'),'<a v-on:keyup.enter="b"></a>')
     })
     it("should return an element with a action directive", function(){

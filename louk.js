@@ -102,6 +102,7 @@ function determineProperties(content){
         lines[index].key = determineKey(lines[index])
         lines[index].interpretation = determineInterpretation(lines[index])
         lines[index].fill = determineFill(lines[index])
+        lines[index].directiveType = determineDirectiveType(lines[index])
         lines[index].preceding = []
     }
 
@@ -114,6 +115,7 @@ function assignAttributes(content){
 
     for(var index = 0; index < content.length; index++){
         var value = content[index]
+        console.log(value)
         if(value.classification == "tag"){
             if(index > 0){
                 elements.push(currentTag)
@@ -126,7 +128,8 @@ function assignAttributes(content){
         else if(value.classification == "attribute"){
             currentTag.attributes[value.key] = {
                 data: value.fill,
-                interpretation: value.interpretation
+                interpretation: value.interpretation,
+                directiveType: value.directiveType
             }
         }
     }
@@ -241,10 +244,9 @@ function generateHTML(content){
     //TODO: Allow extended handlers like specific keyboard shortcuts
     var shorthand = {
     }
-
     for(var index = 0; index < content.length; index++){
     var value = content[index]
-
+        console.log(value.attributes)
         //Generate opening tags
         if(value.position == "opening" && value.key != null){
 
@@ -260,21 +262,31 @@ function generateHTML(content){
 
 
                     console.log(value)
+                    console.log(key)
+                    if(value.directiveType == "simple"){
+                        attribute = "v-" + key
+                    }
+                    else if(value.directiveType == "action"){
+                        attribute = "v-on:" + key
+                    }
+                    else if(value.directiveType == "bind"){
+                        attribute = "v-bind:" + key
+                    }
 
 
                     //Some cruxes have special mappings to Vue, which are handled here
-                    if(key == "for"){
-                        attribute = "v-for"
-                    }
-                    else if(key == "if"){
-                        attribute = "v-if"
-                    }
-                    else if(key.match(/^click/)){
-                        attribute = "v-on:" + key
-                    }
-                    else if(shorthand[key]){
-                        attribute = shorthand[key]
-                    }
+                    // if(key == "for"){
+                    //     attribute = "v-for"
+                    // }
+                    // else if(key == "if"){
+                    //     attribute = "v-if"
+                    // }
+                    // else if(key.match(/^click/)){
+                    //     attribute = "v-on:" + key
+                    // }
+                    // else if(shorthand[key]){
+                    //     attribute = shorthand[key]
+                    // }
 
                     //v-bind is the default Vue translation for any attributes that don't have special handling
                     else{
@@ -478,22 +490,47 @@ function determineFill(content){
     return fill
 }
 
+function determineDirectiveType(content){
+    console.log(content.prefix)
+    var directiveType = ""
+    if(content.prefix == "-"){
+        directiveType = "simple"
+    }
+    else if(content.prefix == "@"){
+        directiveType = "action"
+    }
+    else if(content.prefix == ":"){
+        directiveType = "bind"
+    }
+    return directiveType
+}
+
 //Expands key shorthands
 //For example, converts "#" to "id"
+//Other valid keys are "if", "for", "click", and "keyup.enter"
 function determineKey(content){
     var key = ""
-    if(content.crux == "."){
-        key = "class"
-    }
-    else if(content.crux == "#"){
-        key = "id"
-    }
-    else if(content.unindented.match(/[~]*(\w+)/)){
-        key = content.unindented.match(/[~]*(\w+)/)[1]
-    }
-    else{
-        key = null
-    }
+    var keyPattern = /[~]*([A-Za-z\.]+)/
+    console.log(content)
+    console.log(content.prefix)
+    console.log()
+    console.log(content.unindented.match(keyPattern)[1])
+
+        if(content.crux == "."){
+            key = "class"
+        }
+        else if(content.crux == "#"){
+            key = "id"
+        }
+        else if(content.unindented.match(keyPattern)){
+            key = content.unindented.match(keyPattern)[1]
+        }
+        else{
+            key = null
+        }
+        console.log(key)
+
+
     return key
 }
 

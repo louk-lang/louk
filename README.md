@@ -82,7 +82,7 @@ All other attributes are simply bound:
 `:href` becomes `v-bind:href`
 
 
-### Statics
+### Escaping & Statics
 
 Content and attributes can be made static by escaping with a trailing tilde.
 

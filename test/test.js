@@ -69,17 +69,17 @@ describe("Louk New Grammar", function(){
 
 })
 
-// describe("Louk Previous Grammar", function(){
-//     it("should return an element with a for statement", function(){
-//         assert.equal(louk('a\n:for b'),'<a v-for="b"></a>')
-//     })
-//     it("should return an attribute with static content", function(){
-//         assert.equal(louk('a\n:b~ c'),'<a b="c"></a>')
-//     })
-//     it("should return an element with a simple directive", function(){
-//         assert.equal(louk('a\n:if b'),'<a v-if="b"></a>')
-//     })
-//     it("should return an element with a click binding", function(){
-//         assert.equal(louk('a\n:click b'),'<a v-on:click="b"></a>')
-//     })
-// })
+describe("Louk Previous Grammar", function(){
+    it("should return an element with a for statement", function(){
+        assert.equal(louk('a\n:for b'),'<a v-for="b"></a>')
+    })
+    it("should return an attribute with static content", function(){
+        assert.equal(louk('a\n:b~ c'),'<a b="c"></a>')
+    })
+    it("should return an element with a simple directive", function(){
+        assert.equal(louk('a\n:if b'),'<a v-if="b"></a>')
+    })
+    it("should return an element with a click binding", function(){
+        assert.equal(louk('a\n:click b'),'<a v-on:click="b"></a>')
+    })
+})

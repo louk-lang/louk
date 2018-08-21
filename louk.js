@@ -377,20 +377,19 @@ function determineSelfClosing(content){
     return selfClosing
 }
 
-var staticSuffixPattern = /[~|]/
+var staticTagSuffixPattern = /[~|]/
 var staticCruxPattern = /[#\.]/
-var staticPrefixPattern = /[~]/
+var staticAttributePrefixPattern = /[~]/
 //Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue) or statically (as plain HTML)
 function determineInterpretation(content){
     var interpretation
-
-    if(content.suffix.match(staticSuffixPattern)){
+    if(content.classification == "tag" && content.suffix.match(staticTagSuffixPattern)){
         interpretation = "static"
     }
     else if(content.crux.match(staticCruxPattern)){
         interpretation = "static"
     }
-    else if(content.crux.match(staticPrefixPattern)){
+    else if(content.classification == "attribute" && content.prefix.match(staticAttributePrefixPattern)){
         interpretation = "static"
     }
     else{

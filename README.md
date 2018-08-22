@@ -107,3 +107,17 @@ Additionally, the `class`, `id`, and `href` attributes can be made static by esc
 `#install` becomes `id="install"`
 
 `>example.org` becomes `href="example.org"`
+
+### Comments & HTML
+
+Comments are indicated with two leading forward slashes.
+
+```html
+//louk
+div save
+//Triggers dialog
+@click confirm
+
+//html
+<div v-bind:click="confirm">{{save}}</div>
+```

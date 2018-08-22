@@ -1,3 +1,5 @@
+<img width="160" src="img/logo.svg" alt="Louk logo" />
+
 # Louk
 _Vue without the HTML_
 

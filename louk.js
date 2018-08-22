@@ -94,6 +94,7 @@ function determineProperties(content){
         lines[index].index = index
         lines[index].indent = indentInfo[0]
         lines[index].unindented = indentInfo[1]
+        lines[index].lineType = determineLineType(lines[index])
         lines[index].crux = determineCrux(lines[index])
         lines[index].prefix = determinePrefix(lines[index])
         lines[index].suffix = determineSuffix(lines[index])
@@ -107,6 +108,20 @@ function determineProperties(content){
     }
 
     return lines
+}
+
+function determineLineType(content){
+    var type = ""
+    if(content.unindented.match(/^\/\//)){
+        type = "comment"
+    }
+    else if(content.unindented.match(/^</)){
+        type = "html"
+    }
+    else{
+        type = "louk"
+    }
+    return type
 }
 
 function assignAttributes(content){
@@ -241,67 +256,81 @@ function generateHTML(content){
     var html = ""
 
     for(var index = 0; index < content.length; index++){
-    var value = content[index]
+        var value = content[index]
 
-        //Generate opening tags
-        if(value.position == "opening" && value.key != null){
-
-            html = html + "<"
-            html = html + value.key
-
-            //Loop over all of the element's attributes
-            _.each(value.attributes, function(value, key){
-                var attribute = ""
-
-                //If the attribute should be interpretted dynamically...
-                if(value.interpretation == "dynamic"){
-                    if(value.directiveType == "simple"){
-                        attribute = "v-" + key
-                    }
-                    else if(value.directiveType == "action"){
-                        attribute = "v-on:" + key
-                    }
-                    else if(value.directiveType == "bind"){
-                        attribute = "v-bind:" + key
-                    }
-                }
-
-                //If the attribute should be interpretted statically...
-                else if(value.interpretation == "static"){
-                    attribute = key
-                }
-
-                //Put the above defined attribute and value into the HTML
-                html = html + " " + attribute + "=\""
-                html = html + value.data
-                html = html + "\""
-
-            })
-
-            if(value.selfClosing){
-                html = html + " /"
-            }
-            html = html + ">"
-
-            //If there's body content...
-            if(value.fill){
-
-                    //If the body should be interpreted dynamically, we wrap it in Vue curly brackets
-                    if(value.interpretation == "dynamic"){
-                        html = html + "{{" + value.fill + "}}"
-                    }
-
-                    //Otherwise we just include it straight.
-                    else if(value.interpretation == "static"){
-                        html = html + value.fill
-                    }
-                }
-
+        //HTML is passed straight through
+        if(value.lineType == "html"){
+            html = html + value.unindented
         }
 
-        //Generate closing tags
-        else if(value.position == "closing" && value.key != null){
-            html = html + "</" + value.key + ">"
+        //Comments are transformed to HTML format
+        else if(value.lineType == "comment"){
+
+            html = html + "<!-- " + value.fill + " -->"
+        }
+
+        //Louk notation goes through additional processing
+        else{
+            //Generate opening tags
+            if(value.position == "opening" && value.key != null){
+
+                html = html + "<"
+                html = html + value.key
+
+                //Loop over all of the element's attributes
+                _.each(value.attributes, function(value, key){
+                    var attribute = ""
+
+                    //If the attribute should be interpretted dynamically...
+                    if(value.interpretation == "dynamic"){
+                        if(value.directiveType == "simple"){
+                            attribute = "v-" + key
+                        }
+                        else if(value.directiveType == "action"){
+                            attribute = "v-on:" + key
+                        }
+                        else if(value.directiveType == "bind"){
+                            attribute = "v-bind:" + key
+                        }
+                    }
+
+                    //If the attribute should be interpretted statically...
+                    else if(value.interpretation == "static"){
+                        attribute = key
+                    }
+
+                    //Put the above defined attribute and value into the HTML
+                    html = html + " " + attribute + "=\""
+                    html = html + value.data
+                    html = html + "\""
+
+                })
+
+                if(value.selfClosing){
+                    html = html + " /"
+                }
+                html = html + ">"
+
+                //If there's body content...
+                if(value.fill){
+
+                        //If the body should be interpreted dynamically, we wrap it in Vue curly brackets
+                        if(value.interpretation == "dynamic"){
+                            html = html + "{{" + value.fill + "}}"
+                        }
+
+                        //Otherwise we just include it straight.
+                        else if(value.interpretation == "static"){
+                            html = html + value.fill
+                        }
+                    }
+
+            }
+
+            //Generate closing tags
+            else if(value.position == "closing" && value.key != null){
+                html = html + "</" + value.key + ">"
+            }
         }
     }
     return html
@@ -334,35 +363,43 @@ function determineClassification(content){
     }
     else{
         classification = "tag"
-
     }
+
     return classification;
 }
 
 //Checks whether there is a special character like a ~, which affects parsing of the line
 function determinePrefix(content){
     var prefix = ""
-    //This should NOT include static attribute shorthands like . # >
-    var prefixPattern = /([~:@-]).*\w+/
-    var matches = content.crux.match(prefixPattern)
-    if(matches){
-        prefix = matches[1]
+
+    if(content.lineType == "louk"){
+        //This should NOT include static attribute shorthands like . # >
+        var prefixPattern = /([~:@-]).*\w+/
+        var matches = content.crux.match(prefixPattern)
+        if(matches){
+            prefix = matches[1]
+        }
     }
+
     return prefix
 }
 
 function determineSuffix(content){
     var suffix = ""
-    var matches = ""
-    var suffixPattern = /([/~])$/
 
-    if(content.crux){
-        matches = content.crux.match(suffixPattern)
+    if(content.lineType == "louk"){
+        var matches = ""
+        var suffixPattern = /([/~])$/
+
+        if(content.crux){
+            matches = content.crux.match(suffixPattern)
+        }
+
+        if(matches){
+            suffix = matches[1]
+        }
     }
 
-    if(matches){
-        suffix = matches[1]
-    }
     return suffix
 }
 
@@ -371,30 +408,40 @@ function determineSelfClosing(content){
     if(content.suffix == "/"){
         selfClosing = true
     }
+    else if(content.lineType == "html"){
+        selfClosing = true
+    }
+    else if(content.lineType == "comment"){
+        selfClosing = true
+    }
     else {
         selfClosing = false
     }
     return selfClosing
 }
 
-var staticTagSuffixPattern = /[~/]/
-var staticCruxPattern = /^[>#\.]/
-var staticAttributePrefixPattern = /[~]/
+
 //Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue) or statically (as plain HTML)
 function determineInterpretation(content){
-    var interpretation
-    if(content.classification == "tag" && content.suffix.match(staticTagSuffixPattern)){
-        interpretation = "static"
-    }
-    else if(content.crux.match(staticCruxPattern)){
-        interpretation = "static"
+    var interpretation = ""
+    var staticTagSuffixPattern = /[~/]/
+    var staticCruxPattern = /^[>#\.]/
+    var staticAttributePrefixPattern = /[~]/
 
-    }
-    else if(content.classification == "attribute" && content.prefix.match(staticAttributePrefixPattern)){
-        interpretation = "static"
-    }
-    else{
-        interpretation = "dynamic"
+    if(content.lineType == "louk"){
+        if(content.classification == "tag" && content.suffix.match(staticTagSuffixPattern)){
+            interpretation = "static"
+        }
+        else if(content.crux.match(staticCruxPattern)){
+            interpretation = "static"
+
+        }
+        else if(content.classification == "attribute" && content.prefix.match(staticAttributePrefixPattern)){
+            interpretation = "static"
+        }
+        else{
+            interpretation = "dynamic"
+        }
     }
     return interpretation
 }
@@ -417,61 +464,76 @@ function determineIndent(content){
 //For example, these are all valid cruxes:     div     ~div     ~class:     #     .
 function determineCrux(content){
     var crux = ""
-    var processed = []
 
-    //Crux shorthands, such as . # >
-    var shorthandCruxPattern = /^([>\.#])/
-    //Cruxes that are followed by content, such as "a b"
-    var modifiedCruxPattern = /^(.+) /
-    //Cruxes not followed by content, such as "a"
-    var plainCruxPattern = /^(.+)/
+    if(content.lineType == "louk"){
+        //Crux shorthands, such as . # >
+        var shorthandCruxPattern = /^([>\.#])/
+        //Cruxes that are followed by content, such as "a b"
+        var modifiedCruxPattern = /^(.+) /
+        //Cruxes not followed by content, such as "a"
+        var plainCruxPattern = /^(.+)/
 
-    //Looks for shorthands such as "." and "#".
-    //If any of those are at the beginning of the line, we conclusively know what the line represents.
-    //This pattern should NOT include colons, since a colon must be associated with additional characters to form a crux.
-    if(content.unindented.match(shorthandCruxPattern)){
-        crux = content.unindented.match(shorthandCruxPattern)[1]
+        //Looks for shorthands such as "." and "#".
+        //If any of those are at the beginning of the line, we conclusively know what the line represents.
+        //This pattern should NOT include colons, since a colon must be associated with additional characters to form a crux.
+        if(content.unindented.match(shorthandCruxPattern)){
+            crux = content.unindented.match(shorthandCruxPattern)[1]
+        }
+
+        else if(content.unindented.match(modifiedCruxPattern)){
+            crux = content.unindented.match(modifiedCruxPattern)[1]
+        }
+
+        else if(content.unindented.match(plainCruxPattern)){
+            crux = content.unindented.match(plainCruxPattern)[1]
+        }
+        //If none of those match, then the crux is simply the undindented content.
+        //In practice, this final block should never be hit.
+        else{
+            crux = content.unindented
+        }
     }
 
-    else if(content.unindented.match(modifiedCruxPattern)){
-        crux = content.unindented.match(modifiedCruxPattern)[1]
-    }
-
-    else if(content.unindented.match(plainCruxPattern)){
-        crux = content.unindented.match(plainCruxPattern)[1]
-    }
-    //If none of those match, then the crux is simply the undindented content.
-    //In practice, this final block should never be hit.
-    else{
-        crux = content.unindented
-    }
     return crux
 }
 
 //Figures out what tag a tag is and what attribute an attribute is
 function determineFill(content){
     var fill = ""
+
+    //Handles static attribute shorthands (> . #)
     if(content.crux.match(/^[>\.#]/)){
         fill = content.unindented.match(/^[>\.#](.*)/)[1]
     }
+
+    //Handles elements and attributes
     else if(content.unindented.match(/^.+?\s.+/)){
         fill = content.unindented.match(/^.+?\s(.+)/)[1]
     }
-    console.log(fill)
+
+    //Handles comments
+    else if(content.lineType == "comment"){
+        fill = content.unindented.match(/^\/\/(.*)/)[1]
+    }
     return fill
 }
 
 function determineDirectiveType(content){
     var directiveType = ""
-    if(content.prefix == "-"){
-        directiveType = "simple"
+
+    if(content.lineType == "louk"){
+
+        if(content.prefix == "-"){
+            directiveType = "simple"
+        }
+        else if(content.prefix == "@"){
+            directiveType = "action"
+        }
+        else if(content.prefix == ":"){
+            directiveType = "bind"
+        }
     }
-    else if(content.prefix == "@"){
-        directiveType = "action"
-    }
-    else if(content.prefix == ":"){
-        directiveType = "bind"
-    }
+
     return directiveType
 }
 
@@ -480,7 +542,11 @@ function determineDirectiveType(content){
 //Other valid keys are "if", "for", "click", and "keyup.enter"
 function determineKey(content){
     var key = ""
-    var keyPattern = /[~:@-]*([A-Za-z\.0-9-]+)[\w\n]*/
+
+    if(content.lineType == "louk"){
+
+        var keyPattern = /[~:@-]*([A-Za-z\.0-9-]+)[\w\n]*/
+
         if(content.crux == "."){
             key = "class"
         }
@@ -496,8 +562,9 @@ function determineKey(content){
         else{
             key = null
         }
-
-        return key
+    }
+    
+    return key
 }
 
 //Adds property to indicate that the element is a closing tag

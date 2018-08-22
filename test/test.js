@@ -72,5 +72,17 @@ describe("Louk Current", function(){
     it("should return an element with static URL", function(){
         assert.equal(louk('a\n>b'),'<a href="b"></a>')
     })
+    it("should pass through HTML content", function(){
+        assert.equal(louk('<a>b</a>'),'<a>b</a>')
+    })
+    it("should generate an HTML comment", function(){
+        assert.equal(louk('//a'),'<!-- a -->')
+    })
+    it("should pass through HTML content", function(){
+        assert.equal(louk('<a>\n<b></b></a>'),'<a><b></b></a>')
+    })
+    it("should pass through HTML content", function(){
+        assert.equal(louk('<a>\n<b>\nhi</b></a>'),'<a><b></b></a>')
+    })
 
 })

@@ -5,7 +5,7 @@ _Vue without the HTML_
 
 Vue is a beautiful technology, but it’s always felt a bit awkward crammed into old-school HTML. Louk is a tailor-made notation and preprocessor that hides the wonky stuff and lets Vue shine.
 
-The key is that most things are interpreted as dynamic Vue entities (bound content and attributes) by default, while anything else is escaped with a single character. This means markup like `{{ }}` and `v-` become unnecessary, as it’s just assumed.
+The key is that most things are interpreted as dynamic Vue entities (bound content and attributes) by default, while anything else is escaped with a single character. This means markup like `{{ }}` and `v-` becomes unnecessary, as it’s just assumed.
 
 Louk runs on Node, and can compile standalone markup into HTML files (via task runners like gulp) or embedded markup in single file components (via module loaders such as webpack).
 
@@ -19,13 +19,13 @@ If using with webpack, you'll also want to install the [Louk Loader](https://git
 
 ### Elements & Content
 
-Elements are denoted by their tags as the first visible characters on a line. Nested elements are indented, and closing tags are implied. Self closing elements are followed with a pipe.
+Elements are denoted by their tags as the first visible characters on a line. Nested elements are indented, and closing tags are implied. Self closing elements are followed with a forward slash.
 
 ```html
 //louk
 h1
 div
-    br|
+    br/
 
 //html
 <h1></h1>
@@ -98,8 +98,10 @@ Attributes can be made static by escaping the attribute name with a leading tild
 
 `~type text/css` becomes `type="text/css"`
 
-Additionally, classes and IDs can be made static by escaping the attribute value with a leading period or pound sign, respectively.
+Additionally, the `class`, `id`, and `href` attributes can be made static by escaping the attribute value with a leading period, pound sign, or closing angle bracket, respectively.
 
 `.center` becomes `class="center"`
 
 `#install` becomes `id="install"`
+
+`>example.org` becomes `href="example.org"`

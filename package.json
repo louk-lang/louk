@@ -1,6 +1,6 @@
 {
   "name": "louk",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "Vue shorthand",
   "main": "louk.js",
   "scripts": {

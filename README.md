@@ -1,6 +1,10 @@
 # Louk
 _Vue without the HTML_
 
+[![Build Status](https://img.shields.io/travis/agorischek/louk.svg)](https://travis-ci.org/agorischek/louk)
+[![Version](https://img.shields.io/npm/v/louk.svg)](https://www.npmjs.com/package/louk)
+[![License](https://img.shields.io/github/license/agorischek/louk.svg)](https://github.com/agorischek/louk/blob/master/LICENSE)
+
 ## Intro
 
 Vue is a beautiful technology, but it’s always felt a bit awkward crammed into old-school HTML. Louk is a tailor-made notation and preprocessor that hides the wonky stuff and lets Vue shine.

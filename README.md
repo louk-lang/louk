@@ -1,11 +1,7 @@
-<img width="160" src="img/logo.svg" alt="Louk logo" />
+<img width="90" src="img/logo.svg" alt="Louk logo" />
 
 # Louk
 _Vue without the HTML_
-
-[![Build Status](https://img.shields.io/travis/agorischek/louk.svg?style=for-the-badge)](https://travis-ci.org/agorischek/louk)
-[![Version](https://img.shields.io/npm/v/louk.svg?style=for-the-badge)](https://www.npmjs.com/package/louk)
-[![License](https://img.shields.io/github/license/agorischek/louk.svg?style=for-the-badge)](https://github.com/agorischek/louk/blob/master/LICENSE)
 
 ## Intro
 

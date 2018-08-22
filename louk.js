@@ -317,6 +317,9 @@ function determineClassification(content){
     else if(content.crux == "."){
         classification = "attribute"
     }
+    else if(content.crux == ">"){
+        classification = "attribute"
+    }
     else if(content.prefix == "~"){
         classification = "attribute"
     }
@@ -339,6 +342,7 @@ function determineClassification(content){
 //Checks whether there is a special character like a ~, which affects parsing of the line
 function determinePrefix(content){
     var prefix = ""
+    //This should NOT include static attribute shorthands like . # >
     var prefixPattern = /([~:@-]).*\w+/
     var matches = content.crux.match(prefixPattern)
     if(matches){
@@ -350,7 +354,7 @@ function determinePrefix(content){
 function determineSuffix(content){
     var suffix = ""
     var matches = ""
-    var suffixPattern = /([~|])$/
+    var suffixPattern = /([/~])$/
 
     if(content.crux){
         matches = content.crux.match(suffixPattern)
@@ -364,7 +368,7 @@ function determineSuffix(content){
 
 function determineSelfClosing(content){
     var selfClosing = false
-    if(content.suffix == "|"){
+    if(content.suffix == "/"){
         selfClosing = true
     }
     else {
@@ -373,8 +377,8 @@ function determineSelfClosing(content){
     return selfClosing
 }
 
-var staticTagSuffixPattern = /[~|]/
-var staticCruxPattern = /^[#\.]/
+var staticTagSuffixPattern = /[~/]/
+var staticCruxPattern = /^[>#\.]/
 var staticAttributePrefixPattern = /[~]/
 //Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue) or statically (as plain HTML)
 function determineInterpretation(content){
@@ -415,8 +419,11 @@ function determineCrux(content){
     var crux = ""
     var processed = []
 
-    var shorthandCruxPattern = /^([\.#])/
+    //Crux shorthands, such as . # >
+    var shorthandCruxPattern = /^([>\.#])/
+    //Cruxes that are followed by content, such as "a b"
     var modifiedCruxPattern = /^(.+) /
+    //Cruxes not followed by content, such as "a"
     var plainCruxPattern = /^(.+)/
 
     //Looks for shorthands such as "." and "#".
@@ -433,25 +440,24 @@ function determineCrux(content){
     else if(content.unindented.match(plainCruxPattern)){
         crux = content.unindented.match(plainCruxPattern)[1]
     }
-
     //If none of those match, then the crux is simply the undindented content.
     //In practice, this final block should never be hit.
     else{
         crux = content.unindented
     }
-
     return crux
 }
 
 //Figures out what tag a tag is and what attribute an attribute is
 function determineFill(content){
     var fill = ""
-    if(content.crux.match(/^[\.#]/)){
-        fill = content.unindented.match(/^[\.#](.*)/)[1]
+    if(content.crux.match(/^[>\.#]/)){
+        fill = content.unindented.match(/^[>\.#](.*)/)[1]
     }
     else if(content.unindented.match(/^.+?\s.+/)){
         fill = content.unindented.match(/^.+?\s(.+)/)[1]
     }
+    console.log(fill)
     return fill
 }
 
@@ -475,12 +481,14 @@ function determineDirectiveType(content){
 function determineKey(content){
     var key = ""
     var keyPattern = /[~:@-]*([A-Za-z\.0-9-]+)[\w\n]*/
-
         if(content.crux == "."){
             key = "class"
         }
         else if(content.crux == "#"){
             key = "id"
+        }
+        else if(content.crux == ">"){
+            key = "href"
         }
         else if(content.unindented.match(keyPattern)){
             key = content.unindented.match(keyPattern)[1]
@@ -488,6 +496,7 @@ function determineKey(content){
         else{
             key = null
         }
+
         return key
 }
 

@@ -49,7 +49,7 @@ describe("Louk Current", function(){
         assert.equal(louk('a~ b'),'<a>b</a>')
     })
     it("should return a self-closing element", function(){
-        assert.equal(louk('a|'),'<a />')
+        assert.equal(louk('a/'),'<a />')
     })
     it("should return an attribute with dynamic content", function(){
         assert.equal(louk('a\n:b c'),'<a v-bind:b="c"></a>')
@@ -63,14 +63,14 @@ describe("Louk Current", function(){
     it("should return an element with a for statement", function(){
         assert.equal(louk('a\n-for b'),'<a v-for="b"></a>')
     })
-    it("should return an element with a action directive", function(){
+    it("should return an element with a click action directive", function(){
         assert.equal(louk('a\n@click b'),'<a v-on:click="b"></a>')
     })
-    it.only("should return an element with a action directive", function(){
+    it("should return an element with a key action directive", function(){
         assert.equal(louk('a\n@keyup.enter b'),'<a v-on:keyup.enter="b"></a>')
     })
-    it("should return an element with a action directive", function(){
-        assert.equal(louk('a\n@click b'),'<a v-on:click="b"></a>')
+    it("should return an element with static URL", function(){
+        assert.equal(louk('a\n>b'),'<a href="b"></a>')
     })
 
 })

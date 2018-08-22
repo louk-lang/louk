@@ -1,13 +1,13 @@
 {
   "name": "louk",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Vue shorthand",
   "main": "louk.js",
   "scripts": {
     "test": "mocha"
   },
   "author": "Alex Gorischek",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "underscore": "^1.9.1"
   },

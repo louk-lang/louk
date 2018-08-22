@@ -106,4 +106,4 @@ Additionally, the `class`, `id`, and `href` attributes can be made static by esc
 
 `#install` becomes `id="install"`
 
-`>example.org` becomes `href="example.org"`
+`>https://example.org` becomes `href="https://example.org"`

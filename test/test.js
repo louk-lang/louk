@@ -78,11 +78,11 @@ describe("Louk Current", function(){
     it("should generate an HTML comment", function(){
         assert.equal(louk('//a'),'<!-- a -->')
     })
-    it("should pass through HTML content", function(){
-        assert.equal(louk('<a>\n<b></b></a>'),'<a><b></b></a>')
+    it("should pass through multi-line HTML content", function(){
+        assert.equal(louk('<a>\n<b></b>\n</a>'),'<a><b></b></a>')
     })
-    it("should pass through HTML content", function(){
-        assert.equal(louk('<a>\n<b>\nhi</b></a>'),'<a><b></b></a>')
+    it("should pass through HTML content with Louk content in it", function(){
+        assert.equal(louk('<a>\n<b>\nc d\n</b></a>'),'<a><b><c>{{d}}</c></b></a>')
     })
 
 })

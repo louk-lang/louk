@@ -147,14 +147,16 @@ function breakLines(content){
 
 function deleteComments(content){
 
+    //Lines with comments
     var lines = content
-    console.log(content.lineType)
 
+    //Lines without comments
     var prunedLines = []
 
     for(var index = 0; index < content.length; index++){
+
         var value = content[index]
-        console.log(value.lineType)
+
         if(value.lineType != "comment"){
             prunedLines.push(value)
         }

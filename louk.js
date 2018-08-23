@@ -8,14 +8,17 @@ require.extensions['.louk'] = function (module, filename) {
 
 const patterns = {
 
+
         //PREFIXES
         //Prefixes are nonalphabetic modifiers that precede the key.
 
         //All valid prefixes: ~ and : and @ and -
+        //Shorthands like . and # are not prefixes, they are cruxes.
         prefix: /^([~:@-])/,
 
         //Prefixes that can make an attribute static: ~
         staticPrefix: /^([~])/,
+
 
         //SUFFIXES
         //Suffixes are nonalphabetic modifiers that follow the key.
@@ -26,6 +29,7 @@ const patterns = {
         //Suffixes that can make an element static: ~ and /
         // The forward slash makes an element self-closing, and therefore not capable of containing dynamic content.
         staticSuffix: /([~/])$/,
+
 
         //CRUXES
         //The crux is the string present in the source Louk that indicates what the line represents.
@@ -39,7 +43,19 @@ const patterns = {
         modifiedCrux: /^(.+)\s.+$/,
 
         //Shorthand cruxes that make their attribute static: > and # and .
-        staticCrux: /^([>#\.])/,
+        //The first capture group gets the shorthand crux, the second capture group gets the fill.
+        staticCrux: /^([>#\.]).*/,
+
+
+        //FILLS
+        //The fill is the "stuff" of the line: It's the content inside the element or the value of the attribute.
+
+        //A normal fill, preceded by a space
+        fill: /^.+?\s(.+)/,
+
+        //A fill prepended by a static crux
+        staticFill: /^[>#\.](.*)/,
+
 
         //KEYS
         //A key is semantically what a line of Louk ultimately represents: A specific tag or a specific attribute.
@@ -47,10 +63,12 @@ const patterns = {
 
         key: /^[~:@-]*([\w\.-]+)/,
 
+
         //OTHER
 
-        //Characters that indicate the line should be interpretted as a comment
-        comment: /^(\/\/)/,
+        //Characters that indicate the line should be interpretted as a comment.
+        //The capture group captures the comment.
+        comment: /^\/\/(.*)/,
 
         //Characters that indicate the line should be interpretted as HTML
         html: /^([<])/,
@@ -422,13 +440,11 @@ function determineClassification(content){
     return classification;
 }
 
-//Checks whether there is a special character like a ~, which affects parsing of the line
 function determinePrefix(content){
     var prefix = ""
 
     if(content.lineType == "louk"){
 
-        //This should NOT include static attribute shorthands like . # >
         var matches = content.crux.match(patterns.prefix)
         if(matches){
             prefix = matches[1]
@@ -513,9 +529,6 @@ function determineCrux(content){
 
     if(content.lineType == "louk"){
 
-        //Looks for shorthands such as "." and "#".
-        //If any of those are at the beginning of the line, we conclusively know what the line represents.
-        //This pattern should NOT include colons, since a colon must be associated with additional characters to form a crux.
         if(content.unindented.match(patterns.staticCrux)){
             crux = content.unindented.match(patterns.staticCrux)[1]
         }
@@ -542,18 +555,18 @@ function determineFill(content){
     var fill = ""
 
     //Handles static attribute shorthands (> . #)
-    if(content.crux.match(/^[>\.#]/)){
-        fill = content.unindented.match(/^[>\.#](.*)/)[1]
+    if(content.crux.match(patterns.staticFill)){
+        fill = content.unindented.match(patterns.staticFill)[1]
     }
 
     //Handles elements and attributes
-    else if(content.unindented.match(/^.+?\s.+/)){
-        fill = content.unindented.match(/^.+?\s(.+)/)[1]
+    else if(content.unindented.match(patterns.fill)){
+        fill = content.unindented.match(patterns.fill)[1]
     }
 
     //Handles comments
     else if(content.lineType == "comment"){
-        fill = content.unindented.match(/^\/\/(.*)/)[1]
+        fill = content.unindented.match(patterns.comment)[1]
     }
     return fill
 }

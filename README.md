@@ -110,7 +110,7 @@ Additionally, the `class`, `id`, and `href` attributes can be made static by esc
 
 ### Comments & HTML
 
-Comments are indicated with two leading forward slashes.
+Comments are indicated with two leading forward slashes and will not be included in the HTML output.
 
 ```html
 //louk
@@ -120,4 +120,17 @@ div save
 
 //html
 <div v-bind:click="confirm">{{save}}</div>
+```
+Raw HTML will be passed through unmodified. Louk notation can be included on new lines inside HTML tags.
+
+```html
+//louk
+<div>
+    h1 title
+    #title
+    <!-- A comment -->
+</div>
+
+//html
+<div><h1 id="title">{{title}}</h1><!-- A comment --></div>
 ```

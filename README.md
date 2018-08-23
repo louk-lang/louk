@@ -121,7 +121,7 @@ div save
 //html
 <div v-on:click="confirm">{{save}}</div>
 ```
-Raw HTML will be passed through unmodified. Louk notation can be included on new lines inside HTML tags.
+Raw HTML will be passed through unmodified. Louk notation can be included on new lines between HTML tags.
 
 ```html
 //louk

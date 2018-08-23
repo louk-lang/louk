@@ -132,5 +132,8 @@ Raw HTML will be passed through unmodified. Louk notation can be included on new
 </div>
 
 //html
-<div><!-- A comment --><h1 id="title">{{title}}</h1></div>
+<div>
+    <!-- A comment -->
+    <h1 id="title">{{title}}</h1>
+</div>
 ```

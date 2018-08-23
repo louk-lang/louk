@@ -90,25 +90,12 @@ describe("Louk", function(){
     it("should pass through an HTML comment", function(){
         assert.equal(louk('a\n<!-- b -->\nc'),'<a></a><!-- b --><c></c>')
     })
-})
-
-describe("Documentation examples", function(){
-    it("should return documented values", function(){
+    it("should return correct values for documentation examples", function(){
         assert.equal(louk('h1\ndiv\n\tbr/'),'<h1></h1><div><br /></div>')
-    })
-    it("should return documented values", function(){
         assert.equal(louk('div string'),'<div>{{string}}</div>')
-    })
-    it("should return documented values", function(){
         assert.equal(louk('ul\n:class focus\n\tli\n\t-for item in items'),'<ul v-bind:class="focus"><li v-for="item in items"></li></ul>')
-    })
-    it("should return documented values", function(){
         assert.equal(louk('p~ Hello world!'),'<p>Hello world!</p>')
-    })
-    it.only("should return documented values", function(){
         assert.equal(louk('div save\n//Triggers dialog\n@click confirm'),'<div v-on:click="confirm">{{save}}</div>')
-    })
-    it("should return documented values", function(){
         assert.equal(louk('<div>\n\th1 title\n\t#title\n\t<!-- A comment --></div>'),'<div><h1 id="title">{{title}}</h1><!-- A comment --></div>')
     })
 })

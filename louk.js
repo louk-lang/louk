@@ -6,6 +6,60 @@ require.extensions['.louk'] = function (module, filename) {
     module.exports = fs.readFileSync(filename, 'utf8');
 };
 
+const patterns = {
+
+        //PREFIXES
+        //Prefixes are nonalphabetic modifiers that precede the key.
+
+        //All valid prefixes: ~ and : and @ and -
+        prefix: /^([~:@-])/,
+
+        //Prefixes that can make an attribute static: ~
+        staticPrefix: /^([~])/,
+
+        //SUFFIXES
+        //Suffixes are nonalphabetic modifiers that follow the key.
+
+        //All valid suffixes: ~ and /
+        suffix: /([~/])$/,
+
+        //Suffixes that can make an element static: ~ and /
+        // The forward slash makes an element self-closing, and therefore not capable of containing dynamic content.
+        staticSuffix: /([~/])$/,
+
+        //CRUXES
+        //The crux is the string present in the source Louk that indicates what the line represents.
+        //It is most commonly the same as the content before the first space or new line.
+        //However, shorthands like "#" and "." are important exceptions.
+
+        //Cruxes not followed by content, such as "a"
+        plainCrux: /^(.+)$/,
+
+        //Cruxes that are followed by content, such as "a b"
+        modifiedCrux: /^(.+)\s.+$/,
+
+        //Shorthand cruxes that make their attribute static: > and # and .
+        staticCrux: /^([>#\.])/,
+
+        //KEYS
+        //A key is semantically what a line of Louk ultimately represents: A specific tag or a specific attribute.
+        //A key might be implied or it might have a shorthand. For example, "." is a crux, and "class" is its key.
+
+        key: /^[~:@-]*([\w\.-]+)/,
+
+        //OTHER
+
+        //Characters that indicate the line should be interpretted as a comment
+        comment: /^(\/\/)/,
+
+        //Characters that indicate the line should be interpretted as HTML
+        html: /^([<])/,
+
+        //Used to identify whether we've hit the first non-space character of a line yet.
+        initialSpace: /^(\s)/
+}
+
+
 module.exports = function(content){
     return html = parse(content);
 }
@@ -112,10 +166,10 @@ function determineProperties(content){
 
 function determineLineType(content){
     var type = ""
-    if(content.unindented.match(/^\/\//)){
+    if(content.unindented.match(patterns.comment)){
         type = "comment"
     }
-    else if(content.unindented.match(/^</)){
+    else if(content.unindented.match(patterns.html)){
         type = "html"
     }
     else{
@@ -358,7 +412,7 @@ function determineClassification(content){
     else if(content.prefix == "@"){
         classification = "attribute"
     }
-    else if(content.crux.match(/^:/)){
+    else if(content.prefix == ":"){
         classification = "attribute"
     }
     else{
@@ -373,9 +427,9 @@ function determinePrefix(content){
     var prefix = ""
 
     if(content.lineType == "louk"){
+
         //This should NOT include static attribute shorthands like . # >
-        var prefixPattern = /([~:@-]).*\w+/
-        var matches = content.crux.match(prefixPattern)
+        var matches = content.crux.match(patterns.prefix)
         if(matches){
             prefix = matches[1]
         }
@@ -389,10 +443,9 @@ function determineSuffix(content){
 
     if(content.lineType == "louk"){
         var matches = ""
-        var suffixPattern = /([/~])$/
 
         if(content.crux){
-            matches = content.crux.match(suffixPattern)
+            matches = content.crux.match(patterns.suffix)
         }
 
         if(matches){
@@ -424,19 +477,16 @@ function determineSelfClosing(content){
 //Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue) or statically (as plain HTML)
 function determineInterpretation(content){
     var interpretation = ""
-    var staticTagSuffixPattern = /[~/]/
-    var staticCruxPattern = /^[>#\.]/
-    var staticAttributePrefixPattern = /[~]/
 
     if(content.lineType == "louk"){
-        if(content.classification == "tag" && content.suffix.match(staticTagSuffixPattern)){
+        if(content.classification == "tag" && content.suffix.match(patterns.staticSuffix)){
             interpretation = "static"
         }
-        else if(content.crux.match(staticCruxPattern)){
+        else if(content.crux.match(patterns.staticCrux)){
             interpretation = "static"
 
         }
-        else if(content.classification == "attribute" && content.prefix.match(staticAttributePrefixPattern)){
+        else if(content.classification == "attribute" && content.prefix.match(patterns.staticPrefix)){
             interpretation = "static"
         }
         else{
@@ -450,42 +500,32 @@ function determineInterpretation(content){
 function determineIndent(content){
     var indent = 0
     var content = content
-    while(content.match(/^\s/)){
+    while(content.match(patterns.initialSpace)){
         content = content.substr(1)
         indent = indent + 1
     }
     return [indent, content]
 }
 
-//Figures out the crux, which is the indicator of what a line represents.
-//The crux potentially includes an element tag, a prefix, a suffix, and/or a key shorthand.
-//Crucially, the crux is always what is explicitly present in the source, regardless of what is eventually inferred.
-//It is nearly the same as any content before the first space, with the exception of shorthands like "#".
-//For example, these are all valid cruxes:     div     ~div     ~class:     #     .
+
 function determineCrux(content){
     var crux = ""
 
     if(content.lineType == "louk"){
-        //Crux shorthands, such as . # >
-        var shorthandCruxPattern = /^([>\.#])/
-        //Cruxes that are followed by content, such as "a b"
-        var modifiedCruxPattern = /^(.+) /
-        //Cruxes not followed by content, such as "a"
-        var plainCruxPattern = /^(.+)/
 
         //Looks for shorthands such as "." and "#".
         //If any of those are at the beginning of the line, we conclusively know what the line represents.
         //This pattern should NOT include colons, since a colon must be associated with additional characters to form a crux.
-        if(content.unindented.match(shorthandCruxPattern)){
-            crux = content.unindented.match(shorthandCruxPattern)[1]
+        if(content.unindented.match(patterns.staticCrux)){
+            crux = content.unindented.match(patterns.staticCrux)[1]
         }
 
-        else if(content.unindented.match(modifiedCruxPattern)){
-            crux = content.unindented.match(modifiedCruxPattern)[1]
+        else if(content.unindented.match(patterns.modifiedCrux)){
+            crux = content.unindented.match(patterns.modifiedCrux)[1]
         }
 
-        else if(content.unindented.match(plainCruxPattern)){
-            crux = content.unindented.match(plainCruxPattern)[1]
+        else if(content.unindented.match(patterns.plainCrux)){
+            crux = content.unindented.match(patterns.plainCrux)[1]
         }
         //If none of those match, then the crux is simply the undindented content.
         //In practice, this final block should never be hit.
@@ -539,13 +579,10 @@ function determineDirectiveType(content){
 
 //Expands key shorthands
 //For example, converts "#" to "id"
-//Other valid keys are "if", "for", "click", and "keyup.enter"
 function determineKey(content){
     var key = ""
 
     if(content.lineType == "louk"){
-
-        var keyPattern = /[~:@-]*([A-Za-z\.0-9-]+)[\w\n]*/
 
         if(content.crux == "."){
             key = "class"
@@ -556,14 +593,14 @@ function determineKey(content){
         else if(content.crux == ">"){
             key = "href"
         }
-        else if(content.unindented.match(keyPattern)){
-            key = content.unindented.match(keyPattern)[1]
+        else if(content.unindented.match(patterns.key)){
+            key = content.unindented.match(patterns.key)[1]
         }
         else{
             key = null
         }
     }
-    
+
     return key
 }
 

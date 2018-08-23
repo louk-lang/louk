@@ -119,18 +119,18 @@ div save
 @click confirm
 
 //html
-<div v-bind:click="confirm">{{save}}</div>
+<div v-on:click="confirm">{{save}}</div>
 ```
 Raw HTML will be passed through unmodified. Louk notation can be included on new lines inside HTML tags.
 
 ```html
 //louk
 <div>
+    <!-- A comment -->
     h1 title
     #title
-    <!-- A comment -->
 </div>
 
 //html
-<div><h1 id="title">{{title}}</h1><!-- A comment --></div>
+<div><!-- A comment --><h1 id="title">{{title}}</h1></div>
 ```

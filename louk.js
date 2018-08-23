@@ -37,10 +37,10 @@ const patterns = {
         //However, shorthands like "#" and "." are important exceptions.
 
         //Cruxes not followed by content, such as "a"
-        plainCrux: /^(.+)$/,
+        plainCrux: /^(.+)/,
 
         //Cruxes that are followed by content, such as "a b"
-        modifiedCrux: /^(.+)\s.+$/,
+        modifiedCrux: /^(.+?)\s/,
 
         //Shorthand cruxes that make their attribute static: > and # and .
         //The first capture group gets the shorthand crux, the second capture group gets the fill.
@@ -115,8 +115,12 @@ function parse(input){
     write("After determining properties:")
     write(lines)
 
+    lines = deleteComments(lines)
+    write("After deleting comments:")
+    write(lines)
+
     elements = assignAttributes(lines)
-    write("After structuring as elements")
+    write("After structuring as elements:")
     write(elements)
 
     elements = assignMatches(elements)
@@ -139,6 +143,24 @@ function breakLines(content){
     var lines = content
     lines = content.split("\n")
     return lines
+}
+
+function deleteComments(content){
+
+    var lines = content
+    console.log(content.lineType)
+
+    var prunedLines = []
+
+    for(var index = 0; index < content.length; index++){
+        var value = content[index]
+        console.log(value.lineType)
+        if(value.lineType != "comment"){
+            prunedLines.push(value)
+        }
+
+    }
+    return prunedLines
 }
 
 function objectifyLines(content){
@@ -354,7 +376,10 @@ function generateHTML(content){
 
                     //If the attribute should be interpretted dynamically...
                     if(value.interpretation == "dynamic"){
-                        if(value.directiveType == "simple"){
+                        if(value.directiveType == "boolean"){
+                            attribute = "v-" + key
+                        }
+                        else if(value.directiveType == "simple"){
                             attribute = "v-" + key
                         }
                         else if(value.directiveType == "action"){
@@ -371,10 +396,12 @@ function generateHTML(content){
                     }
 
                     //Put the above defined attribute and value into the HTML
-                    html = html + " " + attribute + "=\""
-                    html = html + value.data
-                    html = html + "\""
+                    html = html + " " + attribute
 
+                    //If the directive is boolean, no explicit value is needed
+                    if(value.directiveType != "boolean"){
+                        html = html + "=\"" + value.data + "\""
+                    }
                 })
 
                 if(value.selfClosing){
@@ -575,7 +602,10 @@ function determineDirectiveType(content){
 
     if(content.lineType == "louk"){
 
-        if(content.prefix == "-"){
+        if(content.prefix == "-" && content.fill == ""){
+            directiveType = "boolean"
+        }
+        else if(content.prefix == "-" && content.fill != ""){
             directiveType = "simple"
         }
         else if(content.prefix == "@"){

@@ -1,4 +1,4 @@
-<img width="90" src="https://raw.githubusercontent.com/agorischek/louk/master/img/logo.svg" alt="Louk logo" />
+<img width="90" src="img/logo.svg" alt="Louk logo" />
 
 # Louk
 _Vue without the HTML_

@@ -1,4 +1,4 @@
-<img width="90" src="img/logo.svg" alt="Louk logo" />
+<img width="90" src="img/logo.png" alt="Louk logo" />
 
 # Louk
 _Vue without the HTML_

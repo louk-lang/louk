@@ -2,7 +2,7 @@ const louk = require("../louk.js")
 const chai = require("chai")
 const assert = chai.assert
 
-describe("Louk Current", function(){
+describe("Louk", function(){
     it("should return a simple element", function(){
         assert.equal(louk('a'),'<a></a>')
     })
@@ -60,6 +60,9 @@ describe("Louk Current", function(){
     it("should return an element with a simple directive", function(){
         assert.equal(louk('a\n-if b'),'<a v-if="b"></a>')
     })
+    it("should return an element with a boolean directive", function(){
+        assert.equal(louk('a\n-b'),'<a v-b></a>')
+    })
     it("should return an element with a for statement", function(){
         assert.equal(louk('a\n-for b'),'<a v-for="b"></a>')
     })
@@ -72,5 +75,27 @@ describe("Louk Current", function(){
     it("should return an element with static URL", function(){
         assert.equal(louk('a\n>b'),'<a href="b"></a>')
     })
-
+    it("should pass through HTML content", function(){
+        assert.equal(louk('<a>b</a>'),'<a>b</a>')
+    })
+    it("should discard a comment", function(){
+        assert.equal(louk('//a\nb'),'<b></b>')
+    })
+    it("should pass through multi-line HTML content", function(){
+        assert.equal(louk('<a>\n<b></b>\n</a>'),'<a><b></b></a>')
+    })
+    it("should pass through HTML content with Louk content in it", function(){
+        assert.equal(louk('<a>\n<b>\nc d\n</b></a>'),'<a><b><c>{{d}}</c></b></a>')
+    })
+    it("should pass through an HTML comment", function(){
+        assert.equal(louk('a\n<!-- b -->\nc'),'<a></a><!-- b --><c></c>')
+    })
+    it("should return correct values for documentation examples", function(){
+        assert.equal(louk('h1\ndiv\n\tbr/'),'<h1></h1><div><br /></div>')
+        assert.equal(louk('div string'),'<div>{{string}}</div>')
+        assert.equal(louk('ul\n:class focus\n\tli\n\t-for item in items'),'<ul v-bind:class="focus"><li v-for="item in items"></li></ul>')
+        assert.equal(louk('p~ Hello world!'),'<p>Hello world!</p>')
+        assert.equal(louk('div save\n//Triggers dialog\n@click confirm'),'<div v-on:click="confirm">{{save}}</div>')
+        assert.equal(louk('<div>\n\th1 title\n\t#title\n\t<!-- A comment --></div>'),'<div><h1 id="title">{{title}}</h1><!-- A comment --></div>')
+    })
 })

@@ -107,3 +107,33 @@ Additionally, the `class`, `id`, and `href` attributes can be made static by esc
 `#install` becomes `id="install"`
 
 `>https://example.org` becomes `href="https://example.org"`
+
+### Comments & HTML
+
+Comments are indicated with two leading forward slashes and will not be included in the HTML output.
+
+```html
+//louk
+div save
+//Triggers dialog
+@click confirm
+
+//html
+<div v-on:click="confirm">{{save}}</div>
+```
+Raw HTML will be passed through unmodified. Louk notation can be included on new lines between HTML tags.
+
+```html
+//louk
+<div>
+    <!-- A comment -->
+    h1 title
+    #title
+</div>
+
+//html
+<div>
+    <!-- A comment -->
+    <h1 id="title">{{title}}</h1>
+</div>
+```

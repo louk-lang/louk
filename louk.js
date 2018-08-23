@@ -335,10 +335,9 @@ function generateHTML(content){
             html = html + value.unindented
         }
 
-        //Comments are transformed to HTML format
+        //Comments are discarded
         else if(value.lineType == "comment"){
-
-            html = html + "<!-- " + value.fill + " -->"
+            html = html
         }
 
         //Louk notation goes through additional processing

@@ -2,6 +2,10 @@ const louk = require("../louk.js")
 const chai = require("chai")
 const assert = chai.assert
 
+var markunit = require("markunit")
+var fs = require('fs');
+var readme = markunit(fs.readFileSync("./README.md", "utf8"))
+
 describe("Louk", function(){
     it("should return a simple element", function(){
         assert.equal(louk('a'),'<a></a>')
@@ -98,4 +102,25 @@ describe("Louk", function(){
         assert.equal(louk('div save\n//Triggers dialog\n@click confirm'),'<div v-on:click="confirm">{{save}}</div>')
         assert.equal(louk('<div>\n\th1 title\n\t#title\n\t<!-- A comment --></div>'),'<div><h1 id="title">{{title}}</h1><!-- A comment --></div>')
     })
+})
+
+describe("README", function(){
+  it("should contain at least one h1", function(){
+    readme.markup.has("h1")
+  })
+  it("should contain at least one h2", function(){
+    readme.markup.has("h2")
+  })
+  it("should not contain double-indented lists", function(){
+    readme.markup.no("li li")
+  })
+  it("should not have any curly quotes in code snippets", function(){
+    readme.code.no(["“","”"])
+  })
+  it("should not have the library's name in lower-case form in the copy", function(){
+    readme.copy.no("louk")
+  })
+  it("should contain installation instructions", function(){
+    readme.code.has("npm install")
+  })
 })

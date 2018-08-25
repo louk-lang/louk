@@ -5,7 +5,9 @@ module.exports = {
 const _ = require("underscore")
 
 //Turns the completed array of element objects into raw HTML
-function generateHTML(content){
+function generateHTML(input){
+
+    const content = input
     let html = ""
 
     for(let index = 0; index < content.length; index++){

@@ -8,14 +8,20 @@ module.exports = {
 const patterns = require("./patterns")
 const propertyDeterminer = require("./property-determiner")
 
-function breakLines(content){
+function breakLines(input){
+
+    const content = input
     let lines = content
+    
     lines = content.split("\n")
+
     return lines
+
 }
 
-function deleteComments(content){
+function deleteComments(input){
 
+    const content = input
     //Lines with comments
     let lines = content
 
@@ -34,7 +40,9 @@ function deleteComments(content){
     return prunedLines
 }
 
-function objectifyLines(content){
+function objectifyLines(input){
+
+    const content = input
     let objectifiedLines = []
 
     for(let index = 0; index < content.length; index++){
@@ -49,7 +57,9 @@ function objectifyLines(content){
     return objectifiedLines
 }
 
-function determineProperties(content){
+function determineProperties(input){
+
+    const content = input
     let lines = content
 
     for(let index = 0; index < content.length; index++){

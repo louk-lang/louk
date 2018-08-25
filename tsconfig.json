@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "system",
+        "removeComments": true,
+        "sourceMap": true,
+        "outdir": "./dist"
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}

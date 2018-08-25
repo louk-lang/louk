@@ -10,5 +10,6 @@ const parser = require("./parser")
 let logging = false
 
 module.exports = function(content){
-    return html = parser.parse(content, logging);
+    let html = parser.parse(content, logging);
+    return html
 }

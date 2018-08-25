@@ -3,7 +3,7 @@ module.exports = {
     log: log
 }
 
-var logging = true
+let logging = false
 
 //Writing to console
 function write(content){

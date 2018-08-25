@@ -6,7 +6,9 @@ require.extensions['.louk'] = function (module, filename) {
 
 const parser = require("./parser")
 
-module.exports = function(content){
+//Turn verbose logging on or off
+let logging = false
 
-    return html = parser.parse(content);
+module.exports = function(content){
+    return html = parser.parse(content, logging);
 }

@@ -8,8 +8,8 @@ var elementProcessor = require("./element-processor");
 var htmlGenerator = require("./html-generator");
 var utils = require("./utils");
 var write = utils.write;
-utils.log(false);
-function parse(input) {
+function parse(input, logging) {
+    utils.log(logging);
     var raw = "";
     var lines = [];
     var elements = [];

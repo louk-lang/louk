@@ -11,10 +11,10 @@ const htmlGenerator = require("./html-generator")
 const utils = require("./utils")
 const write = utils.write
 
-//Turn verbose logging on or off
-utils.log(false)
+function parse(input, logging){
 
-function parse(input){
+    utils.log(logging)
+
     //Raw holds the raw input
     let raw = ""
     //Lines holds each line of the document broken down into its own object, which we progressively add metadata to

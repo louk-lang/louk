@@ -115,6 +115,70 @@ describe("Louk", function(){
     })
 })
 
+describe("Patterns", function(){
+    it("should be defined", function(){
+        assert.equal(typeof(patterns), "object")
+        assert.notEqual(patterns, {})
+    })
+})
+
+describe("Line Processor", function(){
+    it("should delete comments", function(){
+        const input = [
+            { raw: '//a',
+                lineType: 'comment'
+            },
+            {
+                raw: 'b',
+                lineType: 'louk'
+            }
+        ]
+        assert.equal(lineProcessor.deleteComments(input).length, 1)
+    })
+})
+
+describe("Element Processor", function(){
+    it("should assign a closing tag", function(){
+        const input = [
+            {
+                classification: 'tag',
+                key: 'a',
+                preceding: []
+            }
+        ]
+        assert.equal(elementProcessor.assignMatches(input).length, 2)
+    })
+})
+
+describe("Property Determiner", function(){
+    it("should identify line types", function(){
+        assert.equal(propertyDeterminer.determineLineType({ unindented: '<a>' }), 'html')
+        assert.equal(propertyDeterminer.determineLineType({ unindented: '//b' }), 'comment')
+        assert.equal(propertyDeterminer.determineLineType({ unindented: 'c' }), 'louk')
+    })
+})
+
+describe("HTML Generator", function(){
+    it("should generate HTML", function(){
+        const input = [
+            {
+                unindented: 'a',
+                lineType: 'louk',
+                crux: 'a',
+                selfClosing: false,
+                key: 'a',
+                interpretation: 'dynamic',
+                fill: '',
+                directiveType: '',
+                position: 'opening',
+                attributes: {}
+            },
+            { key: 'a', position: 'closing' }
+        ]
+        assert.equal(htmlGenerator.generateHTML(input), '<a></a>')
+    })
+})
+
 describe("README", function(){
   it("should contain at least one h1", function(){
     readme.markup.has("h1")

@@ -1,7 +1,7 @@
 {
     "name": "louk",
-    "version": "0.4.2",
-    "description": "Vue shorthand",
+    "version": "0.4.3",
+    "description": "Vue without the HTML",
     "main": "dist/index.js",
     "scripts": {
         "test": "gulp test",

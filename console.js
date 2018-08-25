@@ -1,7 +1,0 @@
-const louk = require("./louk.js")
-var doc = require("./example-docs/doc1.louk")
-console.log("Input:")
-console.log(doc)
-var html = louk(doc)
-console.log("Output:")
-console.log(html)

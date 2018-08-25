@@ -1,6 +1,21 @@
-const louk = require("../louk.js")
+const dir = "../dist/"
+const utils = require(dir + "utils")
+utils.setDir(dir)
+const file = utils.file
+
+const louk = require(file("index.js"))
 const chai = require("chai")
 const assert = chai.assert
+
+const markunit = require("markunit")
+const fs = require('fs');
+const readme = markunit(fs.readFileSync("./README.md", "utf8"))
+
+const patterns = require(file("patterns"))
+const lineProcessor = require(file("line-processor"))
+const elementProcessor = require(file("element-processor"))
+const propertyDeterminer = require(file("property-determiner"))
+const htmlGenerator = require(file("html-generator"))
 
 describe("Louk", function(){
     it("should return a simple element", function(){
@@ -98,4 +113,89 @@ describe("Louk", function(){
         assert.equal(louk('div save\n//Triggers dialog\n@click confirm'),'<div v-on:click="confirm">{{save}}</div>')
         assert.equal(louk('<div>\n\th1 title\n\t#title\n\t<!-- A comment --></div>'),'<div><h1 id="title">{{title}}</h1><!-- A comment --></div>')
     })
+})
+
+describe("Patterns", function(){
+    it("should be defined", function(){
+        assert.equal(typeof(patterns), "object")
+        assert.notEqual(patterns, {})
+    })
+})
+
+describe("Line Processor", function(){
+    it("should delete comments", function(){
+        const input = [
+            { raw: '//a',
+                lineType: 'comment'
+            },
+            {
+                raw: 'b',
+                lineType: 'louk'
+            }
+        ]
+        assert.equal(lineProcessor.deleteComments(input).length, 1)
+    })
+})
+
+describe("Element Processor", function(){
+    it("should assign a closing tag", function(){
+        const input = [
+            {
+                classification: 'tag',
+                key: 'a',
+                preceding: []
+            }
+        ]
+        assert.equal(elementProcessor.assignMatches(input).length, 2)
+    })
+})
+
+describe("Property Determiner", function(){
+    it("should identify line types", function(){
+        assert.equal(propertyDeterminer.determineLineType({ unindented: '<a>' }), 'html')
+        assert.equal(propertyDeterminer.determineLineType({ unindented: '//b' }), 'comment')
+        assert.equal(propertyDeterminer.determineLineType({ unindented: 'c' }), 'louk')
+    })
+})
+
+describe("HTML Generator", function(){
+    it("should generate HTML", function(){
+        const input = [
+            {
+                unindented: 'a',
+                lineType: 'louk',
+                crux: 'a',
+                selfClosing: false,
+                key: 'a',
+                interpretation: 'dynamic',
+                fill: '',
+                directiveType: '',
+                position: 'opening',
+                attributes: {}
+            },
+            { key: 'a', position: 'closing' }
+        ]
+        assert.equal(htmlGenerator.generateHTML(input), '<a></a>')
+    })
+})
+
+describe("README", function(){
+  it("should contain at least one h1", function(){
+    readme.markup.has("h1")
+  })
+  it("should contain at least one h2", function(){
+    readme.markup.has("h2")
+  })
+  it("should not contain double-indented lists", function(){
+    readme.markup.no("li li")
+  })
+  it("should not have any curly quotes in code snippets", function(){
+    readme.code.no(["“","”"])
+  })
+  it("should not have the library's name in lower-case form in the copy", function(){
+    readme.copy.no("louk")
+  })
+  it("should contain installation instructions", function(){
+    readme.code.has("npm install")
+  })
 })

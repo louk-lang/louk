@@ -48,7 +48,7 @@ div string
 
 ### Directives & Attributes
 
-Directives and other attributes are denoted by prefixes and follow their corresponding element on separate lines.
+Directives and other attributes are denoted by prefixes and follow their corresponding elements on separate lines.
 
 ```html
 //louk

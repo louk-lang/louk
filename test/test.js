@@ -1,4 +1,4 @@
-const louk = require("../src/index.js")
+const louk = require("../dist/index.js")
 const chai = require("chai")
 const assert = chai.assert
 

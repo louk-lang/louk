@@ -4,7 +4,7 @@ var log = false;
 require.extensions['.louk'] = function (module, filename) {
     module.exports = fs.readFileSync(filename, 'utf8');
 };
-var patterns = require("./patterns.js");
+var patterns = require("./patterns");
 module.exports = function (content) {
     return html = parse(content);
 };

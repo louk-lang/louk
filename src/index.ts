@@ -21,13 +21,13 @@ function write(content){
 
 function parse(input){
     //Raw holds the raw input
-    var raw = ""
+    let raw = ""
     //Lines holds each line of the document broken down into its own object, which we progressively add metadata to
-    var lines = []
+    let lines = []
     //Out of all the lines, we create a new array with only those that represent elements, and then attach attributes to them
-    var elements = []
+    let elements = []
     //Finally, we translate the elements into raw HTML
-    var html = ""
+    let html = ""
 
     raw = input
     write("Raw content:")
@@ -70,7 +70,7 @@ function parse(input){
 }
 
 function breakLines(content){
-    var lines = content
+    let lines = content
     lines = content.split("\n")
     return lines
 }
@@ -78,14 +78,14 @@ function breakLines(content){
 function deleteComments(content){
 
     //Lines with comments
-    var lines = content
+    let lines = content
 
     //Lines without comments
-    var prunedLines = []
+    let prunedLines = []
 
-    for(var index = 0; index < content.length; index++){
+    for(let index = 0; index < content.length; index++){
 
-        var value = content[index]
+        let value = content[index]
 
         if(value.lineType != "comment"){
             prunedLines.push(value)
@@ -96,10 +96,10 @@ function deleteComments(content){
 }
 
 function objectifyLines(content){
-    var objectifiedLines = []
+    let objectifiedLines = []
 
-    for(var index = 0; index < content.length; index++){
-        var value = content[index]
+    for(let index = 0; index < content.length; index++){
+        let value = content[index]
         if(value != ""){
             objectifiedLines.push({
                 "raw":value
@@ -111,12 +111,12 @@ function objectifyLines(content){
 }
 
 function determineProperties(content){
-    var lines = content
+    let lines = content
 
-    for(var index = 0; index < content.length; index++){
-        var value = content[index]
+    for(let index = 0; index < content.length; index++){
+        let value = content[index]
         lines[index].line = index
-        var indentInfo = determineIndent(value.raw)
+        let indentInfo = determineIndent(value.raw)
         lines[index].index = index
         lines[index].indent = indentInfo[0]
         lines[index].unindented = indentInfo[1]
@@ -137,7 +137,7 @@ function determineProperties(content){
 }
 
 function determineLineType(content){
-    var type = ""
+    let type = ""
     if(content.unindented.match(patterns.comment)){
         type = "comment"
     }
@@ -151,11 +151,11 @@ function determineLineType(content){
 }
 
 function assignAttributes(content){
-    var elements = []
-    var currentTag = {}
+    let elements = []
+    let currentTag = {}
 
-    for(var index = 0; index < content.length; index++){
-        var value = content[index]
+    for(let index = 0; index < content.length; index++){
+        let value = content[index]
         if(value.classification == "tag"){
             if(index > 0){
                 elements.push(currentTag)
@@ -180,15 +180,15 @@ function assignAttributes(content){
 
 //Determines where matching closing tags need to be inserted
 function assignMatches(content){
-    var elements = content
+    let elements = content
     //Temporarily stores the elements we know we need to insert when we reach the right point
-    var elementsForInsertion = {}
-    var level = 0
-    var maxLevel = 0
+    let elementsForInsertion = {}
+    let level = 0
+    let maxLevel = 0
 
-    for(var index = 0; index < content.length; index++){
-        var value = content[index]
-        var currentLevelElement = ""
+    for(let index = 0; index < content.length; index++){
+        let value = content[index]
+        let currentLevelElement = ""
 
         //The level of indentation we're currently working at
         level = value.indent
@@ -228,13 +228,13 @@ function assignMatches(content){
     }
 
     //This is a special element we use to represent the end of the html
-    var endElement = {
+    let endElement = {
         system: "end",
         preceding: []
     }
 
     //After working through all the elements, we'll need to close any elements that are still open
-    var remainingElements = []
+    let remainingElements = []
     _.each(elementsForInsertion, function(value, key){
         remainingElements[key] = value
     })
@@ -242,8 +242,8 @@ function assignMatches(content){
     //We insert these elements in reverse
     remainingElements.reverse()
 
-    for(var index = 0; index < remainingElements.length; index++){
-        var value = remainingElements[index]
+    for(let index = 0; index < remainingElements.length; index++){
+        let value = remainingElements[index]
         if(value){
             endElement.preceding.push((closingTag(value)))
         }
@@ -257,13 +257,13 @@ function assignMatches(content){
 
 //Takes the matches temporarily stored in other elements and inserts them into the main array
 function insertMatches(content){
-    var elements = []
+    let elements = []
 
-    for(var index = 0; index < content.length; index++){
-        var value = content[index]
+    for(let index = 0; index < content.length; index++){
+        let value = content[index]
 
-        for(var subindex = 0; subindex < value.preceding.length; subindex++){
-            var element = value.preceding[subindex]
+        for(let subindex = 0; subindex < value.preceding.length; subindex++){
+            let element = value.preceding[subindex]
             elements.push(element)
         }
 
@@ -279,10 +279,10 @@ function insertMatches(content){
 
 //Turns the completed array of element objects into raw HTML
 function generateHTML(content){
-    var html = ""
+    let html = ""
 
-    for(var index = 0; index < content.length; index++){
-        var value = content[index]
+    for(let index = 0; index < content.length; index++){
+        let value = content[index]
 
         //HTML is passed straight through
         if(value.lineType == "html"){
@@ -304,7 +304,7 @@ function generateHTML(content){
 
                 //Loop over all of the element's attributes
                 _.each(value.attributes, function(value, key){
-                    var attribute = ""
+                    let attribute = ""
 
                     //If the attribute should be interpretted dynamically...
                     if(value.interpretation == "dynamic"){
@@ -368,7 +368,7 @@ function generateHTML(content){
 
 //Determines whether each line represents an attribute or a tag
 function determineClassification(content){
-    var classification = ""
+    let classification = ""
 
     if(content.crux == "#"){
         classification = "attribute"
@@ -399,11 +399,11 @@ function determineClassification(content){
 }
 
 function determinePrefix(content){
-    var prefix = ""
+    let prefix = ""
 
     if(content.lineType == "louk"){
 
-        var matches = content.crux.match(patterns.prefix)
+        let matches = content.crux.match(patterns.prefix)
         if(matches){
             prefix = matches[1]
         }
@@ -413,10 +413,10 @@ function determinePrefix(content){
 }
 
 function determineSuffix(content){
-    var suffix = ""
+    let suffix = ""
 
     if(content.lineType == "louk"){
-        var matches = ""
+        let matches = ""
 
         if(content.crux){
             matches = content.crux.match(patterns.suffix)
@@ -431,7 +431,7 @@ function determineSuffix(content){
 }
 
 function determineSelfClosing(content){
-    var selfClosing = false
+    let selfClosing = false
     if(content.suffix == "/"){
         selfClosing = true
     }
@@ -450,7 +450,7 @@ function determineSelfClosing(content){
 
 //Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue) or statically (as plain HTML)
 function determineInterpretation(content){
-    var interpretation = ""
+    let interpretation = ""
 
     if(content.lineType == "louk"){
         if(content.classification == "tag" && content.suffix.match(patterns.staticSuffix)){
@@ -472,8 +472,8 @@ function determineInterpretation(content){
 
 //Determines how far a line is indented
 function determineIndent(content){
-    var indent = 0
-    var content = content
+    let indent = 0
+    let content = content
     while(content.match(patterns.initialSpace)){
         content = content.substr(1)
         indent = indent + 1
@@ -483,7 +483,7 @@ function determineIndent(content){
 
 
 function determineCrux(content){
-    var crux = ""
+    let crux = ""
 
     if(content.lineType == "louk"){
 
@@ -510,7 +510,7 @@ function determineCrux(content){
 
 //Figures out what tag a tag is and what attribute an attribute is
 function determineFill(content){
-    var fill = ""
+    let fill = ""
 
     //Handles static attribute shorthands (> . #)
     if(content.crux.match(patterns.staticFill)){
@@ -530,7 +530,7 @@ function determineFill(content){
 }
 
 function determineDirectiveType(content){
-    var directiveType = ""
+    let directiveType = ""
 
     if(content.lineType == "louk"){
 
@@ -554,7 +554,7 @@ function determineDirectiveType(content){
 //Expands key shorthands
 //For example, converts "#" to "id"
 function determineKey(content){
-    var key = ""
+    let key = ""
 
     if(content.lineType == "louk"){
 
@@ -580,7 +580,7 @@ function determineKey(content){
 
 //Adds property to indicate that the element is a closing tag
 function closingTag(content){
-    var element = content
+    let element = content
     element.position = "closing"
     return element
 }

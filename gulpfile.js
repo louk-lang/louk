@@ -13,13 +13,13 @@ gulp.task('build', function() {
         .pipe(gulp.dest(outDir));
 });
 
-gulp.task('watch', ['default'], function() {
-    return gulp.watch('src/*.ts', ['default']);
-});
-
-gulp.task('test', ['build'], function(){
+gulp.task('test', function(){
     return gulp.src('./test/test.js', {read: false})
 		.pipe(mocha())
+});
+
+gulp.task('watch', ['default'], function() {
+    return gulp.watch('src/*.ts', ['default']);
 });
 
 gulp.task('default', ['build','test'])

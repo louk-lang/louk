@@ -3,7 +3,8 @@
         "module": "system",
         "removeComments": true,
         "sourceMap": true,
-        "outdir": "./dist"
+        "outdir": "./dist",
+        "moduleResolution": "node"
     },
     "include": [
         "src/**/*"

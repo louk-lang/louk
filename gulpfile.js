@@ -7,19 +7,33 @@ const outDir = tsconfig.compilerOptions.outdir;
 
 const tsProject = ts.createProject('tsconfig.json');
 
-gulp.task('build', function() {
+function build(){
     return gulp.src('src/**/*.ts')
         .pipe(tsProject())
         .pipe(gulp.dest(outDir));
+}
+
+function test(){
+    return gulp.src('./test/test.js', {read: false})
+        .pipe(mocha())
+}
+
+function watch(){
+    return gulp.watch('src/*.ts', ['default']);
+}
+
+gulp.task('build', function() {
+    build();
 });
 
 gulp.task('test', function(){
-    return gulp.src('./test/test.js', {read: false})
-		.pipe(mocha())
+    test();
 });
 
 gulp.task('watch', ['default'], function() {
-    return gulp.watch('src/*.ts', ['default']);
+    watch();
 });
 
-gulp.task('default', ['build','test'])
+gulp.task('default', ['build'], function(){
+    test();
+})

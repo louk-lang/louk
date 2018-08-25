@@ -2,7 +2,8 @@ module.exports = {
     generateHTML: generateHTML
 };
 var _ = require("underscore");
-function generateHTML(content) {
+function generateHTML(input) {
+    var content = input;
     var html = "";
     for (var index = 0; index < content.length; index++) {
         var value = content[index];

@@ -6,12 +6,14 @@ module.exports = {
 };
 var patterns = require("./patterns");
 var propertyDeterminer = require("./property-determiner");
-function breakLines(content) {
+function breakLines(input) {
+    var content = input;
     var lines = content;
     lines = content.split("\n");
     return lines;
 }
-function deleteComments(content) {
+function deleteComments(input) {
+    var content = input;
     var lines = content;
     var prunedLines = [];
     for (var index = 0; index < content.length; index++) {
@@ -22,7 +24,8 @@ function deleteComments(content) {
     }
     return prunedLines;
 }
-function objectifyLines(content) {
+function objectifyLines(input) {
+    var content = input;
     var objectifiedLines = [];
     for (var index = 0; index < content.length; index++) {
         var value = content[index];
@@ -34,7 +37,8 @@ function objectifyLines(content) {
     }
     return objectifiedLines;
 }
-function determineProperties(content) {
+function determineProperties(input) {
+    var content = input;
     var lines = content;
     for (var index = 0; index < content.length; index++) {
         var value = content[index];

@@ -15,7 +15,9 @@ module.exports = {
 const patterns = require("./patterns")
 
 //Determines whether each line represents an attribute or a tag
-function determineClassification(content){
+function determineClassification(input){
+
+    const content = input
     let classification = ""
 
     if(content.crux == "#"){
@@ -46,7 +48,9 @@ function determineClassification(content){
     return classification;
 }
 
-function determinePrefix(content){
+function determinePrefix(input){
+
+    const content = input
     let prefix = ""
 
     if(content.lineType == "louk"){
@@ -60,7 +64,9 @@ function determinePrefix(content){
     return prefix
 }
 
-function determineSuffix(content){
+function determineSuffix(input){
+
+    const content = input
     let suffix = ""
 
     if(content.lineType == "louk"){
@@ -78,8 +84,11 @@ function determineSuffix(content){
     return suffix
 }
 
-function determineSelfClosing(content){
+function determineSelfClosing(input){
+
+    const content = input
     let selfClosing = false
+
     if(content.suffix == "/"){
         selfClosing = true
     }
@@ -97,7 +106,9 @@ function determineSelfClosing(content){
 
 
 //Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue) or statically (as plain HTML)
-function determineInterpretation(content){
+function determineInterpretation(input){
+
+    const content = input
     let interpretation = ""
 
     if(content.lineType == "louk"){
@@ -119,18 +130,23 @@ function determineInterpretation(content){
 }
 
 //Determines how far a line is indented
-function determineIndent(content){
+function determineIndent(input){
+
+    const content = input
+    let trimmed = content
     let indent = 0
-    let content = content
-    while(content.match(patterns.initialSpace)){
-        content = content.substr(1)
+
+    while(trimmed.match(patterns.initialSpace)){
+        trimmed = trimmed.substr(1)
         indent = indent + 1
     }
-    return [indent, content]
+    return [indent, trimmed]
 }
 
 
-function determineCrux(content){
+function determineCrux(input){
+
+    const content = input
     let crux = ""
 
     if(content.lineType == "louk"){
@@ -157,7 +173,9 @@ function determineCrux(content){
 }
 
 //Figures out what tag a tag is and what attribute an attribute is
-function determineFill(content){
+function determineFill(input){
+
+    const content = input
     let fill = ""
 
     //Handles static attribute shorthands (> . #)
@@ -177,7 +195,9 @@ function determineFill(content){
     return fill
 }
 
-function determineDirectiveType(content){
+function determineDirectiveType(input){
+
+    const content = input
     let directiveType = ""
 
     if(content.lineType == "louk"){
@@ -201,7 +221,9 @@ function determineDirectiveType(content){
 
 //Expands key shorthands
 //For example, converts "#" to "id"
-function determineKey(content){
+function determineKey(input){
+
+    const content = input
     let key = ""
 
     if(content.lineType == "louk"){
@@ -226,8 +248,11 @@ function determineKey(content){
     return key
 }
 
-function determineLineType(content){
+function determineLineType(input){
+
+    const content = input
     let type = ""
+
     if(content.unindented.match(patterns.comment)){
         type = "comment"
     }

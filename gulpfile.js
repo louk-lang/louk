@@ -3,7 +3,7 @@ const ts = require('gulp-typescript');
 const mocha = require('gulp-mocha');
 
 const tsconfig = require('./tsconfig.json');
-const outDir = tsconfig.compilerOptions.outdir;
+const outDir = tsconfig.compilerOptions.outDir;
 
 const tsProject = ts.createProject('tsconfig.json');
 

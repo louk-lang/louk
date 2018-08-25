@@ -1,5 +1,7 @@
 const gulp = require('gulp');
 const ts = require('gulp-typescript');
+const mocha = require('gulp-mocha'
+)
 const tsconfig = require('./tsconfig.json')
 const outDir = tsconfig.compilerOptions.outdir;
 
@@ -11,8 +13,13 @@ gulp.task('build', function() {
         .pipe(gulp.dest(outDir));
 });
 
-gulp.task('watch', ['build'], function() {
-    gulp.watch('src/*.ts', ['build']);
+gulp.task('watch', ['default'], function() {
+    return gulp.watch('src/*.ts', ['default']);
 });
 
-gulp.task('default', ['build'])
+gulp.task('test', ['build'], function(){
+    return gulp.src('./test/test.js', {read: false})
+		.pipe(mocha())
+});
+
+gulp.task('default', ['build','test'])

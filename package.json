@@ -4,7 +4,7 @@
     "description": "Vue shorthand",
     "main": "dist/index.js",
     "scripts": {
-        "test": "mocha",
+        "test": "gulp test",
         "build": "gulp build",
         "watch": "gulp watch"
     },
@@ -19,6 +19,7 @@
     },
     "devDependencies": {
         "chai": "^4.1.2",
+        "gulp-mocha": "^6.0.0",
         "gulp-typescript": "^4.0.0",
         "markunit": "^1.0.0",
         "mocha": "^5.2.0",

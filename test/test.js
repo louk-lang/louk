@@ -1,10 +1,19 @@
-const louk = require("../dist/index.js")
+const dir = "../dist/"
+
+const louk = require(dir + "index.js")
 const chai = require("chai")
 const assert = chai.assert
 
 const markunit = require("markunit")
 const fs = require('fs');
 const readme = markunit(fs.readFileSync("./README.md", "utf8"))
+
+const patterns = require(dir + "patterns")
+const lineProcessor = require(dir + "line-processor")
+const elementProcessor = require(dir + "element-processor")
+const propertyDeterminer = require(dir + "property-determiner")
+const htmlGenerator = require(dir + "html-generator")
+const utils = require(dir + "utils")
 
 describe("Louk", function(){
     it("should return a simple element", function(){

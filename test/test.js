@@ -1,10 +1,10 @@
-const louk = require("../louk.js")
+const louk = require("../src/index.js")
 const chai = require("chai")
 const assert = chai.assert
 
-var markunit = require("markunit")
-var fs = require('fs');
-var readme = markunit(fs.readFileSync("./README.md", "utf8"))
+const markunit = require("markunit")
+const fs = require('fs');
+const readme = markunit(fs.readFileSync("./README.md", "utf8"))
 
 describe("Louk", function(){
     it("should return a simple element", function(){

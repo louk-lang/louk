@@ -4,7 +4,9 @@
     "description": "Vue shorthand",
     "main": "dist/index.js",
     "scripts": {
-        "test": "mocha"
+        "test": "mocha",
+        "build": "gulp build",
+        "watch": "gulp watch"
     },
     "homepage": "https://louk-lang.org",
     "keywords": [

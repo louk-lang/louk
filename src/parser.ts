@@ -11,7 +11,7 @@ const htmlGenerator = require("./html-generator")
 const utils = require("./utils")
 const write = utils.write
 
-function parse(input, logging){
+function parse(input, options, logging){
 
     utils.log(logging)
 
@@ -56,7 +56,7 @@ function parse(input, logging){
     write("After adding closing tags:")
     write(elements)
 
-    html = htmlGenerator.generateHTML(elements)
+    html = htmlGenerator.generateHTML(elements, options)
     write("After generating HTML:")
     write(html)
 

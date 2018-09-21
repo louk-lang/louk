@@ -9,7 +9,7 @@ const parser = require("./parser")
 //Turn verbose logging on or off
 let logging = false
 
-module.exports = function(content){
-    let html = parser.parse(content, logging);
+module.exports = function(content, options){
+    let html = parser.parse(content, options, logging);
     return html
 }

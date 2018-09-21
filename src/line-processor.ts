@@ -12,7 +12,7 @@ function breakLines(input){
 
     const content = input
     let lines = content
-    
+
     lines = content.split("\n")
 
     return lines

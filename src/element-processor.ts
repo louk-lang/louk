@@ -67,6 +67,7 @@ function assignMatches(content){
         if(!value.selfClosing){
             elementsForInsertion[level] = {
                 key: value.key,
+                indent: value.indent
             }
         }
 
@@ -107,6 +108,23 @@ function assignMatches(content){
 
     //Add the special end element to the end
     elements.push(endElement)
+
+    for(let index = 0; index < elements.length; index++){
+        console.log(elements[index])
+
+            //If we're not at the last element
+            if(index < (content.length - 1)){
+                //If the element following the current one is indented farther than the current one
+                if(elements[index+1].indent > elements[index].indent){
+                    //Then the current element contains an element.
+                    elements[index].containsElement = true
+                }
+            }
+            //Else, it definitely doesn't contain an element if it's the last element.
+            else{
+                elements[index].containsElement = false
+            }
+    }
 
     return elements
 }

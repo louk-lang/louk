@@ -6,9 +6,14 @@ const _ = require("underscore")
 
 //Turns the completed array of element objects into raw HTML
 function generateHTML(input, options){
-
     const content = input
     let html = ""
+
+    var keepWhitespace = true
+
+    if(options && options.whitespace !=null){
+        keepWhitespace = options.whitespace
+    }
 
     for(let index = 0; index < content.length; index++){
         let value = content[index]
@@ -27,6 +32,10 @@ function generateHTML(input, options){
         else{
             //Generate opening tags
             if(value.position == "opening" && value.key != null){
+
+                if(keepWhitespace){
+                    html = html + generateWhitespace(value.indent)
+                }
 
                 html = html + "<"
                 html = html + value.key
@@ -73,24 +82,47 @@ function generateHTML(input, options){
                 //If there's body content...
                 if(value.fill){
 
-                        //If the body should be interpreted dynamically, we wrap it in Vue curly brackets
-                        if(value.interpretation == "dynamic"){
-                            html = html + "{{" + value.fill + "}}"
-                        }
-
-                        //Otherwise we just include it straight.
-                        else if(value.interpretation == "static"){
-                            html = html + value.fill
-                        }
+                    //If the body should be interpreted dynamically, we wrap it in Vue curly brackets
+                    if(value.interpretation == "dynamic"){
+                        html = html + "{{" + value.fill + "}}"
                     }
 
-            }
+                    //Otherwise we just include it straight.
+                    else if(value.interpretation == "static"){
+                        html = html + value.fill
+                    }
+                }
+                else{
+                    if(keepWhitespace && value.containsElement){
+                        html = html +  "\n"
+                    }
+                }
 
+            }
             //Generate closing tags
             else if(value.position == "closing" && value.key != null){
+
+                //If the current element doesn't contain an element, then don't indent the closing tag, as it's on the same line as the opening tag.
+                if(keepWhitespace && value.containsElement){
+                    html = html + generateWhitespace(value.indent)
+                }
+
                 html = html + "</" + value.key + ">"
+
+                //Add a return if we're not at the last element.
+                if(keepWhitespace && index < (content.length - 1)){
+                    html = html +  "\n"
+                }
             }
         }
     }
     return html
+}
+
+function generateWhitespace(indent){
+    var indentation = ""
+    for(var i = 0; i < indent; i++){
+        indentation = indentation + "\t"
+    }
+    return indentation
 }

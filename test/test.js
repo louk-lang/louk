@@ -1,4 +1,6 @@
-const dir = "../dist/"
+//Can use src or dist
+const dir = "../src/"
+
 const utils = require(dir + "utils")
 utils.setDir(dir)
 const file = utils.file
@@ -28,16 +30,22 @@ describe("Louk", function(){
         assert.equal(louk('img'),'<img></img>')
     })
     it("should return two peer elements", function(){
-        assert.equal(louk('a\nb'),'<a></a><b></b>')
+        assert.equal(louk('a\nb'),'<a></a>\n<b></b>')
+    })
+    it("should return two peer elements without whitespace", function(){
+        assert.equal(louk('a\nb',{whitespace:false}),'<a></a><b></b>')
     })
     it("should return a nested element", function(){
-        assert.equal(louk('a\n\tb'),'<a><b></b></a>')
+        assert.equal(louk('a\n\tb'),'<a>\n\t<b></b>\n</a>')
     })
     it("should return a simple element when indented once", function(){
-        assert.equal(louk('\ta'),'<a></a>')
+        assert.equal(louk('\ta'),'\t<a></a>')
+    })
+    it("should return a simple element when indented once, without whitespace", function(){
+        assert.equal(louk('\ta',{whitespace:false}),'<a></a>')
     })
     it("should return a simple element when indented twice", function(){
-        assert.equal(louk('\t\ta'),'<a></a>')
+        assert.equal(louk('\t\ta'),'\t\t<a></a>')
     })
     it("should return an element with dynamic content", function(){
         assert.equal(louk('a b'),'<a>{{b}}</a>')
@@ -49,10 +57,13 @@ describe("Louk", function(){
         assert.equal(louk('a\n#c'),'<a id="c"></a>')
     })
     it("should return two peer nested elements", function(){
-        assert.equal(louk('a\n\tb\nc\n\td'),'<a><b></b></a><c><d></d></c>')
+        assert.equal(louk('a\n\tb\nc\n\td'),'<a>\n\t<b></b>\n</a>\n<c>\n\t<d></d>\n</c>')
+    })
+    it("should return two peer nested elements without whitespace", function(){
+        assert.equal(louk('a\n\tb\nc\n\td',{whitespace:false}),'<a><b></b></a><c><d></d></c>')
     })
     it("should return a double nested element", function(){
-        assert.equal(louk('a\n\tb\n\t\tc'),'<a><b><c></c></b></a>')
+        assert.equal(louk('a\n\tb\n\t\tc'),'<a>\n\t<b>\n\t\t<c></c>\n\t</b>\n</a>')
     })
     it("should return a double nested element with a trailing line", function(){
         assert.equal(louk('a\n\tb\n\t\tc\n'),'<a><b><c></c></b></a>')

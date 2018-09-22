@@ -4,7 +4,7 @@ require.extensions['.louk'] = function (module, filename) {
 };
 var parser = require("./parser");
 var logging = false;
-module.exports = function (content) {
-    var html = parser.parse(content, logging);
+module.exports = function (content, options) {
+    var html = parser.parse(content, options, logging);
     return html;
 };

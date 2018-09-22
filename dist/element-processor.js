@@ -48,7 +48,8 @@ function assignMatches(content) {
         }
         if (!value.selfClosing) {
             elementsForInsertion[level] = {
-                key: value.key
+                key: value.key,
+                indent: value.indent
             };
         }
         while (level < maxLevel) {
@@ -76,6 +77,16 @@ function assignMatches(content) {
         }
     }
     elements.push(endElement);
+    for (var index = 0; index < elements.length; index++) {
+        if (index < (content.length - 1)) {
+            if (elements[index + 1].indent > elements[index].indent) {
+                elements[index].containsElement = true;
+            }
+        }
+        else {
+            elements[index].containsElement = false;
+        }
+    }
     return elements;
 }
 function insertMatches(content) {

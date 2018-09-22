@@ -1,5 +1,5 @@
 //Can use src or dist
-const dir = "../src/"
+const dir = "../dist/"
 
 const utils = require(dir + "utils")
 utils.setDir(dir)
@@ -68,6 +68,9 @@ describe("Louk", function(){
     it("should return a double nested element with a trailing line", function(){
         assert.equal(louk('a\n\tb\n\t\tc\n'),'<a><b><c></c></b></a>')
     })
+    it("should return a double nested element without whitespace", function(){
+        assert.equal(louk('a\n\tb\n\t\tc',{whitespace:false}),'<a><b><c></c></b></a>')
+    })
     it("should handle multiple consecutive closures", function(){
         assert.equal(louk('a\n\tb\n\t\tc\nd'),'<a><b><c></c></b></a><d></d>')
     })
@@ -108,21 +111,24 @@ describe("Louk", function(){
         assert.equal(louk('//a\nb'),'<b></b>')
     })
     it("should pass through multi-line HTML content", function(){
-        assert.equal(louk('<a>\n<b></b>\n</a>'),'<a><b></b></a>')
+        assert.equal(louk('<a>\n<b></b>\n</a>'),'<a>\n<b></b>\n</a>')
     })
     it("should pass through HTML content with Louk content in it", function(){
-        assert.equal(louk('<a>\n<b>\nc d\n</b></a>'),'<a><b><c>{{d}}</c></b></a>')
+        assert.equal(louk('<a>\n<b>\nc d\n</b></a>'),'<a>\n<b>\n<c>{{d}}</c>\n</b>\n</a>')
     })
     it("should pass through an HTML comment", function(){
-        assert.equal(louk('a\n<!-- b -->\nc'),'<a></a><!-- b --><c></c>')
+        assert.equal(louk('a\n<!-- b -->\nc'),'<a></a>\n<!-- b -->\n<c></c>')
+    })
+    it("should pass through an HTML comment without whitespace", function(){
+        assert.equal(louk('a\n<!-- b -->\nc',{whitespace:false}),'<a></a><!-- b --><c></c>')
     })
     it("should return correct values for documentation examples", function(){
-        assert.equal(louk('h1\ndiv\n\tbr/'),'<h1></h1><div><br /></div>')
+        assert.equal(louk('h1\ndiv\n\tbr/'),'<h1></h1>\n<div>\n\t<br /></div>')
         assert.equal(louk('div string'),'<div>{{string}}</div>')
-        assert.equal(louk('ul\n:class focus\n\tli\n\t-for item in items'),'<ul v-bind:class="focus"><li v-for="item in items"></li></ul>')
+        assert.equal(louk('ul\n:class focus\n\tli\n\t-for item in items'),'<ul v-bind:class="focus">\n\t<li v-for="item in items"></li>\n</ul>')
         assert.equal(louk('p~ Hello world!'),'<p>Hello world!</p>')
         assert.equal(louk('div save\n//Triggers dialog\n@click confirm'),'<div v-on:click="confirm">{{save}}</div>')
-        assert.equal(louk('<div>\n\th1 title\n\t#title\n\t<!-- A comment --></div>'),'<div><h1 id="title">{{title}}</h1><!-- A comment --></div>')
+        assert.equal(louk('<div>\n\th1 title\n\t#title\n\t<!-- A comment --></div>'),'<div>\n\t<h1 id="title">{{title}}</h1>\n\t<!-- A comment --></div>')
     })
 })
 

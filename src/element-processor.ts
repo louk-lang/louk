@@ -110,7 +110,6 @@ function assignMatches(content){
     elements.push(endElement)
 
     for(let index = 0; index < elements.length; index++){
-        console.log(elements[index])
 
             //If we're not at the last element
             if(index < (content.length - 1)){

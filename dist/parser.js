@@ -8,7 +8,7 @@ var elementProcessor = require("./element-processor");
 var htmlGenerator = require("./html-generator");
 var utils = require("./utils");
 var write = utils.write;
-function parse(input, logging) {
+function parse(input, options, logging) {
     utils.log(logging);
     var raw = "";
     var lines = [];
@@ -38,7 +38,7 @@ function parse(input, logging) {
     elements = elementProcessor.insertMatches(elements);
     write("After adding closing tags:");
     write(elements);
-    html = htmlGenerator.generateHTML(elements);
+    html = htmlGenerator.generateHTML(elements, options);
     write("After generating HTML:");
     write(html);
     return html;

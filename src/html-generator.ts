@@ -20,7 +20,18 @@ function generateHTML(input, options){
 
         //HTML is passed straight through
         if(value.lineType == "html"){
-            html = html + value.unindented
+
+            if(keepWhitespace){
+                html = html + value.raw
+            }
+            else{
+                html = html + value.unindented
+            }
+
+            //Insert a newline as long as we're not at the last line.
+            if(index < (content.length - 1)){
+                html = html + "\n"
+            }
         }
 
         //Comments are discarded
@@ -102,7 +113,6 @@ function generateHTML(input, options){
             //Generate closing tags
             else if(value.position == "closing" && value.key != null){
 
-                //If the current element doesn't contain an element, then don't indent the closing tag, as it's on the same line as the opening tag.
                 if(keepWhitespace && value.containsElement){
                     html = html + generateWhitespace(value.indent)
                 }

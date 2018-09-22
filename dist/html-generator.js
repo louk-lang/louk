@@ -2,19 +2,34 @@ module.exports = {
     generateHTML: generateHTML
 };
 var _ = require("underscore");
-function generateHTML(input) {
+function generateHTML(input, options) {
     var content = input;
     var html = "";
+    var keepWhitespace = true;
+    if (options && options.whitespace != null) {
+        keepWhitespace = options.whitespace;
+    }
     for (var index = 0; index < content.length; index++) {
         var value = content[index];
         if (value.lineType == "html") {
-            html = html + value.unindented;
+            if (keepWhitespace) {
+                html = html + value.raw;
+            }
+            else {
+                html = html + value.unindented;
+            }
+            if (index < (content.length - 1)) {
+                html = html + "\n";
+            }
         }
         else if (value.lineType == "comment") {
             html = html;
         }
         else {
             if (value.position == "opening" && value.key != null) {
+                if (keepWhitespace) {
+                    html = html + generateWhitespace(value.indent);
+                }
                 html = html + "<";
                 html = html + value.key;
                 _.each(value.attributes, function (value, key) {
@@ -53,11 +68,29 @@ function generateHTML(input) {
                         html = html + value.fill;
                     }
                 }
+                else {
+                    if (keepWhitespace && value.containsElement) {
+                        html = html + "\n";
+                    }
+                }
             }
             else if (value.position == "closing" && value.key != null) {
+                if (keepWhitespace && value.containsElement) {
+                    html = html + generateWhitespace(value.indent);
+                }
                 html = html + "</" + value.key + ">";
+                if (keepWhitespace && index < (content.length - 1)) {
+                    html = html + "\n";
+                }
             }
         }
     }
     return html;
+}
+function generateWhitespace(indent) {
+    var indentation = "";
+    for (var i = 0; i < indent; i++) {
+        indentation = indentation + "\t";
+    }
+    return indentation;
 }

@@ -51,6 +51,12 @@ function assignMatches(content) {
                 key: value.key,
                 indent: value.indent
             };
+            for (var subindex = (level - 1); subindex >= 0; subindex--) {
+                if (elementsForInsertion[subindex]) {
+                    elementsForInsertion[subindex].containsElement = true;
+                    break;
+                }
+            }
         }
         while (level < maxLevel) {
             if (elementsForInsertion[maxLevel]) {

@@ -14,12 +14,12 @@ function generateHTML(input, options) {
         if (value.lineType == "html") {
             if (keepWhitespace) {
                 html = html + value.raw;
+                if (index < (content.length - 1)) {
+                    html = html + "\n";
+                }
             }
             else {
                 html = html + value.unindented;
-            }
-            if (index < (content.length - 1)) {
-                html = html + "\n";
             }
         }
         else if (value.lineType == "comment") {

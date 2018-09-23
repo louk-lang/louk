@@ -66,13 +66,13 @@ describe("Louk", function(){
         assert.equal(louk('a\n\tb\n\t\tc'),'<a>\n\t<b>\n\t\t<c></c>\n\t</b>\n</a>')
     })
     it("should return a double nested element with a trailing line", function(){
-        assert.equal(louk('a\n\tb\n\t\tc\n'),'<a><b><c></c></b></a>')
+        assert.equal(louk('a\n\tb\n\t\tc\n'),'<a>\n\t<b>\n\t\t<c></c>\n\t</b>\n</a>')
     })
     it("should return a double nested element without whitespace", function(){
         assert.equal(louk('a\n\tb\n\t\tc',{whitespace:false}),'<a><b><c></c></b></a>')
     })
     it("should handle multiple consecutive closures", function(){
-        assert.equal(louk('a\n\tb\n\t\tc\nd'),'<a><b><c></c></b></a><d></d>')
+        assert.equal(louk('a\n\tb\n\t\tc\nd'),'<a>\n\t<b>\n\t\t<c></c>\n\t</b>\n</a>\n<d></d>')
     })
     it("should return an element with static content", function(){
         assert.equal(louk('a~ b'),'<a>b</a>')
@@ -114,7 +114,7 @@ describe("Louk", function(){
         assert.equal(louk('<a>\n<b></b>\n</a>'),'<a>\n<b></b>\n</a>')
     })
     it("should pass through HTML content with Louk content in it", function(){
-        assert.equal(louk('<a>\n<b>\nc d\n</b></a>'),'<a>\n<b>\n<c>{{d}}</c>\n</b>\n</a>')
+        assert.equal(louk('<a>\n<b>\nc d\n</b></a>'),'<a>\n<b>\n<c>{{d}}</c>\n</b></a>')
     })
     it("should pass through an HTML comment", function(){
         assert.equal(louk('a\n<!-- b -->\nc'),'<a></a>\n<!-- b -->\n<c></c>')

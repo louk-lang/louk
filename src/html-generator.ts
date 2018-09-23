@@ -23,14 +23,14 @@ function generateHTML(input, options){
 
             if(keepWhitespace){
                 html = html + value.raw
+                
+                //Insert a newline as long as we're not at the last line.
+                if(index < (content.length - 1)){
+                    html = html + "\n"
+                }
             }
             else{
                 html = html + value.unindented
-            }
-
-            //Insert a newline as long as we're not at the last line.
-            if(index < (content.length - 1)){
-                html = html + "\n"
             }
         }
 

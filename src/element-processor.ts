@@ -69,6 +69,15 @@ function assignMatches(content){
                 key: value.key,
                 indent: value.indent
             }
+
+            //Look for the next level of element (since levels can be skipped)
+            for (let subindex = (level - 1); subindex >= 0; subindex--){
+                if(elementsForInsertion[subindex]){
+                    //Mark the closing tag one level up as containing an element.
+                    elementsForInsertion[subindex].containsElement = true
+                    break;
+                }
+            }
         }
 
         //If the current level is less than the maximum level, that means we've outdented, and therefore have multiple necessary closing elements
@@ -98,7 +107,7 @@ function assignMatches(content){
 
     //We insert these elements in reverse
     remainingElements.reverse()
-
+    // console.log(remainingElements)
     for(let index = 0; index < remainingElements.length; index++){
         let value = remainingElements[index]
         if(value){
@@ -108,6 +117,8 @@ function assignMatches(content){
 
     //Add the special end element to the end
     elements.push(endElement)
+
+    // console.log(endElement)
 
     for(let index = 0; index < elements.length; index++){
 
@@ -124,6 +135,10 @@ function assignMatches(content){
                 elements[index].containsElement = false
             }
     }
+
+    // console.log(endElement)
+    // console.log(elements)
+    // console.log(endElement)
 
     return elements
 }

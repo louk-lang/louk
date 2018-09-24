@@ -137,3 +137,10 @@ Raw HTML will be passed through unmodified. Louk notation can be included on new
     <h1 id="title">{{title}}</h1>
 </div>
 ```
+
+### Options
+
+Indentation and newlines are kept by default, but can be removed with the `whitespace` option.
+```js
+louk(content, {whitespace: false})
+```

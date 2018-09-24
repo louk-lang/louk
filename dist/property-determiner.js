@@ -9,7 +9,8 @@ module.exports = {
     determineDirectiveType: determineDirectiveType,
     determineFill: determineFill,
     determineKey: determineKey,
-    determineLineType: determineLineType
+    determineLineType: determineLineType,
+    determineWhitespace: determineWhitespace
 };
 var patterns = require("./patterns");
 function determineClassification(input) {
@@ -199,4 +200,9 @@ function determineLineType(input) {
         type = "louk";
     }
     return type;
+}
+function determineWhitespace(input) {
+    var content = input;
+    var whitespace = content.raw.match(patterns.whitespace)[1];
+    return whitespace;
 }

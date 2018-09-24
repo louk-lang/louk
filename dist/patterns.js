@@ -11,5 +11,6 @@ module.exports = {
     key: /^[~:@-]*([\w\.-]+)/,
     comment: /^\/\/(.*)/,
     html: /^([<])/,
-    initialSpace: /^(\s)/
+    initialSpace: /^(\s)/,
+    whitespace: /^(\s*)/
 };

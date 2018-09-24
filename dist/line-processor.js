@@ -45,6 +45,7 @@ function determineProperties(input) {
         lines[index].line = index;
         var indentInfo = propertyDeterminer.determineIndent(value.raw);
         lines[index].index = index;
+        lines[index].whitespace = propertyDeterminer.determineWhitespace(lines[index]);
         lines[index].indent = indentInfo[0];
         lines[index].unindented = indentInfo[1];
         lines[index].lineType = propertyDeterminer.determineLineType(lines[index]);

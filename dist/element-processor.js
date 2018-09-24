@@ -49,7 +49,8 @@ function assignMatches(content) {
         if (!value.selfClosing) {
             elementsForInsertion[level] = {
                 key: value.key,
-                indent: value.indent
+                indent: value.indent,
+                whitespace: value.whitespace
             };
             for (var subindex = (level - 1); subindex >= 0; subindex--) {
                 if (elementsForInsertion[subindex]) {

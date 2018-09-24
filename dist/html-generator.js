@@ -27,8 +27,8 @@ function generateHTML(input, options) {
         }
         else {
             if (value.position == "opening" && value.key != null) {
-                if (keepWhitespace) {
-                    html = html + generateWhitespace(value.indent);
+                if (keepWhitespace && value.whitespace) {
+                    html = html + value.whitespace;
                 }
                 html = html + "<";
                 html = html + value.key;
@@ -75,8 +75,8 @@ function generateHTML(input, options) {
                 }
             }
             else if (value.position == "closing" && value.key != null) {
-                if (keepWhitespace && value.containsElement) {
-                    html = html + generateWhitespace(value.indent);
+                if (keepWhitespace && value.containsElement && value.whitespace) {
+                    html = html + value.whitespace;
                 }
                 html = html + "</" + value.key + ">";
                 if (keepWhitespace && index < (content.length - 1)) {

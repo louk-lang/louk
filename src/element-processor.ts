@@ -67,7 +67,8 @@ function assignMatches(content){
         if(!value.selfClosing){
             elementsForInsertion[level] = {
                 key: value.key,
-                indent: value.indent
+                indent: value.indent,
+                whitespace: value.whitespace
             }
 
             //Look for the next level of element (since levels can be skipped)

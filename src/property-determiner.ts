@@ -9,7 +9,8 @@ module.exports = {
     determineDirectiveType: determineDirectiveType,
     determineFill: determineFill,
     determineKey: determineKey,
-    determineLineType: determineLineType
+    determineLineType: determineLineType,
+    determineWhitespace: determineWhitespace
 }
 
 const patterns = require("./patterns")
@@ -263,4 +264,12 @@ function determineLineType(input){
         type = "louk"
     }
     return type
+}
+
+function determineWhitespace(input){
+
+    const content = input
+    const whitespace = content.raw.match(patterns.whitespace)[1]
+
+    return whitespace
 }

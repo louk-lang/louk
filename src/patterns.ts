@@ -65,6 +65,9 @@ module.exports = {
         html: /^([<])/,
 
         //Used to identify whether we've hit the first non-space character of a line yet.
-        initialSpace: /^(\s)/
+        initialSpace: /^(\s)/,
+
+        //Used to capture leading whitespace
+        whitespace: /^(\s*)/
 
 }

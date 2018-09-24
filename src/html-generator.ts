@@ -23,7 +23,7 @@ function generateHTML(input, options){
 
             if(keepWhitespace){
                 html = html + value.raw
-                
+
                 //Insert a newline as long as we're not at the last line.
                 if(index < (content.length - 1)){
                     html = html + "\n"
@@ -44,8 +44,8 @@ function generateHTML(input, options){
             //Generate opening tags
             if(value.position == "opening" && value.key != null){
 
-                if(keepWhitespace){
-                    html = html + generateWhitespace(value.indent)
+                if(keepWhitespace && value.whitespace){
+                    html = html + value.whitespace
                 }
 
                 html = html + "<"
@@ -113,8 +113,8 @@ function generateHTML(input, options){
             //Generate closing tags
             else if(value.position == "closing" && value.key != null){
 
-                if(keepWhitespace && value.containsElement){
-                    html = html + generateWhitespace(value.indent)
+                if(keepWhitespace && value.containsElement && value.whitespace){
+                    html = html + value.whitespace
                 }
 
                 html = html + "</" + value.key + ">"

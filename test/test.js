@@ -83,6 +83,9 @@ describe("Louk", function(){
     it("should return an attribute with dynamic content", function(){
         assert.equal(louk('a\n:b c'),'<a v-bind:b="c"></a>')
     })
+    it("should return a boolean attribute", function(){
+        assert.equal(louk('a\n~b'),'<a b></a>')
+    })
     it("should return an attribute with static content", function(){
         assert.equal(louk('a\n~b c'),'<a b="c"></a>')
     })

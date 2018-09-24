@@ -79,8 +79,8 @@ function generateHTML(input, options){
                     //Put the above defined attribute and value into the HTML
                     html = html + " " + attribute
 
-                    //If the directive is boolean, no explicit value is needed
-                    if(value.directiveType != "boolean"){
+                    //If the attribute is boolean, no explicit value is needed
+                    if(value.directiveType != "boolean" && value.data){
                         html = html + "=\"" + value.data + "\""
                     }
                 })

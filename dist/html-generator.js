@@ -52,7 +52,7 @@ function generateHTML(input, options) {
                         attribute = key;
                     }
                     html = html + " " + attribute;
-                    if (value.directiveType != "boolean") {
+                    if (value.directiveType != "boolean" && value.data) {
                         html = html + "=\"" + value.data + "\"";
                     }
                 });

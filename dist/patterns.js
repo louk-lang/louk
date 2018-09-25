@@ -1,16 +1,19 @@
 module.exports = {
     prefix: /^([~:@-])/,
     staticPrefix: /^([~])/,
-    suffix: /([~/])$/,
-    staticSuffix: /([~/])$/,
+    suffix: /([~/,])$/,
+    staticSuffix: /([~/,])$/,
     plainCrux: /^(.+)/,
     modifiedCrux: /^(.+?)\s/,
     staticCrux: /^([>#\.]).*/,
+    sectionCrux: /^(\w+),/,
     fill: /^.+?\s(.+)/,
     staticFill: /^[>#\.](.*)/,
     key: /^[~:@-]*([\w\.-]+)/,
+    loukLangAttribute: /~lang louk/,
     comment: /^\/\/(.*)/,
     html: /^([<])/,
     initialSpace: /^(\s)/,
-    whitespace: /^(\s*)/
+    whitespace: /^(\s*)/,
+    unindented: /^\S/
 };

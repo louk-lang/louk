@@ -14,12 +14,12 @@ module.exports = {
         //SUFFIXES
         //Suffixes are nonalphabetic modifiers that follow the key.
 
-        //All valid suffixes: ~ and /
-        suffix: /([~/])$/,
+        //All valid suffixes: ~ and / and ,
+        suffix: /([~/,])$/,
 
         //Suffixes that can make an element static: ~ and /
         // The forward slash makes an element self-closing, and therefore not capable of containing dynamic content.
-        staticSuffix: /([~/])$/,
+        staticSuffix: /([~/,])$/,
 
 
         //CRUXES
@@ -36,6 +36,9 @@ module.exports = {
         //Shorthand cruxes that make their attribute static: > and # and .
         //The first capture group gets the shorthand crux, the second capture group gets the fill.
         staticCrux: /^([>#\.]).*/,
+
+        //Crux of a Vue single-file component section.
+        sectionCrux: /^(\w+),/,
 
 
         //FILLS
@@ -57,6 +60,9 @@ module.exports = {
 
         //OTHER
 
+        //Louk attribute, for use while parsing sections
+        loukLangAttribute: /~lang louk/,
+
         //Characters that indicate the line should be interpretted as a comment.
         //The capture group captures the comment.
         comment: /^\/\/(.*)/,
@@ -67,7 +73,10 @@ module.exports = {
         //Used to identify whether we've hit the first non-space character of a line yet.
         initialSpace: /^(\s)/,
 
-        //Used to capture leading whitespace
-        whitespace: /^(\s*)/
+        //Used to capture leading whitespace.
+        whitespace: /^(\s*)/,
+
+        //Shows that the line is not indented.
+        unindented: /^\S/
 
 }

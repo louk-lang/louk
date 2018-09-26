@@ -91,6 +91,11 @@ function assignMatches(content){
             maxLevel--
         }
 
+        //Just in case it doesn't exist for some elements
+        if(!elements[index].preceding){
+            elements[index].preceding = []
+        }
+        
         elements[index].preceding.push(closingTag(currentLevelElement))
 
     }

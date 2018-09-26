@@ -73,9 +73,9 @@ function findSections(input){
         }
 
     }
-    console.log(section)
+
     sections.push(section)
-    console.log(sections.length)
+
     return sections
 }
 
@@ -109,7 +109,14 @@ function processSections(input){
             sections[index].elements = sections[index].elements.concat(sections[index].body.elements)
 
         }
-
+        //If the section is not Louk content, pass the body through
+        else{
+            sections[index].elements.push({
+                raw: sections[index].body.raw,
+                passthrough: true
+            })
+        }
+        // console.log(sections[index].elements)
         sections[index].elements = elementProcessor.assignMatches(sections[index].elements)
         sections[index].elements = elementProcessor.insertMatches(sections[index].elements)
 

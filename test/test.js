@@ -20,22 +20,22 @@ const elementProcessor = require(file("element-processor"))
 const propertyDeterminer = require(file("property-determiner"))
 const htmlGenerator = require(file("html-generator"))
 
-// describe("Louk", function(){
-//     it("should return a simple element", function(){
-//         assert.equal(louk('a'),'<a></a>')
-//     })
-//     it("should return a simple header element", function(){
-//         assert.equal(louk('h1'),'<h1></h1>')
-//     })
-//     it("should return a simple img element", function(){
-//         assert.equal(louk('img'),'<img></img>')
-//     })
-//     it("should return two peer elements", function(){
-//         assert.equal(louk('a\nb'),'<a></a>\n<b></b>')
-//     })
-//     it("should return two peer elements without whitespace", function(){
-//         assert.equal(louk('a\nb',{whitespace:false}),'<a></a><b></b>')
-//     })
+describe("Louk", function(){
+    // it("should return a simple element", function(){
+    //     assert.equal(louk('a'),'<a></a>')
+    // })
+    // it("should return a simple header element", function(){
+    //     assert.equal(louk('h1'),'<h1></h1>')
+    // })
+    // it("should return a simple img element", function(){
+    //     assert.equal(louk('img'),'<img></img>')
+    // })
+    // it("should return two peer elements", function(){
+    //     assert.equal(louk('a\nb'),'<a></a>\n<b></b>')
+    // })
+    // it("should return two peer elements without whitespace", function(){
+    //     assert.equal(louk('a\nb',{whitespace:false}),'<a></a><b></b>')
+    // })
 //     it("should return a nested element", function(){
 //         assert.equal(louk('a\n\tb'),'<a>\n\t<b></b>\n</a>')
 //     })
@@ -134,7 +134,7 @@ const htmlGenerator = require(file("html-generator"))
 //         assert.equal(louk('div save\n//Triggers dialog\n@click confirm'),'<div v-on:click="confirm">{{save}}</div>')
 //         assert.equal(louk('<div>\n\th1 title\n\t#title\n\t<!-- A comment --></div>'),'<div>\n\t<h1 id="title">{{title}}</h1>\n\t<!-- A comment --></div>')
 //     })
-// })
+})
 //
 // describe("Patterns", function(){
 //     it("should be defined", function(){
@@ -240,7 +240,13 @@ describe("Section processor", function(){
     it("should identify the body of a section", function(){
         assert.equal(sectionProcessor.findSections(["template,","\t~a"])[0].body.raw, "\t~a")
     })
-    it("should louk section content", function(){
+    it("should process louk section content", function(){
         assert.equal(louk("template,\n\ta b\n\t.c"), '<template>\n\t<a class="c">{{b}}</a>\n</template>')
     })
+    it("should pass through non-louk section content", function(){
+        assert.equal(louk("script,\n\tfunction(x){return x}"), '<script>\n\tfunction(x){return x}</script>')
+    })
+    // it("should pass through multiple non-louk sections' content", function(){
+    //     assert.equal(louk("script,\n\tfunction(x){return x}\nstyle,\n\t*{color:green}"), '<script>\n\tfunction(x){return x}</script>')
+    // })
 })

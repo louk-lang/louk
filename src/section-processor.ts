@@ -36,7 +36,9 @@ function findSections(input){
 
         if (line.match(patterns.sectionCrux)){
 
-            if (sections.length > 0){
+            //If we know anything about this section (using marker tag as a proxy)
+            if (section.marker.tag){
+                //Push the current section and reset
                 sections.push(section)
                 section = sectionDefault
             }
@@ -62,6 +64,7 @@ function findSections(input){
         //If the line is part of a Louk section, push it into an array
         else if(section.isLouk){
             section.body.lines.push(line)
+            section.body.raw = section.body.raw + line
         }
 
         //Otherwise, just add it to a string, as we won't be parsing it
@@ -70,9 +73,9 @@ function findSections(input){
         }
 
     }
-
+    console.log(section)
     sections.push(section)
-
+    console.log(sections.length)
     return sections
 }
 

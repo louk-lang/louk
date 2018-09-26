@@ -240,4 +240,7 @@ describe("Section processor", function(){
     it("should identify the body of a section", function(){
         assert.equal(sectionProcessor.findSections(["template,","\t~a"])[0].body.raw, "\t~a")
     })
+    it.only("should louk section content", function(){
+        assert.equal(louk("template,\n\ta b\n\t.c"), '<template>\n\t<a class="c">{{b}}</a>\n</template>')
+    })
 })

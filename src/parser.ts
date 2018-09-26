@@ -22,24 +22,22 @@ function parse(input, options, logging){
     let elements = []
     let html = ""
 
+    //Start with the raw input
     raw = input
 
+    //Break the input by line
     lines = lineProcessor.breakLines(raw)
 
+    //Identify file sections based on top-level markers
     sections = sectionProcessor.findSections(lines)
 
-    lines = lineProcessor.objectifyLines(lines)
+    //Process the information inside
+    sections = sectionProcessor.processSections(sections)
 
-    lines = lineProcessor.determineProperties(lines)
+    //Take the elements out of each section and make them a flat list
+    elements = sectionProcessor.flattenElements(sections)
 
-    lines = lineProcessor.deleteComments(lines)
-
-    elements = elementProcessor.assignAttributes(lines)
-
-    elements = elementProcessor.assignMatches(elements)
-
-    elements = elementProcessor.insertMatches(elements)
-
+    //Turn the elements list into HTML
     html = htmlGenerator.generateHTML(elements, options)
 
     return html

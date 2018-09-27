@@ -61,7 +61,6 @@ function determineProperties(input){
 
     const content = input
     let lines = content
-
     for(let index = 0; index < content.length; index++){
         let value = content[index]
         lines[index].line = index

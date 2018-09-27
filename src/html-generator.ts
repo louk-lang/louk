@@ -41,7 +41,7 @@ function generateHTML(input, options){
 
         //Passthrough content (such as scripts or CSS) aren't processed
         else if(value.passthrough == true){
-            html = html + "\n" + value.raw
+            html = html + "\n" + value.raw + "\n"
         }
 
         //Louk notation goes through additional processing

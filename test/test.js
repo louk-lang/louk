@@ -244,9 +244,12 @@ describe("Section processor", function(){
         assert.equal(louk("template,\n\ta b\n\t.c"), '<template>\n\t<a class="c">{{b}}</a>\n</template>')
     })
     it("should pass through non-louk section content", function(){
-        assert.equal(louk("script,\n\tfunction(x){return x}"), '<script>\n\tfunction(x){return x}</script>')
+        assert.equal(louk("script,\n\tfunction(x){return x}"), '<script>\n\tfunction(x){return x}\n</script>')
     })
-    // it("should pass through multiple non-louk sections' content", function(){
-    //     assert.equal(louk("script,\n\tfunction(x){return x}\nstyle,\n\t*{color:green}"), '<script>\n\tfunction(x){return x}</script>')
-    // })
+    it("should pass through multiple non-louk sections' content", function(){
+        assert.equal(louk("script,\n\tfunction(x){return x}\nstyle,\n\t*{color:green}"), '<script>\n\tfunction(x){return x}\n</script>\n<style>\n\t*{color:green}\n</style>')
+    })
+    it("should handle mix of louk and non-louk sections' content", function(){
+        assert.equal(louk("template,\n\tdiv string\nscript,\n\tfunction(x){return x}\nstyle,\n\t*{color:green}"), '<template>\n\t<div>{{string}}</div>\n</template>\n<script>\n\tfunction(x){return x}\n</script>\n<style>\n\t*{color:green}\n</style>')
+    })
 })

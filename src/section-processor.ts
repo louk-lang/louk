@@ -28,21 +28,19 @@ function findSections(input){
         }
     }
 
-    let section = sectionDefault
+    let section = JSON.parse(JSON.stringify(sectionDefault))
 
     for(let index = 0; index < content.length; index++){
 
-        const line = content[index]
-
+        let line = content[index]
         if (line.match(patterns.sectionCrux)){
+            //As long as this isn't our first iteration through this loop
+            if (section.marker.lines.length > 0){
 
-            //If we know anything about this section (using marker tag as a proxy)
-            if (section.marker.tag){
                 //Push the current section and reset
                 sections.push(section)
-                section = sectionDefault
+                section = JSON.parse(JSON.stringify(sectionDefault))
             }
-
             section.marker.lines.push(line)
 
             //Pull out the section type
@@ -71,11 +69,9 @@ function findSections(input){
         else{
             section.body.raw = section.body.raw + line
         }
-
     }
 
     sections.push(section)
-
     return sections
 }
 
@@ -88,6 +84,7 @@ function processSections(input){
 
         //For each section, process the lines
         sections[index].marker.lines = lineProcessor.objectifyLines(sections[index].marker.lines)
+
         sections[index].marker.lines = lineProcessor.determineProperties(sections[index].marker.lines)
         sections[index].marker.lines = lineProcessor.deleteComments(sections[index].marker.lines)
 
@@ -105,7 +102,6 @@ function processSections(input){
             sections[index].body.lines = lineProcessor.deleteComments(sections[index].body.lines)
 
             sections[index].body.elements = elementProcessor.assignAttributes(sections[index].body.lines)
-
             sections[index].elements = sections[index].elements.concat(sections[index].body.elements)
 
         }
@@ -113,22 +109,21 @@ function processSections(input){
         else{
             sections[index].elements.push({
                 raw: sections[index].body.raw,
-                passthrough: true
+                passthrough: true,
             })
         }
-        // console.log(sections[index].elements)
+
         sections[index].elements = elementProcessor.assignMatches(sections[index].elements)
         sections[index].elements = elementProcessor.insertMatches(sections[index].elements)
 
     }
-
     return sections
 }
 
 function flattenElements(input){
 
     const content = input
-    let elements = content
+    let elements = []
 
     for(var index = 0; index < content.length; index++){
         elements = elements.concat(content[index].elements)

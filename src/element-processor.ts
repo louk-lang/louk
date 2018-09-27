@@ -95,7 +95,7 @@ function assignMatches(content){
         if(!elements[index].preceding){
             elements[index].preceding = []
         }
-        
+
         elements[index].preceding.push(closingTag(currentLevelElement))
 
     }
@@ -113,7 +113,7 @@ function assignMatches(content){
 
     //We insert these elements in reverse
     remainingElements.reverse()
-    // console.log(remainingElements)
+
     for(let index = 0; index < remainingElements.length; index++){
         let value = remainingElements[index]
         if(value){
@@ -123,8 +123,6 @@ function assignMatches(content){
 
     //Add the special end element to the end
     elements.push(endElement)
-
-    // console.log(endElement)
 
     for(let index = 0; index < elements.length; index++){
 
@@ -141,10 +139,6 @@ function assignMatches(content){
                 elements[index].containsElement = false
             }
     }
-
-    // console.log(endElement)
-    // console.log(elements)
-    // console.log(endElement)
 
     return elements
 }

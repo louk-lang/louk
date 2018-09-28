@@ -66,6 +66,9 @@ function assignMatches(content) {
             }
             maxLevel--;
         }
+        if (!elements[index].preceding) {
+            elements[index].preceding = [];
+        }
         elements[index].preceding.push(closingTag(currentLevelElement));
     }
     var endElement = {

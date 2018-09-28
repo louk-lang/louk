@@ -41,7 +41,19 @@ function generateHTML(input, options){
 
         //Passthrough content (such as scripts or CSS) aren't processed
         else if(value.passthrough == true){
-            html = html + "\n" + value.raw + "\n"
+
+            let passthroughContentArray = value.lines
+            if(passthroughContentArray[passthroughContentArray.length-1] == ""){
+                passthroughContentArray.splice(-1,1)
+            }
+            if(passthroughContentArray[0] == ""){
+                passthroughContentArray.splice(0,1)
+            }
+            let passthroughContentString = passthroughContentArray.join("\n")
+
+            html = html + "\n" + passthroughContentString + "\n"
+
+            // console.log(value.lines[value.lines.length-1)])
         }
 
         //Louk notation goes through additional processing

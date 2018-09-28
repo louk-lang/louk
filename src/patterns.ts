@@ -63,6 +63,9 @@ module.exports = {
         //Louk attribute, for use while parsing sections
         loukLangAttribute: /~lang louk/,
 
+        //Used to recognize that something is a tag
+        tag: /^\s*\w/,
+
         //Characters that indicate the line should be interpretted as a comment.
         //The capture group captures the comment.
         comment: /^\/\/(.*)/,

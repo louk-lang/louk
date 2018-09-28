@@ -36,12 +36,12 @@ describe("Louk", function(){
     // it("should return two peer elements without whitespace", function(){
     //     assert.equal(louk('a\nb',{whitespace:false}),'<a></a><b></b>')
     // })
-//     it("should return a nested element", function(){
-//         assert.equal(louk('a\n\tb'),'<a>\n\t<b></b>\n</a>')
-//     })
-//     it("should return a simple element when indented once", function(){
-//         assert.equal(louk('\ta'),'\t<a></a>')
-//     })
+    // it("should return a nested element", function(){
+    //     assert.equal(louk('a\n\tb'),'<a>\n\t<b></b>\n</a>')
+    // })
+    // it("should return a simple element when indented once", function(){
+    //     assert.equal(louk('\ta'),'\t<a></a>')
+    // })
 //     it("should return a simple element when indented once, without whitespace", function(){
 //         assert.equal(louk('\ta',{whitespace:false}),'<a></a>')
 //     })
@@ -238,7 +238,7 @@ describe("Section processor", function(){
         assert.equal(sectionProcessor.findSections(["template,","script,"]).length, 2)
     })
     it("should identify the body of a section", function(){
-        assert.equal(sectionProcessor.findSections(["template,","\t~a"])[0].body.raw, "\t~a")
+        assert.equal(sectionProcessor.findSections(["template,","\t~a"])[0].body.lines[0], "\t~a")
     })
     it("should process louk section content", function(){
         assert.equal(louk("template,\n\ta b\n\t.c"), '<template>\n\t<a class="c">{{b}}</a>\n</template>')
@@ -246,10 +246,22 @@ describe("Section processor", function(){
     it("should pass through non-louk section content", function(){
         assert.equal(louk("script,\n\tfunction(x){return x}"), '<script>\n\tfunction(x){return x}\n</script>')
     })
+    it("should handle multiple lines of non-louk section content", function(){
+        assert.equal(louk("script,\n\tfunction(x){\n\t\treturn x\n\t}"), '<script>\n\tfunction(x){\n\t\treturn x\n\t}\n</script>')
+    })
     it("should pass through multiple non-louk sections' content", function(){
         assert.equal(louk("script,\n\tfunction(x){return x}\nstyle,\n\t*{color:green}"), '<script>\n\tfunction(x){return x}\n</script>\n<style>\n\t*{color:green}\n</style>')
     })
     it("should handle mix of louk and non-louk sections' content", function(){
         assert.equal(louk("template,\n\tdiv string\nscript,\n\tfunction(x){return x}\nstyle,\n\t*{color:green}"), '<template>\n\t<div>{{string}}</div>\n</template>\n<script>\n\tfunction(x){return x}\n</script>\n<style>\n\t*{color:green}\n</style>')
     })
+    it("should remove excess leading and trailing whitespace in non-Louk section", function(){
+        assert.equal(louk("script,\n\n\tfunction(x){\n\t\treturn x\n\t}\n"), '<script>\n\tfunction(x){\n\t\treturn x\n\t}\n</script>')
+    })
+    // it("should handle a raw element before a proper section", function(){
+    //     assert.equal(louk("a\ntemplate,"), '<a></a>\n<template></template>')
+    // })
+    // it("should handle a raw element before a proper section", function(){
+    //     assert.equal(louk("a\n\tb\ntemplate,"), '<a>\n\t<b></b>\n</a>\n<template></template>')
+    // })
 })

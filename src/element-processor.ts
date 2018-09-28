@@ -139,7 +139,6 @@ function assignMatches(content){
                 elements[index].containsElement = false
             }
     }
-
     return elements
 }
 

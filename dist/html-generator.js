@@ -25,6 +25,17 @@ function generateHTML(input, options) {
         else if (value.lineType == "comment") {
             html = html;
         }
+        else if (value.passthrough == true) {
+            var passthroughContentArray = value.lines;
+            if (passthroughContentArray[passthroughContentArray.length - 1] == "") {
+                passthroughContentArray.splice(-1, 1);
+            }
+            if (passthroughContentArray[0] == "") {
+                passthroughContentArray.splice(0, 1);
+            }
+            var passthroughContentString = passthroughContentArray.join("\n");
+            html = html + "\n" + passthroughContentString + "\n";
+        }
         else {
             if (value.position == "opening" && value.key != null) {
                 if (keepWhitespace && value.whitespace) {

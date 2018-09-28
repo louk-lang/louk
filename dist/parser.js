@@ -19,12 +19,8 @@ function parse(input, options, logging) {
     raw = input;
     lines = lineProcessor.breakLines(raw);
     sections = sectionProcessor.findSections(lines);
-    lines = lineProcessor.objectifyLines(lines);
-    lines = lineProcessor.determineProperties(lines);
-    lines = lineProcessor.deleteComments(lines);
-    elements = elementProcessor.assignAttributes(lines);
-    elements = elementProcessor.assignMatches(elements);
-    elements = elementProcessor.insertMatches(elements);
+    sections = sectionProcessor.processSections(sections);
+    elements = sectionProcessor.flattenElements(sections);
     html = htmlGenerator.generateHTML(elements, options);
     return html;
 }

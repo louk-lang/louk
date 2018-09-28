@@ -15,6 +15,7 @@ function findSections(input){
 
     const sectionDefault = {
         isLouk: false,
+        contained: false,
         elements: [],
         marker: {
             lines: [],
@@ -22,13 +23,12 @@ function findSections(input){
             tag: ""
         },
         body:{
-            raw: "",
             lines:[],
             elements: []
         }
     }
 
-    let section = JSON.parse(JSON.stringify(sectionDefault))
+    let section = clone(sectionDefault)
 
     for(let index = 0; index < content.length; index++){
 
@@ -39,7 +39,7 @@ function findSections(input){
 
                 //Push the current section and reset
                 sections.push(section)
-                section = JSON.parse(JSON.stringify(sectionDefault))
+                section = clone(sectionDefault)
             }
             section.marker.lines.push(line)
 
@@ -62,13 +62,13 @@ function findSections(input){
         //If the line is part of a Louk section, push it into an array
         else if(section.isLouk){
             section.body.lines.push(line)
-            section.body.raw = section.body.raw + line
         }
 
-        //Otherwise, just add it to a string, as we won't be parsing it
-        else{
-            section.body.raw = section.body.raw + line
+        //Otherwise, we won't be parsing it
+        else if(section.marker.tag != ""){
+            section.body.lines.push(line)
         }
+
     }
 
     sections.push(section)
@@ -105,10 +105,11 @@ function processSections(input){
             sections[index].elements = sections[index].elements.concat(sections[index].body.elements)
 
         }
+        
         //If the section is not Louk content, pass the body through
-        else{
+        else {
             sections[index].elements.push({
-                raw: sections[index].body.raw,
+                lines: sections[index].body.lines,
                 passthrough: true,
             })
         }
@@ -128,6 +129,10 @@ function flattenElements(input){
     for(var index = 0; index < content.length; index++){
         elements = elements.concat(content[index].elements)
     }
-
+    elements
     return elements
+}
+
+function clone(input){
+    return JSON.parse(JSON.stringify(input))
 }

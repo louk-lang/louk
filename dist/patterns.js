@@ -11,7 +11,7 @@ module.exports = {
     staticFill: /^[>#\.](.*)/,
     key: /^[~:@-]*([\w\.-]+)/,
     loukLangAttribute: /~lang louk/,
-    tag: /^\s*\w/,
+    unindentedElement: /^[\w<]/,
     comment: /^\/\/(.*)/,
     html: /^([<])/,
     initialSpace: /^(\s)/,

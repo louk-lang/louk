@@ -53,7 +53,6 @@ function generateHTML(input, options){
 
             html = html + "\n" + passthroughContentString + "\n"
 
-            // console.log(value.lines[value.lines.length-1)])
         }
 
         //Louk notation goes through additional processing

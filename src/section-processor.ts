@@ -14,8 +14,8 @@ function findSections(input){
     let sections = []
 
     const sectionDefault = {
-        isLouk: false,
-        contained: false,
+        isLouk: null,
+        isMarked: null,
         elements: [],
         marker: {
             lines: [],
@@ -33,26 +33,51 @@ function findSections(input){
     for(let index = 0; index < content.length; index++){
 
         let line = content[index]
-        if (line.match(patterns.sectionCrux)){
-            //As long as this isn't our first iteration through this loop
-            if (section.marker.lines.length > 0){
 
+        if (line.match(patterns.sectionCrux)){
+
+            //As long as this isn't our first iteration through this loop
+            if (section.marker.lines.length > 0 || section.body.lines.length > 0){
                 //Push the current section and reset
                 sections.push(section)
                 section = clone(sectionDefault)
             }
+
+            section.isMarked = true
+
             section.marker.lines.push(line)
 
             //Pull out the section type
             section.marker.tag = line.match(patterns.sectionCrux)[1]
+
             if(section.marker.tag == "template"){
                 section.isLouk = true
             }
+            else{
+                section.isLouk = false
+            }
+
 
         }
 
-        //If the line isn't indented, add it to the marker object
-        else if(line.match(patterns.unindented)){
+        else if(line.match(patterns.unindentedElement)){
+
+            //As long as this isn't our first iteration through this loop
+            if (section.marker.lines.length > 0){
+                //Push the current section and reset
+                sections.push(section)
+                section = clone(sectionDefault)
+            }
+
+            section.isMarked = false
+            section.isLouk = true
+
+            section.body.lines.push(line)
+        }
+
+        //If the line isn't indented, and the section is marked, add the line to the marker object
+        else if(line.match(patterns.unindented) && section.isMarked){
+
             section.marker.lines.push(line)
             if (line.match(patterns.loukLangAttribute)){
                 section.isLouk = true
@@ -105,7 +130,7 @@ function processSections(input){
             sections[index].elements = sections[index].elements.concat(sections[index].body.elements)
 
         }
-        
+
         //If the section is not Louk content, pass the body through
         else {
             sections[index].elements.push({
@@ -118,6 +143,7 @@ function processSections(input){
         sections[index].elements = elementProcessor.insertMatches(sections[index].elements)
 
     }
+
     return sections
 }
 
@@ -129,7 +155,6 @@ function flattenElements(input){
     for(var index = 0; index < content.length; index++){
         elements = elements.concat(content[index].elements)
     }
-    elements
     return elements
 }
 

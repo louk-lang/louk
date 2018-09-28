@@ -10,8 +10,8 @@ function findSections(input) {
     var content = input;
     var sections = [];
     var sectionDefault = {
-        isLouk: false,
-        contained: false,
+        isLouk: null,
+        isMarked: null,
         elements: [],
         marker: {
             lines: [],
@@ -19,26 +19,38 @@ function findSections(input) {
             tag: ""
         },
         body: {
-            raw: "",
             lines: [],
             elements: []
         }
     };
-    var section = JSON.parse(JSON.stringify(sectionDefault));
+    var section = clone(sectionDefault);
     for (var index = 0; index < content.length; index++) {
         var line = content[index];
         if (line.match(patterns.sectionCrux)) {
-            if (section.marker.lines.length > 0) {
+            if (section.marker.lines.length > 0 || section.body.lines.length > 0) {
                 sections.push(section);
-                section = JSON.parse(JSON.stringify(sectionDefault));
+                section = clone(sectionDefault);
             }
+            section.isMarked = true;
             section.marker.lines.push(line);
             section.marker.tag = line.match(patterns.sectionCrux)[1];
             if (section.marker.tag == "template") {
                 section.isLouk = true;
             }
+            else {
+                section.isLouk = false;
+            }
         }
-        else if (line.match(patterns.unindented)) {
+        else if (line.match(patterns.unindentedElement)) {
+            if (section.marker.lines.length > 0) {
+                sections.push(section);
+                section = clone(sectionDefault);
+            }
+            section.isMarked = false;
+            section.isLouk = true;
+            section.body.lines.push(line);
+        }
+        else if (line.match(patterns.unindented) && section.isMarked) {
             section.marker.lines.push(line);
             if (line.match(patterns.loukLangAttribute)) {
                 section.isLouk = true;
@@ -46,7 +58,6 @@ function findSections(input) {
         }
         else if (section.isLouk) {
             section.body.lines.push(line);
-            section.body.raw = section.body.raw + line;
         }
         else if (section.marker.tag != "") {
             section.body.lines.push(line);
@@ -88,6 +99,8 @@ function flattenElements(input) {
     for (var index = 0; index < content.length; index++) {
         elements = elements.concat(content[index].elements);
     }
-    elements;
     return elements;
+}
+function clone(input) {
+    return JSON.parse(JSON.stringify(input));
 }

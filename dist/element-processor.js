@@ -105,7 +105,9 @@ function insertMatches(content) {
         var value = content[index];
         for (var subindex = 0; subindex < value.preceding.length; subindex++) {
             var element = value.preceding[subindex];
-            elements.push(element);
+            if (element != "") {
+                elements.push(element);
+            }
         }
         if (!value.system) {
             elements.push(value);

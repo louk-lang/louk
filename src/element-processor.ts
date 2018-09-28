@@ -151,7 +151,9 @@ function insertMatches(content){
 
         for(let subindex = 0; subindex < value.preceding.length; subindex++){
             let element = value.preceding[subindex]
-            elements.push(element)
+            if(element != ""){
+                elements.push(element)
+            }
         }
 
         //We don't want to insert temporary system elements into the final array

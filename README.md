@@ -138,6 +138,52 @@ Raw HTML will be passed through unmodified. Louk notation can be included on new
 </div>
 ```
 
+### Single File Components
+
+Vue component sections are denoted with a trailing comma.
+
+```html
+template,
+    //Template goes here
+
+script,
+    //Script goes here
+
+style,
+    //Style goes here
+```
+Only the `template` section will have its contents parsed as Louk.
+
+A complete component might look as such:
+
+```html
+template,
+
+    div
+    #main
+        button string
+        @click greet
+
+script,
+~lang ts
+
+    export default {
+      methods:{
+          greet: function(){alert('Hello!'')}
+      },
+      data: function(){
+        return {string: 'Greet'}
+      }
+    }
+
+style,
+~scoped
+
+    button{
+        background-color: blue;
+    }
+```
+
 ### Options
 
 Indentation and newlines are kept by default, but can be removed with the `whitespace` option.

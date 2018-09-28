@@ -108,6 +108,21 @@ Additionally, the `class`, `id`, and `href` attributes can be made static by esc
 
 `>https://example.org` becomes `href="https://example.org"`
 
+### Component Sections
+
+Single file component sections are denoted with a trailing comma. Only the `template` section will have its contents parsed as Louk.
+
+```html
+template,
+    //Template goes here
+
+script,
+    //Script goes here
+
+style,
+    //Style goes here
+```
+
 ### Comments & HTML
 
 Comments are indicated with two leading forward slashes and will not be included in the HTML output.
@@ -138,25 +153,20 @@ Raw HTML will be passed through unmodified. Louk notation can be included on new
 </div>
 ```
 
-### Single File Components
+## Options
 
-Vue component sections are denoted with a trailing comma.
-
-```html
-template,
-    //Template goes here
-
-script,
-    //Script goes here
-
-style,
-    //Style goes here
+Indentation and newlines are kept by default, but can be removed with the `whitespace` option.
+```js
+louk(content, {whitespace: false})
 ```
-Only the `template` section will have its contents parsed as Louk.
+
+## Example
 
 A complete component might look as such:
 
 ```html
+//component.louk
+
 template,
 
     div
@@ -182,11 +192,4 @@ style,
     button{
         background-color: blue;
     }
-```
-
-### Options
-
-Indentation and newlines are kept by default, but can be removed with the `whitespace` option.
-```js
-louk(content, {whitespace: false})
 ```

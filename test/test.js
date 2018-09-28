@@ -1,5 +1,5 @@
 //Can use src or dist
-const dir = "../src/"
+const dir = "../dist/"
 
 const utils = require(dir + "utils")
 utils.setDir(dir)

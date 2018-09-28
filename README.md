@@ -110,7 +110,7 @@ Additionally, the `class`, `id`, and `href` attributes can be made static by esc
 
 ### Component Sections
 
-Single file component sections are denoted with a trailing comma. Only the `template` section will have its contents parsed as Louk.
+Single file component sections are denoted with a trailing comma, and must be unindented. Only the `template` section will have its contents parsed as Louk.
 
 ```html
 template,
@@ -162,10 +162,8 @@ louk(content, {whitespace: false})
 
 ## Example
 
-A complete component might look as such:
-
 ```html
-//component.louk
+//louk
 
 template,
 
@@ -179,7 +177,7 @@ script,
 
     export default {
       methods:{
-          greet: function(){alert('Hello!'')}
+          greet: function(){alert('Hello!')}
       },
       data: function(){
         return {string: 'Greet'}
@@ -192,4 +190,26 @@ style,
     button{
         background-color: blue;
     }
+
+//html
+<template>
+    <div id="main">
+        <button v-on:click="greet">{{string}}</button>
+    </div>
+</template>
+<script lang="ts">
+    export default {
+      methods:{
+          greet: function(){alert('Hello!')}
+      },
+      data: function(){
+        return {string: 'Greet'}
+      }
+    }
+</script>
+<style scoped>
+    button{
+        background-color: blue;
+    }
+</style>
 ```

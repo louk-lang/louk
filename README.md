@@ -112,15 +112,25 @@ Additionally, the `class`, `id`, and `href` attributes can be made static by esc
 
 Single file component sections are denoted with a trailing comma, and must be unindented. Only the `template` section will have its contents parsed as Louk.
 
-```html
+```
+//louk
 template,
     //Template goes here
-
 script,
     //Script goes here
-
 style,
     //Style goes here
+
+//html
+<template>
+    //Template goes here
+</template>
+<script>
+    //Script goes here
+</script>
+<style>
+    //Style goes here
+</style>
 ```
 
 ### Comments & HTML

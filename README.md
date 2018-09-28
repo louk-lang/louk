@@ -9,7 +9,7 @@ Vue is a beautiful technology, but it’s always felt a bit awkward crammed into
 
 The key is that most things are interpreted as dynamic Vue entities (bound content and attributes) by default, while anything else is escaped with a single character. This means markup like `{{ }}` and `v-` becomes unnecessary, as it’s just assumed.
 
-Louk runs on Node, and can compile standalone markup into HTML files (via task runners like gulp) or embedded markup in single file components (via module loaders such as webpack).
+Louk runs on Node, and compiles into Vue HTML. Standalone Louk files can be compiled into full Vue components, or Louk notation can be embedded into Vue component sections.
 
 ## Installation
 ```sh

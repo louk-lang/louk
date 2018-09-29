@@ -115,21 +115,21 @@ Single file component sections are denoted with a trailing comma, and must be un
 ```
 //louk
 template,
-    //Template goes here
+    <!-- Template goes here -->
 script,
     //Script goes here
 style,
-    //Style goes here
+    /* Style goes here */
 
 //html
 <template>
-    //Template goes here
+    <!-- Template goes here -->
 </template>
 <script>
     //Script goes here
 </script>
 <style>
-    //Style goes here
+    /* Style goes here */
 </style>
 ```
 

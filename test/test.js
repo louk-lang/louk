@@ -67,7 +67,7 @@ describe("Louk", function(){
         assert.equal(louk('a\n\tb\n\t\tc\nd'),'<a>\n\t<b>\n\t\t<c></c>\n\t</b>\n</a>\n<d></d>')
     })
     it("should return an element with static content", function(){
-        assert.equal(louk('a~ b'),'<a>b</a>')
+        assert.equal(louk('a" b'),'<a>b</a>')
     })
     it("should return a self-closing element", function(){
         assert.equal(louk('a/'),'<a />')
@@ -76,10 +76,10 @@ describe("Louk", function(){
         assert.equal(louk('a\n:b c'),'<a v-bind:b="c"></a>')
     })
     it("should return a boolean attribute", function(){
-        assert.equal(louk('a\n~b'),'<a b></a>')
+        assert.equal(louk('a\n"b'),'<a b></a>')
     })
     it("should return an attribute with static content", function(){
-        assert.equal(louk('a\n~b c'),'<a b="c"></a>')
+        assert.equal(louk('a\n"b c'),'<a b="c"></a>')
     })
     it("should return an element with a simple directive", function(){
         assert.equal(louk('a\n-if b'),'<a v-if="b"></a>')
@@ -121,7 +121,7 @@ describe("Louk", function(){
         assert.equal(louk('h1\ndiv\n\tbr/'),'<h1></h1>\n<div>\n\t<br /></div>')
         assert.equal(louk('div string'),'<div>{{string}}</div>')
         assert.equal(louk('ul\n:class focus\n\tli\n\t-for item in items'),'<ul v-bind:class="focus">\n\t<li v-for="item in items"></li>\n</ul>')
-        assert.equal(louk('p~ Hello world!'),'<p>Hello world!</p>')
+        assert.equal(louk('p" Hello world!'),'<p>Hello world!</p>')
         assert.equal(louk('div save\n//Triggers dialog\n@click confirm'),'<div v-on:click="confirm">{{save}}</div>')
         assert.equal(louk('<div>\n\th1 title\n\t#title\n\t<!-- A comment --></div>'),'<div>\n\t<h1 id="title">{{title}}</h1>\n\t<!-- A comment --></div>')
     })
@@ -220,7 +220,7 @@ describe("Section processor", function(){
         assert.equal(sectionProcessor.findSections(["template,"])[0].isLouk, true)
     })
     it("should find a section marker attribute", function(){
-        assert.equal(sectionProcessor.findSections(["layout,","~lang louk"])[0].isLouk, true)
+        assert.equal(sectionProcessor.findSections(["layout,",'"lang louk'])[0].isLouk, true)
     })
     it("should identify a non-louk section", function(){
         assert.equal(sectionProcessor.findSections(["script,"])[0].isLouk, false)
@@ -229,7 +229,7 @@ describe("Section processor", function(){
         assert.equal(sectionProcessor.findSections(["template,","script,"]).length, 2)
     })
     it("should identify the body of a section", function(){
-        assert.equal(sectionProcessor.findSections(["template,","\t~a"])[0].body.lines[0], "\t~a")
+        assert.equal(sectionProcessor.findSections(["template,",'\t"a'])[0].body.lines[0], '\t"a')
     })
     it("should process louk section content", function(){
         assert.equal(louk("template,\n\ta b\n\t.c"), '<template>\n\t<a class="c">{{b}}</a>\n</template>')

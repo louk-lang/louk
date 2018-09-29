@@ -94,11 +94,11 @@ Action directives are denoted by a leading at sign.
 
 Content can be made static by escaping the tag with a trailing tilde.
 
-`p~ Hello world!` becomes `<p>Hello world!</p>`
+`p" Hello world!` becomes `<p>Hello world!</p>`
 
 Attributes can be made static by escaping the attribute name with a leading tilde.
 
-`~type text/css` becomes `type="text/css"`
+`"type text/css` becomes `type="text/css"`
 
 Additionally, the `class`, `id`, and `href` attributes can be made static by escaping the attribute value with a leading period, pound sign, or closing angle bracket, respectively.
 
@@ -182,7 +182,7 @@ template,
         @click greet
 
 script,
-~lang ts
+"lang ts
 
     export default {
       methods:{
@@ -194,7 +194,7 @@ script,
     }
 
 style,
-~scoped
+"scoped
 
     button{
         background-color: blue;

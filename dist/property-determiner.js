@@ -16,25 +16,25 @@ var patterns = require("./patterns");
 function determineClassification(input) {
     var content = input;
     var classification = "";
-    if (content.crux == "#") {
+    if (content.crux == '#') {
         classification = "attribute";
     }
-    else if (content.crux == ".") {
+    else if (content.crux == '.') {
         classification = "attribute";
     }
-    else if (content.crux == ">") {
+    else if (content.crux == '>') {
         classification = "attribute";
     }
-    else if (content.prefix == "~") {
+    else if (content.prefix == '"') {
         classification = "attribute";
     }
-    else if (content.prefix == "-") {
+    else if (content.prefix == '-') {
         classification = "attribute";
     }
-    else if (content.prefix == "@") {
+    else if (content.prefix == '@') {
         classification = "attribute";
     }
-    else if (content.prefix == ":") {
+    else if (content.prefix == ':') {
         classification = "attribute";
     }
     else {

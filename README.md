@@ -92,11 +92,11 @@ Action directives are denoted by a leading at sign.
 
 ### Escaping & Statics
 
-Content can be made static by escaping the tag with a trailing tilde.
+Content can be made static by escaping the tag with a trailing quote mark.
 
 `p" Hello world!` becomes `<p>Hello world!</p>`
 
-Attributes can be made static by escaping the attribute name with a leading tilde.
+Attributes can be made static by escaping the attribute name with a leading quote mark.
 
 `"type text/css` becomes `type="text/css"`
 

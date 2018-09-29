@@ -117,6 +117,33 @@ describe("Louk", function(){
     it("should pass through an HTML comment without whitespace", function(){
         assert.equal(louk('a\n<!-- b -->\nc',{whitespace:false}),'<a></a><!-- b --><c></c>')
     })
+    it("should process louk section content", function(){
+        assert.equal(louk("template,\n\ta b\n\t.c"), '<template>\n\t<a class="c">{{b}}</a>\n</template>')
+    })
+    it("should pass through non-louk section content", function(){
+        assert.equal(louk("script,\n\tfunction(x){return x}"), '<script>\n\tfunction(x){return x}\n</script>')
+    })
+    it("should handle multiple lines of non-louk section content", function(){
+        assert.equal(louk("script,\n\tfunction(x){\n\t\treturn x\n\t}"), '<script>\n\tfunction(x){\n\t\treturn x\n\t}\n</script>')
+    })
+    it("should pass through multiple non-louk sections' content", function(){
+        assert.equal(louk("script,\n\tfunction(x){return x}\nstyle,\n\t*{color:green}"), '<script>\n\tfunction(x){return x}\n</script>\n<style>\n\t*{color:green}\n</style>')
+    })
+    it("should handle mix of louk and non-louk sections' content", function(){
+        assert.equal(louk("template,\n\tdiv string\nscript,\n\tfunction(x){return x}\nstyle,\n\t*{color:green}"), '<template>\n\t<div>{{string}}</div>\n</template>\n<script>\n\tfunction(x){return x}\n</script>\n<style>\n\t*{color:green}\n</style>')
+    })
+    it("should remove excess leading and trailing whitespace in non-Louk section", function(){
+        assert.equal(louk("script,\n\n\tfunction(x){\n\t\treturn x\n\t}\n"), '<script>\n\tfunction(x){\n\t\treturn x\n\t}\n</script>')
+    })
+    it("should handle an uncontained element before a marked section", function(){
+        assert.equal(louk("a\ntemplate,"), '<a></a>\n<template></template>')
+    })
+    it("should handle multiple uncontained elements before a marked section", function(){
+        assert.equal(louk("a\n\tb\ntemplate,"), '<a>\n\t<b></b>\n</a>\n<template></template>')
+    })
+    it("should handle an uncontained comment before a marked section", function(){
+        assert.equal(louk("<!--Comment-->\ntemplate,"), '<!--Comment-->\n<template></template>')
+    })
     it("should return correct values for documentation examples", function(){
         assert.equal(louk('h1\ndiv\n\tbr/'),'<h1></h1>\n<div>\n\t<br /></div>')
         assert.equal(louk('div string'),'<div>{{string}}</div>')
@@ -146,6 +173,27 @@ describe("Line Processor", function(){
             }
         ]
         assert.equal(lineProcessor.deleteComments(input).length, 1)
+    })
+})
+
+describe("Section processor", function(){
+    it("should find a section marker", function(){
+        assert.equal(sectionProcessor.findSections(["template,"]).length, 1)
+    })
+    it("should identify a louk template section", function(){
+        assert.equal(sectionProcessor.findSections(["template,"])[0].isLouk, true)
+    })
+    it("should find a section marker attribute", function(){
+        assert.equal(sectionProcessor.findSections(["layout,",'"lang louk'])[0].isLouk, true)
+    })
+    it("should identify a non-louk section", function(){
+        assert.equal(sectionProcessor.findSections(["script,"])[0].isLouk, false)
+    })
+    it("should identify multiple sections", function(){
+        assert.equal(sectionProcessor.findSections(["template,","script,"]).length, 2)
+    })
+    it("should identify the body of a section", function(){
+        assert.equal(sectionProcessor.findSections(["template,",'\t"a'])[0].body.lines[0], '\t"a')
     })
 })
 
@@ -210,52 +258,4 @@ describe("README", function(){
   it("should contain installation instructions", function(){
     readme.code.has("npm install")
   })
-})
-
-describe("Section processor", function(){
-    it("should find a section marker", function(){
-        assert.equal(sectionProcessor.findSections(["template,"]).length, 1)
-    })
-    it("should identify a louk template section", function(){
-        assert.equal(sectionProcessor.findSections(["template,"])[0].isLouk, true)
-    })
-    it("should find a section marker attribute", function(){
-        assert.equal(sectionProcessor.findSections(["layout,",'"lang louk'])[0].isLouk, true)
-    })
-    it("should identify a non-louk section", function(){
-        assert.equal(sectionProcessor.findSections(["script,"])[0].isLouk, false)
-    })
-    it("should identify multiple sections", function(){
-        assert.equal(sectionProcessor.findSections(["template,","script,"]).length, 2)
-    })
-    it("should identify the body of a section", function(){
-        assert.equal(sectionProcessor.findSections(["template,",'\t"a'])[0].body.lines[0], '\t"a')
-    })
-    it("should process louk section content", function(){
-        assert.equal(louk("template,\n\ta b\n\t.c"), '<template>\n\t<a class="c">{{b}}</a>\n</template>')
-    })
-    it("should pass through non-louk section content", function(){
-        assert.equal(louk("script,\n\tfunction(x){return x}"), '<script>\n\tfunction(x){return x}\n</script>')
-    })
-    it("should handle multiple lines of non-louk section content", function(){
-        assert.equal(louk("script,\n\tfunction(x){\n\t\treturn x\n\t}"), '<script>\n\tfunction(x){\n\t\treturn x\n\t}\n</script>')
-    })
-    it("should pass through multiple non-louk sections' content", function(){
-        assert.equal(louk("script,\n\tfunction(x){return x}\nstyle,\n\t*{color:green}"), '<script>\n\tfunction(x){return x}\n</script>\n<style>\n\t*{color:green}\n</style>')
-    })
-    it("should handle mix of louk and non-louk sections' content", function(){
-        assert.equal(louk("template,\n\tdiv string\nscript,\n\tfunction(x){return x}\nstyle,\n\t*{color:green}"), '<template>\n\t<div>{{string}}</div>\n</template>\n<script>\n\tfunction(x){return x}\n</script>\n<style>\n\t*{color:green}\n</style>')
-    })
-    it("should remove excess leading and trailing whitespace in non-Louk section", function(){
-        assert.equal(louk("script,\n\n\tfunction(x){\n\t\treturn x\n\t}\n"), '<script>\n\tfunction(x){\n\t\treturn x\n\t}\n</script>')
-    })
-    it("should handle an uncontained element before a marked section", function(){
-        assert.equal(louk("a\ntemplate,"), '<a></a>\n<template></template>')
-    })
-    it("should handle multiple uncontained elements before a marked section", function(){
-        assert.equal(louk("a\n\tb\ntemplate,"), '<a>\n\t<b></b>\n</a>\n<template></template>')
-    })
-    it("should handle an uncontained comment before a marked section", function(){
-        assert.equal(louk("<!--Comment-->\ntemplate,"), '<!--Comment-->\n<template></template>')
-    })
 })

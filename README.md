@@ -15,7 +15,7 @@ Louk runs on Node, and compiles into Vue HTML. Standalone Louk files can be comp
 ```sh
 $ npm install louk -D
 ```
-If using with webpack, you'll also want to install the [Louk Loader](https://github.com/agorischek/louk-loader).
+If using with webpack, you'll also want to install the [Louk Loader](https://www.npmjs.com/package/louk-loader).
 
 ## Notation
 

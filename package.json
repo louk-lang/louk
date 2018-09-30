@@ -1,6 +1,6 @@
 {
     "name": "louk",
-    "version": "0.6.1",
+    "version": "0.6.2",
     "description": "Vue without the HTML",
     "main": "dist/index.js",
     "scripts": {
@@ -29,6 +29,6 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/agorischek/louk.git"
+        "url": "https://github.com/louk-lang/louk.git"
     }
 }

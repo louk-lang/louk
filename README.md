@@ -117,7 +117,7 @@ Single file component sections are denoted with a trailing comma, and must be un
 template,
     <!-- Template goes here -->
 script,
-    //Script goes here
+    // Script goes here
 style,
     /* Style goes here */
 
@@ -126,7 +126,7 @@ style,
     <!-- Template goes here -->
 </template>
 <script>
-    //Script goes here
+    // Script goes here
 </script>
 <style>
     /* Style goes here */

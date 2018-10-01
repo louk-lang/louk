@@ -170,6 +170,11 @@ Indentation and newlines are kept by default, but can be removed with the `white
 louk(content, {whitespace: false})
 ```
 
+Sections can be assigned default `lang` attributes. Setting these explicitly in the component will override defaults.
+```js
+louk(content, {langs: {style: "stylus"}})
+```
+
 ## Example
 
 ```html

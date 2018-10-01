@@ -144,6 +144,18 @@ describe("Louk", function(){
     it("should handle an uncontained comment before a marked section", function(){
         assert.equal(louk("<!--Comment-->\ntemplate,"), '<!--Comment-->\n<template></template>')
     })
+    it("should set the language per section", function(){
+        const options = {
+            langs: { style: "stylus" }
+        }
+        assert.equal(louk('style,',options),'<style lang="stylus">\n\n</style>')
+    })
+    it("should not override an explicitly set section language", function(){
+        const options = {
+            langs: { style: "stylus" }
+        }
+        assert.equal(louk('style,\n"lang sass',options),'<style lang="sass">\n\n</style>')
+    })
     it("should return correct values for documentation examples", function(){
         assert.equal(louk('h1\ndiv\n\tbr/'),'<h1></h1>\n<div>\n\t<br /></div>')
         assert.equal(louk('div string'),'<div>{{string}}</div>')

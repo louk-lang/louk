@@ -32,7 +32,7 @@ function parse(input, options, logging){
     sections = sectionProcessor.findSections(lines)
 
     //Process the information inside
-    sections = sectionProcessor.processSections(sections)
+    sections = sectionProcessor.processSections(sections, options)
 
     //Take the elements out of each section and make them a flat list
     elements = sectionProcessor.flattenElements(sections)

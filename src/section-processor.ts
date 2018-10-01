@@ -100,7 +100,7 @@ function findSections(input){
     return sections
 }
 
-function processSections(input){
+function processSections(input, options){
 
     const content = input
     let sections = content
@@ -115,6 +115,20 @@ function processSections(input){
 
         //Then turn those lines into element objects and begin to process them
         sections[index].marker.elements = elementProcessor.assignAttributes(sections[index].marker.lines)
+
+        //If there are language options, and the section's marker tag doesn't have a language explicitly set
+        if(options && options.langs && !sections[index].marker.elements[0].attributes.lang){
+            const tag = sections[index].marker.tag
+            const lang = options.langs[tag]
+            //If there is a language setting for this specific section
+            if (options.langs[tag]){
+                //Then set the lang attribute
+                sections[index].marker.elements[0].attributes.lang = {
+                    data: lang,
+                    interpretation: "static"
+                }
+            }
+        }
 
         //Then push the marker elements up into the section elements
         sections[index].elements = sections[index].elements.concat(sections[index].marker.elements)

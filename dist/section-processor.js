@@ -66,7 +66,7 @@ function findSections(input) {
     sections.push(section);
     return sections;
 }
-function processSections(input) {
+function processSections(input, options) {
     var content = input;
     var sections = content;
     for (var index = 0; index < sections.length; index++) {
@@ -74,6 +74,16 @@ function processSections(input) {
         sections[index].marker.lines = lineProcessor.determineProperties(sections[index].marker.lines);
         sections[index].marker.lines = lineProcessor.deleteComments(sections[index].marker.lines);
         sections[index].marker.elements = elementProcessor.assignAttributes(sections[index].marker.lines);
+        if (options && options.langs && !sections[index].marker.elements[0].attributes.lang) {
+            var tag = sections[index].marker.tag;
+            var lang = options.langs[tag];
+            if (options.langs[tag]) {
+                sections[index].marker.elements[0].attributes.lang = {
+                    data: lang,
+                    interpretation: "static"
+                };
+            }
+        }
         sections[index].elements = sections[index].elements.concat(sections[index].marker.elements);
         if (sections[index].isLouk) {
             sections[index].body.lines = lineProcessor.objectifyLines(sections[index].body.lines);

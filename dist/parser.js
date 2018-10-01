@@ -19,7 +19,7 @@ function parse(input, options, logging) {
     raw = input;
     lines = lineProcessor.breakLines(raw);
     sections = sectionProcessor.findSections(lines);
-    sections = sectionProcessor.processSections(sections);
+    sections = sectionProcessor.processSections(sections, options);
     elements = sectionProcessor.flattenElements(sections);
     html = htmlGenerator.generateHTML(elements, options);
     return html;

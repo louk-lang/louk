@@ -9,7 +9,11 @@ const _ = require("underscore");
 
 function assignAttributes(content) {
     const elements = [];
-    let currentTag = {};
+    let currentTag = {
+        attributes: {},
+        matched: false,
+        position: "",
+    };
 
     for (let index = 0; index < content.length; index++) {
         const value = content[index];

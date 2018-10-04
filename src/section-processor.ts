@@ -142,7 +142,7 @@ function processSections(sections, options) {
 
 function flattenElements(sections) {
 
-    const elements = [];
+    let elements = [];
 
     for (const section of sections) {
         elements = elements.concat(section.elements);

@@ -1,3 +1,5 @@
+"use strict";
+exports.__esModule = true;
 module.exports = {
     determineClassification: determineClassification,
     determineCrux: determineCrux,
@@ -12,7 +14,7 @@ module.exports = {
     determineSuffix: determineSuffix,
     determineWhitespace: determineWhitespace
 };
-var patterns = require("./patterns");
+var patterns_1 = require("./patterns");
 function determineClassification(line) {
     if (line.crux === "#") {
         return "attribute";
@@ -42,7 +44,7 @@ function determineClassification(line) {
 function determinePrefix(line) {
     var prefix = "";
     if (line.lineType === "louk") {
-        var matches = line.crux.match(patterns.prefix);
+        var matches = line.crux.match(patterns_1["default"].prefix);
         if (matches) {
             prefix = matches[1];
         }
@@ -54,7 +56,7 @@ function determineSuffix(line) {
     if (line.lineType === "louk") {
         var matches = "";
         if (line.crux) {
-            matches = line.crux.match(patterns.suffix);
+            matches = line.crux.match(patterns_1["default"].suffix);
         }
         if (matches) {
             suffix = matches[1];
@@ -78,13 +80,13 @@ function determineSelfClosing(line) {
 }
 function determineInterpretation(line) {
     if (line.lineType === "louk") {
-        if (line.classification === "tag" && line.suffix.match(patterns.staticSuffix)) {
+        if (line.classification === "tag" && line.suffix.match(patterns_1["default"].staticSuffix)) {
             return "static";
         }
-        else if (line.crux.match(patterns.staticCrux)) {
+        else if (line.crux.match(patterns_1["default"].staticCrux)) {
             return "static";
         }
-        else if (line.classification === "attribute" && line.prefix.match(patterns.staticPrefix)) {
+        else if (line.classification === "attribute" && line.prefix.match(patterns_1["default"].staticPrefix)) {
             return "static";
         }
         else {
@@ -98,7 +100,7 @@ function determineInterpretation(line) {
 function determineIndent(line) {
     var trimmed = line;
     var indent = 0;
-    while (trimmed.match(patterns.initialSpace)) {
+    while (trimmed.match(patterns_1["default"].initialSpace)) {
         trimmed = trimmed.substr(1);
         indent = indent + 1;
     }
@@ -106,14 +108,14 @@ function determineIndent(line) {
 }
 function determineCrux(line) {
     if (line.lineType === "louk") {
-        if (line.unindented.match(patterns.staticCrux)) {
-            return line.unindented.match(patterns.staticCrux)[1];
+        if (line.unindented.match(patterns_1["default"].staticCrux)) {
+            return line.unindented.match(patterns_1["default"].staticCrux)[1];
         }
-        else if (line.unindented.match(patterns.modifiedCrux)) {
-            return line.unindented.match(patterns.modifiedCrux)[1];
+        else if (line.unindented.match(patterns_1["default"].modifiedCrux)) {
+            return line.unindented.match(patterns_1["default"].modifiedCrux)[1];
         }
-        else if (line.unindented.match(patterns.plainCrux)) {
-            return line.unindented.match(patterns.plainCrux)[1];
+        else if (line.unindented.match(patterns_1["default"].plainCrux)) {
+            return line.unindented.match(patterns_1["default"].plainCrux)[1];
         }
         else {
             return line.unindented;
@@ -124,14 +126,14 @@ function determineCrux(line) {
     }
 }
 function determineFill(line) {
-    if (line.crux.match(patterns.staticFill)) {
-        return line.unindented.match(patterns.staticFill)[1];
+    if (line.crux.match(patterns_1["default"].staticFill)) {
+        return line.unindented.match(patterns_1["default"].staticFill)[1];
     }
-    else if (line.unindented.match(patterns.fill)) {
-        return line.unindented.match(patterns.fill)[1];
+    else if (line.unindented.match(patterns_1["default"].fill)) {
+        return line.unindented.match(patterns_1["default"].fill)[1];
     }
     else if (line.lineType === "comment") {
-        return line.unindented.match(patterns.comment)[1];
+        return line.unindented.match(patterns_1["default"].comment)[1];
     }
 }
 function determineDirectiveType(line) {
@@ -163,8 +165,8 @@ function determineKey(line) {
         else if (line.crux === ">") {
             return "href";
         }
-        else if (line.unindented.match(patterns.key)) {
-            return line.unindented.match(patterns.key)[1];
+        else if (line.unindented.match(patterns_1["default"].key)) {
+            return line.unindented.match(patterns_1["default"].key)[1];
         }
         else {
             return "";
@@ -175,10 +177,10 @@ function determineKey(line) {
     }
 }
 function determineLineType(line) {
-    if (line.unindented.match(patterns.comment)) {
+    if (line.unindented.match(patterns_1["default"].comment)) {
         return "comment";
     }
-    else if (line.unindented.match(patterns.html)) {
+    else if (line.unindented.match(patterns_1["default"].html)) {
         return "html";
     }
     else {
@@ -186,6 +188,6 @@ function determineLineType(line) {
     }
 }
 function determineWhitespace(line) {
-    var whitespace = line.raw.match(patterns.whitespace)[1];
+    var whitespace = line.raw.match(patterns_1["default"].whitespace)[1];
     return whitespace;
 }

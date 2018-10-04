@@ -1,12 +1,14 @@
+"use strict";
+exports.__esModule = true;
 module.exports = {
     findSections: findSections,
     flattenElements: flattenElements,
     processSections: processSections
 };
-var patterns = require("./patterns");
+var patterns_1 = require("./patterns");
 var lineProcessor = require("./line-processor");
 var elementProcessor = require("./element-processor");
-var utils = require("./utils");
+var utils_1 = require("./utils");
 function findSections(lines) {
     var sections = [];
     var sectionDefault = {
@@ -23,17 +25,17 @@ function findSections(lines) {
             tag: ""
         }
     };
-    var section = utils.clone(sectionDefault);
+    var section = utils_1["default"].clone(sectionDefault);
     for (var _i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
         var line = lines_1[_i];
-        if (line.match(patterns.sectionCrux)) {
+        if (line.match(patterns_1["default"].sectionCrux)) {
             if (section.marker.lines.length > 0 || section.body.lines.length > 0) {
                 sections.push(section);
-                section = utils.clone(sectionDefault);
+                section = utils_1["default"].clone(sectionDefault);
             }
             section.isMarked = true;
             section.marker.lines.push(line);
-            section.marker.tag = line.match(patterns.sectionCrux)[1];
+            section.marker.tag = line.match(patterns_1["default"].sectionCrux)[1];
             if (section.marker.tag === "template") {
                 section.isLouk = true;
             }
@@ -41,7 +43,7 @@ function findSections(lines) {
                 section.isLouk = false;
             }
         }
-        else if (line.match(patterns.unindentedElement)) {
+        else if (line.match(patterns_1["default"].unindentedElement)) {
             if (section.marker.lines.length > 0) {
                 sections.push(section);
                 section = clone(sectionDefault);
@@ -50,9 +52,9 @@ function findSections(lines) {
             section.isLouk = true;
             section.body.lines.push(line);
         }
-        else if (line.match(patterns.unindented) && section.isMarked) {
+        else if (line.match(patterns_1["default"].unindented) && section.isMarked) {
             section.marker.lines.push(line);
-            if (line.match(patterns.loukLangAttribute)) {
+            if (line.match(patterns_1["default"].loukLangAttribute)) {
                 section.isLouk = true;
             }
         }

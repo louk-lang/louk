@@ -4,17 +4,12 @@ module.exports = {
 
 const _ = require("underscore");
 
-const patterns = require("./patterns");
 const lineProcessor = require("./line-processor");
 const sectionProcessor = require("./section-processor");
 const elementProcessor = require("./element-processor");
 const htmlGenerator = require("./html-generator");
-const utils = require("./utils");
-const write = utils.write;
 
-function parse(input, options, logging) {
-
-    utils.log(logging);
+function parse(input, options) {
 
     let raw = "";
     let lines = [];

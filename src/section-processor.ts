@@ -4,10 +4,10 @@ module.exports = {
     processSections,
 };
 
-const patterns = require("./patterns");
+import patterns from "./patterns";
 const lineProcessor = require("./line-processor");
 const elementProcessor = require("./element-processor");
-const utils = require("./utils");
+import utils from "./utils";
 
 function findSections(lines) {
 

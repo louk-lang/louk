@@ -13,7 +13,7 @@ module.exports = {
     determineWhitespace,
 };
 
-const patterns = require ("./patterns");
+import patterns from "./patterns";
 
 // Determines whether each line represents an attribute or a tag
 function determineClassification(line) {

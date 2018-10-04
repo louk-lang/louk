@@ -1,9 +1,7 @@
 //Can use src or dist
 const dir = "../dist/"
 
-const utils = require(dir + "utils")
-utils.setDir(dir)
-const file = utils.file
+function file(path) { return dir + path;}
 
 const louk = require(file("index.js"))
 const chai = require("chai")

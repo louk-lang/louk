@@ -1,4 +1,6 @@
-module.exports = {
+"use strict";
+exports.__esModule = true;
+exports["default"] = {
     prefix: /^([":@-])/,
     staticPrefix: /^(["])/,
     suffix: /(["/,])$/,

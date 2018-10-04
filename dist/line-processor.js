@@ -4,7 +4,6 @@ module.exports = {
     determineProperties: determineProperties,
     objectifyLines: objectifyLines
 };
-var patterns = require("./patterns");
 var propertyDeterminer = require("./property-determiner");
 function breakLines(content) {
     return content.split("\n");

@@ -5,7 +5,6 @@ module.exports = {
     objectifyLines,
 };
 
-const patterns = require("./patterns");
 const propertyDeterminer = require("./property-determiner");
 
 function breakLines(content) {

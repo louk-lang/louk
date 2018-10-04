@@ -1,8 +1,8 @@
 module.exports = {
     assignAttributes: assignAttributes,
     assignMatches: assignMatches,
-    insertMatches: insertMatches,
-    clostingTag: closingTag
+    closingTag: closingTag,
+    insertMatches: insertMatches
 };
 var _ = require("underscore");
 function assignAttributes(content) {
@@ -10,7 +10,7 @@ function assignAttributes(content) {
     var currentTag = {};
     for (var index = 0; index < content.length; index++) {
         var value = content[index];
-        if (value.classification == "tag") {
+        if (value.classification === "tag") {
             if (index > 0) {
                 elements.push(currentTag);
             }
@@ -19,26 +19,25 @@ function assignAttributes(content) {
             currentTag.matched = false;
             currentTag.attributes = {};
         }
-        else if (value.classification == "attribute") {
+        else if (value.classification === "attribute") {
             currentTag.attributes[value.key] = {
                 data: value.fill,
-                interpretation: value.interpretation,
-                directiveType: value.directiveType
+                directiveType: value.directiveType,
+                interpretation: value.interpretation
             };
         }
     }
     elements.push(currentTag);
     return elements;
 }
-function assignMatches(content) {
-    var elements = content;
+function assignMatches(elements) {
     var elementsForInsertion = {};
     var level = 0;
     var maxLevel = 0;
-    for (var index = 0; index < content.length; index++) {
-        var value = content[index];
+    for (var _i = 0, elements_1 = elements; _i < elements_1.length; _i++) {
+        var element = elements_1[_i];
         var currentLevelElement = "";
-        level = value.indent;
+        level = element.indent;
         if (level >= maxLevel) {
             maxLevel = level;
         }
@@ -46,11 +45,11 @@ function assignMatches(content) {
             currentLevelElement = elementsForInsertion[level];
             delete elementsForInsertion[level];
         }
-        if (!value.selfClosing) {
+        if (!element.selfClosing) {
             elementsForInsertion[level] = {
-                key: value.key,
-                indent: value.indent,
-                whitespace: value.whitespace
+                indent: element.indent,
+                key: element.key,
+                whitespace: element.whitespace
             };
             for (var subindex = (level - 1); subindex >= 0; subindex--) {
                 if (elementsForInsertion[subindex]) {
@@ -61,34 +60,34 @@ function assignMatches(content) {
         }
         while (level < maxLevel) {
             if (elementsForInsertion[maxLevel]) {
-                elements[index].preceding.push(closingTag(elementsForInsertion[maxLevel]));
+                element.preceding.push(closingTag(elementsForInsertion[maxLevel]));
                 delete elementsForInsertion[maxLevel];
             }
             maxLevel--;
         }
-        if (!elements[index].preceding) {
-            elements[index].preceding = [];
+        if (!element.preceding) {
+            element.preceding = [];
         }
-        elements[index].preceding.push(closingTag(currentLevelElement));
+        element.preceding.push(closingTag(currentLevelElement));
     }
     var endElement = {
-        system: "end",
-        preceding: []
+        preceding: [],
+        system: "end"
     };
     var remainingElements = [];
     _.each(elementsForInsertion, function (value, key) {
         remainingElements[key] = value;
     });
     remainingElements.reverse();
-    for (var index = 0; index < remainingElements.length; index++) {
-        var value = remainingElements[index];
-        if (value) {
-            endElement.preceding.push((closingTag(value)));
+    for (var _a = 0, remainingElements_1 = remainingElements; _a < remainingElements_1.length; _a++) {
+        var element = remainingElements_1[_a];
+        if (element) {
+            endElement.preceding.push((closingTag(element)));
         }
     }
     elements.push(endElement);
     for (var index = 0; index < elements.length; index++) {
-        if (index < (content.length - 1)) {
+        if (index < (elements.length - 1)) {
             if (elements[index + 1].indent > elements[index].indent) {
                 elements[index].containsElement = true;
             }
@@ -99,18 +98,18 @@ function assignMatches(content) {
     }
     return elements;
 }
-function insertMatches(content) {
+function insertMatches(nestedElements) {
     var elements = [];
-    for (var index = 0; index < content.length; index++) {
-        var value = content[index];
-        for (var subindex = 0; subindex < value.preceding.length; subindex++) {
-            var element = value.preceding[subindex];
-            if (element != "") {
-                elements.push(element);
+    for (var _i = 0, nestedElements_1 = nestedElements; _i < nestedElements_1.length; _i++) {
+        var element = nestedElements_1[_i];
+        for (var _a = 0, _b = element.preceding; _a < _b.length; _a++) {
+            var precedingElement = _b[_a];
+            if (precedingElement !== "") {
+                elements.push(precedingElement);
             }
         }
-        if (!value.system) {
-            elements.push(value);
+        if (!element.system) {
+            elements.push(element);
         }
     }
     return elements;

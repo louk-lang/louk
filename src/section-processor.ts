@@ -1,177 +1,151 @@
 module.exports = {
-    findSections: findSections,
-    processSections: processSections,
-    flattenElements: flattenElements
-}
+    findSections,
+    flattenElements,
+    processSections,
+};
 
-const patterns = require("./patterns")
-const lineProcessor = require("./line-processor")
-const elementProcessor = require("./element-processor")
+const patterns = require("./patterns");
+const lineProcessor = require("./line-processor");
+const elementProcessor = require("./element-processor");
+const utils = require("./utils");
 
-function findSections(input){
+function findSections(lines) {
 
-    const content = input
-    let sections = []
+    const sections = [];
 
     const sectionDefault = {
+        body: {
+            elements: [],
+            lines: [],
+        },
+        elements: [],
         isLouk: null,
         isMarked: null,
-        elements: [],
         marker: {
-            lines: [],
             elements: [],
-            tag: ""
+            lines: [],
+            tag: "",
         },
-        body:{
-            lines:[],
-            elements: []
-        }
-    }
+    };
 
-    let section = clone(sectionDefault)
+    let section = utils.clone(sectionDefault);
 
-    for(let index = 0; index < content.length; index++){
+    for (const line of lines) {
 
-        let line = content[index]
+        if (line.match(patterns.sectionCrux)) {
 
-        if (line.match(patterns.sectionCrux)){
-
-            //As long as this isn't our first iteration through this loop
-            if (section.marker.lines.length > 0 || section.body.lines.length > 0){
-                //Push the current section and reset
-                sections.push(section)
-                section = clone(sectionDefault)
+            // As long as this isn't our first iteration through this loop
+            if (section.marker.lines.length > 0 || section.body.lines.length > 0) {
+                // Push the current section and reset
+                sections.push(section);
+                section = utils.clone(sectionDefault);
             }
 
-            section.isMarked = true
+            section.isMarked = true;
 
-            section.marker.lines.push(line)
+            section.marker.lines.push(line);
 
-            //Pull out the section type
-            section.marker.tag = line.match(patterns.sectionCrux)[1]
+            // Pull out the section type
+            section.marker.tag = line.match(patterns.sectionCrux)[1];
 
-            if(section.marker.tag == "template"){
-                section.isLouk = true
-            }
-            else{
-                section.isLouk = false
-            }
-
-
-        }
-
-        else if(line.match(patterns.unindentedElement)){
-
-            //As long as this isn't our first iteration through this loop
-            if (section.marker.lines.length > 0){
-                //Push the current section and reset
-                sections.push(section)
-                section = clone(sectionDefault)
+            if (section.marker.tag === "template") {
+                section.isLouk = true;
+            } else {
+                section.isLouk = false;
             }
 
-            section.isMarked = false
-            section.isLouk = true
+        } else if (line.match(patterns.unindentedElement)) {
 
-            section.body.lines.push(line)
-        }
-
-        //If the line isn't indented, and the section is marked, add the line to the marker object
-        else if(line.match(patterns.unindented) && section.isMarked){
-
-            section.marker.lines.push(line)
-            if (line.match(patterns.loukLangAttribute)){
-                section.isLouk = true
+            // As long as this isn't our first iteration through this loop
+            if (section.marker.lines.length > 0) {
+                // Push the current section and reset
+                sections.push(section);
+                section = clone(sectionDefault);
             }
-        }
 
-        //If the line is part of a Louk section, push it into an array
-        else if(section.isLouk){
-            section.body.lines.push(line)
-        }
+            section.isMarked = false;
+            section.isLouk = true;
 
-        //Otherwise, we won't be parsing it
-        else if(section.marker.tag != ""){
-            section.body.lines.push(line)
+            section.body.lines.push(line);
+        } else if (line.match(patterns.unindented) && section.isMarked) {
+
+            section.marker.lines.push(line);
+            if (line.match(patterns.loukLangAttribute)) {
+                section.isLouk = true;
+            }
+        } else if (section.isLouk) {
+            section.body.lines.push(line);
+        } else if (section.marker.tag !== "") {
+            section.body.lines.push(line);
         }
 
     }
 
-    sections.push(section)
-    return sections
+    sections.push(section);
+    return sections;
 }
 
-function processSections(input, options){
+function processSections(sections, options) {
 
-    const content = input
-    let sections = content
+    for (const section of sections) {
 
-    for(var index = 0; index < sections.length; index++){
+        // For each section, process the lines
+        section.marker.lines = lineProcessor.objectifyLines(section.marker.lines);
 
-        //For each section, process the lines
-        sections[index].marker.lines = lineProcessor.objectifyLines(sections[index].marker.lines)
+        section.marker.lines = lineProcessor.determineProperties(section.marker.lines);
+        section.marker.lines = lineProcessor.deleteComments(section.marker.lines);
 
-        sections[index].marker.lines = lineProcessor.determineProperties(sections[index].marker.lines)
-        sections[index].marker.lines = lineProcessor.deleteComments(sections[index].marker.lines)
+        // Then turn those lines into element objects and begin to process them
+        section.marker.elements = elementProcessor.assignAttributes(section.marker.lines);
 
-        //Then turn those lines into element objects and begin to process them
-        sections[index].marker.elements = elementProcessor.assignAttributes(sections[index].marker.lines)
-
-        //If there are language options, and the section's marker tag doesn't have a language explicitly set
-        if(options && options.langs && !sections[index].marker.elements[0].attributes.lang){
-            const tag = sections[index].marker.tag
-            const lang = options.langs[tag]
-            //If there is a language setting for this specific section
-            if (options.langs[tag]){
-                //Then set the lang attribute
-                sections[index].marker.elements[0].attributes.lang = {
+        // If there are language options, and the section's marker tag doesn't have a language explicitly set
+        if (options && options.langs && !section.marker.elements[0].attributes.lang) {
+            const tag = section.marker.tag;
+            const lang = options.langs[tag];
+            // If there is a language setting for this specific section
+            if (options.langs[tag]) {
+                // Then set the lang attribute
+                section.marker.elements[0].attributes.lang = {
                     data: lang,
-                    interpretation: "static"
-                }
+                    interpretation: "static",
+                };
             }
         }
 
-        //Then push the marker elements up into the section elements
-        sections[index].elements = sections[index].elements.concat(sections[index].marker.elements)
+        // Then push the marker elements up into the section elements
+        section.elements = section.elements.concat(section.marker.elements);
 
-        //If the section is Louk content, process the body as well.
-        if(sections[index].isLouk){
+        // If the section is Louk content, process the body as well.
+        if (section.isLouk) {
 
-            sections[index].body.lines = lineProcessor.objectifyLines(sections[index].body.lines)
-            sections[index].body.lines = lineProcessor.determineProperties(sections[index].body.lines)
-            sections[index].body.lines = lineProcessor.deleteComments(sections[index].body.lines)
+            section.body.lines = lineProcessor.objectifyLines(section.body.lines);
+            section.body.lines = lineProcessor.determineProperties(section.body.lines);
+            section.body.lines = lineProcessor.deleteComments(section.body.lines);
 
-            sections[index].body.elements = elementProcessor.assignAttributes(sections[index].body.lines)
-            sections[index].elements = sections[index].elements.concat(sections[index].body.elements)
+            section.body.elements = elementProcessor.assignAttributes(section.body.lines);
+            section.elements = section.elements.concat(section.body.elements);
 
-        }
-
-        //If the section is not Louk content, pass the body through
-        else {
-            sections[index].elements.push({
-                lines: sections[index].body.lines,
+        } else {
+            section.elements.push({
+                lines: section.body.lines,
                 passthrough: true,
-            })
+            });
         }
 
-        sections[index].elements = elementProcessor.assignMatches(sections[index].elements)
-        sections[index].elements = elementProcessor.insertMatches(sections[index].elements)
+        section.elements = elementProcessor.assignMatches(section.elements);
+        section.elements = elementProcessor.insertMatches(section.elements);
 
     }
 
-    return sections
+    return sections;
 }
 
-function flattenElements(input){
+function flattenElements(sections) {
 
-    const content = input
-    let elements = []
+    const elements = [];
 
-    for(var index = 0; index < content.length; index++){
-        elements = elements.concat(content[index].elements)
+    for (const section of sections) {
+        elements = elements.concat(section.elements);
     }
-    return elements
-}
-
-function clone(input){
-    return JSON.parse(JSON.stringify(input))
+    return elements;
 }

@@ -1,86 +1,71 @@
 module.exports = {
-    breakLines: breakLines,
-    deleteComments: deleteComments,
-    objectifyLines: objectifyLines,
-    determineProperties: determineProperties
-}
+    breakLines,
+    deleteComments,
+    determineProperties,
+    objectifyLines,
+};
 
-const patterns = require("./patterns")
-const propertyDeterminer = require("./property-determiner")
+const patterns = require("./patterns");
+const propertyDeterminer = require("./property-determiner");
 
-function breakLines(input){
+function breakLines(content) {
 
-    const content = input
-    let lines = content
-
-    lines = content.split("\n")
-
-    return lines
+    return content.split("\n");
 
 }
 
-function deleteComments(input){
+function deleteComments(lines) {
 
-    const content = input
-    //Lines with comments
-    let lines = content
+    // Lines without comments
+    const prunedLines = [];
 
-    //Lines without comments
-    let prunedLines = []
+    for (const line of lines) {
 
-    for(let index = 0; index < content.length; index++){
-
-        let value = content[index]
-
-        if(value.lineType != "comment"){
-            prunedLines.push(value)
+        if (line.lineType !== "comment") {
+            prunedLines.push(line);
         }
 
     }
-    return prunedLines
+    return prunedLines;
 }
 
-function objectifyLines(input){
+function objectifyLines(lines) {
 
-    const content = input
-    let objectifiedLines = []
+    const objectifiedLines = [];
 
-    for(let index = 0; index < content.length; index++){
-        let value = content[index]
-        if(value != ""){
+    for (const line of lines) {
+        if (line !== "") {
             objectifiedLines.push({
-                "raw":value
-            })
+                raw: line,
+            });
         }
     }
 
-    return objectifiedLines
+    return objectifiedLines;
 }
 
-function determineProperties(input){
+function determineProperties(lines) {
 
-    const content = input
-    let lines = content
-    for(let index = 0; index < content.length; index++){
-        let value = content[index]
-        lines[index].line = index
-        let indentInfo = propertyDeterminer.determineIndent(value.raw)
-        lines[index].index = index
-        lines[index].whitespace = propertyDeterminer.determineWhitespace(lines[index])
-        lines[index].indent = indentInfo[0]
-        lines[index].unindented = indentInfo[1]
-        lines[index].lineType = propertyDeterminer.determineLineType(lines[index])
-        lines[index].crux = propertyDeterminer.determineCrux(lines[index])
-        lines[index].prefix = propertyDeterminer.determinePrefix(lines[index])
-        lines[index].suffix = propertyDeterminer.determineSuffix(lines[index])
-        lines[index].selfClosing = propertyDeterminer.determineSelfClosing(lines[index])
-        lines[index].classification = propertyDeterminer.determineClassification(lines[index])
-        lines[index].key = propertyDeterminer.determineKey(lines[index])
-        lines[index].interpretation = propertyDeterminer.determineInterpretation(lines[index])
-        lines[index].fill = propertyDeterminer.determineFill(lines[index])
-        lines[index].directiveType = propertyDeterminer.determineDirectiveType(lines[index])
-        lines[index].preceding = []
+    for (let index = 0; index < lines.length; index++) {
+        const value = lines[index];
+        lines[index].line = index;
+        const indentInfo = propertyDeterminer.determineIndent(value.raw);
+        lines[index].index = index;
+        lines[index].whitespace = propertyDeterminer.determineWhitespace(lines[index]);
+        lines[index].indent = indentInfo[0];
+        lines[index].unindented = indentInfo[1];
+        lines[index].lineType = propertyDeterminer.determineLineType(lines[index]);
+        lines[index].crux = propertyDeterminer.determineCrux(lines[index]);
+        lines[index].prefix = propertyDeterminer.determinePrefix(lines[index]);
+        lines[index].suffix = propertyDeterminer.determineSuffix(lines[index]);
+        lines[index].selfClosing = propertyDeterminer.determineSelfClosing(lines[index]);
+        lines[index].classification = propertyDeterminer.determineClassification(lines[index]);
+        lines[index].key = propertyDeterminer.determineKey(lines[index]);
+        lines[index].interpretation = propertyDeterminer.determineInterpretation(lines[index]);
+        lines[index].fill = propertyDeterminer.determineFill(lines[index]);
+        lines[index].directiveType = propertyDeterminer.determineDirectiveType(lines[index]);
+        lines[index].preceding = [];
     }
 
-    return lines
+    return lines;
 }

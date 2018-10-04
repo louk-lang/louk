@@ -1,40 +1,40 @@
 module.exports = {
     findSections: findSections,
-    processSections: processSections,
-    flattenElements: flattenElements
+    flattenElements: flattenElements,
+    processSections: processSections
 };
 var patterns = require("./patterns");
 var lineProcessor = require("./line-processor");
 var elementProcessor = require("./element-processor");
-function findSections(input) {
-    var content = input;
+var utils = require("./utils");
+function findSections(lines) {
     var sections = [];
     var sectionDefault = {
+        body: {
+            elements: [],
+            lines: []
+        },
+        elements: [],
         isLouk: null,
         isMarked: null,
-        elements: [],
         marker: {
-            lines: [],
             elements: [],
-            tag: ""
-        },
-        body: {
             lines: [],
-            elements: []
+            tag: ""
         }
     };
-    var section = clone(sectionDefault);
-    for (var index = 0; index < content.length; index++) {
-        var line = content[index];
+    var section = utils.clone(sectionDefault);
+    for (var _i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
+        var line = lines_1[_i];
         if (line.match(patterns.sectionCrux)) {
             if (section.marker.lines.length > 0 || section.body.lines.length > 0) {
                 sections.push(section);
-                section = clone(sectionDefault);
+                section = utils.clone(sectionDefault);
             }
             section.isMarked = true;
             section.marker.lines.push(line);
             section.marker.tag = line.match(patterns.sectionCrux)[1];
-            if (section.marker.tag == "template") {
+            if (section.marker.tag === "template") {
                 section.isLouk = true;
             }
             else {
@@ -59,58 +59,54 @@ function findSections(input) {
         else if (section.isLouk) {
             section.body.lines.push(line);
         }
-        else if (section.marker.tag != "") {
+        else if (section.marker.tag !== "") {
             section.body.lines.push(line);
         }
     }
     sections.push(section);
     return sections;
 }
-function processSections(input, options) {
-    var content = input;
-    var sections = content;
-    for (var index = 0; index < sections.length; index++) {
-        sections[index].marker.lines = lineProcessor.objectifyLines(sections[index].marker.lines);
-        sections[index].marker.lines = lineProcessor.determineProperties(sections[index].marker.lines);
-        sections[index].marker.lines = lineProcessor.deleteComments(sections[index].marker.lines);
-        sections[index].marker.elements = elementProcessor.assignAttributes(sections[index].marker.lines);
-        if (options && options.langs && !sections[index].marker.elements[0].attributes.lang) {
-            var tag = sections[index].marker.tag;
+function processSections(sections, options) {
+    for (var _i = 0, sections_1 = sections; _i < sections_1.length; _i++) {
+        var section = sections_1[_i];
+        section.marker.lines = lineProcessor.objectifyLines(section.marker.lines);
+        section.marker.lines = lineProcessor.determineProperties(section.marker.lines);
+        section.marker.lines = lineProcessor.deleteComments(section.marker.lines);
+        section.marker.elements = elementProcessor.assignAttributes(section.marker.lines);
+        if (options && options.langs && !section.marker.elements[0].attributes.lang) {
+            var tag = section.marker.tag;
             var lang = options.langs[tag];
             if (options.langs[tag]) {
-                sections[index].marker.elements[0].attributes.lang = {
+                section.marker.elements[0].attributes.lang = {
                     data: lang,
                     interpretation: "static"
                 };
             }
         }
-        sections[index].elements = sections[index].elements.concat(sections[index].marker.elements);
-        if (sections[index].isLouk) {
-            sections[index].body.lines = lineProcessor.objectifyLines(sections[index].body.lines);
-            sections[index].body.lines = lineProcessor.determineProperties(sections[index].body.lines);
-            sections[index].body.lines = lineProcessor.deleteComments(sections[index].body.lines);
-            sections[index].body.elements = elementProcessor.assignAttributes(sections[index].body.lines);
-            sections[index].elements = sections[index].elements.concat(sections[index].body.elements);
+        section.elements = section.elements.concat(section.marker.elements);
+        if (section.isLouk) {
+            section.body.lines = lineProcessor.objectifyLines(section.body.lines);
+            section.body.lines = lineProcessor.determineProperties(section.body.lines);
+            section.body.lines = lineProcessor.deleteComments(section.body.lines);
+            section.body.elements = elementProcessor.assignAttributes(section.body.lines);
+            section.elements = section.elements.concat(section.body.elements);
         }
         else {
-            sections[index].elements.push({
-                lines: sections[index].body.lines,
+            section.elements.push({
+                lines: section.body.lines,
                 passthrough: true
             });
         }
-        sections[index].elements = elementProcessor.assignMatches(sections[index].elements);
-        sections[index].elements = elementProcessor.insertMatches(sections[index].elements);
+        section.elements = elementProcessor.assignMatches(section.elements);
+        section.elements = elementProcessor.insertMatches(section.elements);
     }
     return sections;
 }
-function flattenElements(input) {
-    var content = input;
+function flattenElements(sections) {
     var elements = [];
-    for (var index = 0; index < content.length; index++) {
-        elements = elements.concat(content[index].elements);
+    for (var _i = 0, sections_2 = sections; _i < sections_2.length; _i++) {
+        var section = sections_2[_i];
+        elements = elements.concat(section.elements);
     }
     return elements;
-}
-function clone(input) {
-    return JSON.parse(JSON.stringify(input));
 }

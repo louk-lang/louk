@@ -1,47 +1,39 @@
 module.exports = {
     breakLines: breakLines,
     deleteComments: deleteComments,
-    objectifyLines: objectifyLines,
-    determineProperties: determineProperties
+    determineProperties: determineProperties,
+    objectifyLines: objectifyLines
 };
 var patterns = require("./patterns");
 var propertyDeterminer = require("./property-determiner");
-function breakLines(input) {
-    var content = input;
-    var lines = content;
-    lines = content.split("\n");
-    return lines;
+function breakLines(content) {
+    return content.split("\n");
 }
-function deleteComments(input) {
-    var content = input;
-    var lines = content;
+function deleteComments(lines) {
     var prunedLines = [];
-    for (var index = 0; index < content.length; index++) {
-        var value = content[index];
-        if (value.lineType != "comment") {
-            prunedLines.push(value);
+    for (var _i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
+        var line = lines_1[_i];
+        if (line.lineType !== "comment") {
+            prunedLines.push(line);
         }
     }
     return prunedLines;
 }
-function objectifyLines(input) {
-    var content = input;
+function objectifyLines(lines) {
     var objectifiedLines = [];
-    for (var index = 0; index < content.length; index++) {
-        var value = content[index];
-        if (value != "") {
+    for (var _i = 0, lines_2 = lines; _i < lines_2.length; _i++) {
+        var line = lines_2[_i];
+        if (line !== "") {
             objectifiedLines.push({
-                "raw": value
+                raw: line
             });
         }
     }
     return objectifiedLines;
 }
-function determineProperties(input) {
-    var content = input;
-    var lines = content;
-    for (var index = 0; index < content.length; index++) {
-        var value = content[index];
+function determineProperties(lines) {
+    for (var index = 0; index < lines.length; index++) {
+        var value = lines[index];
         lines[index].line = index;
         var indentInfo = propertyDeterminer.determineIndent(value.raw);
         lines[index].index = index;

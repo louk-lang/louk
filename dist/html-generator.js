@@ -2,106 +2,97 @@ module.exports = {
     generateHTML: generateHTML
 };
 var _ = require("underscore");
-function generateHTML(input, options) {
-    var content = input;
+function generateHTML(elements, options) {
     var html = "";
     var keepWhitespace = true;
     if (options && options.whitespace != null) {
         keepWhitespace = options.whitespace;
     }
-    for (var index = 0; index < content.length; index++) {
-        var value = content[index];
-        if (value.lineType == "html") {
+    for (var index = 0; index < elements.length; index++) {
+        var element = elements[index];
+        if (element.lineType === "html") {
             if (keepWhitespace) {
-                html = html + value.raw;
-                if (index < (content.length - 1)) {
+                html = html + element.raw;
+                if (index < (elements.length - 1)) {
                     html = html + "\n";
                 }
             }
             else {
-                html = html + value.unindented;
+                html = html + element.unindented;
             }
         }
-        else if (value.lineType == "comment") {
-            html = html;
+        else if (element.lineType === "comment") {
         }
-        else if (value.passthrough == true) {
-            var passthroughContentArray = value.lines;
-            if (passthroughContentArray[passthroughContentArray.length - 1] == "") {
+        else if (element.passthrough === true) {
+            var passthroughContentArray = element.lines;
+            if (passthroughContentArray[passthroughContentArray.length - 1] === "") {
                 passthroughContentArray.splice(-1, 1);
             }
-            if (passthroughContentArray[0] == "") {
+            if (passthroughContentArray[0] === "") {
                 passthroughContentArray.splice(0, 1);
             }
             var passthroughContentString = passthroughContentArray.join("\n");
             html = html + "\n" + passthroughContentString + "\n";
         }
         else {
-            if (value.position == "opening" && value.key != null) {
-                if (keepWhitespace && value.whitespace) {
-                    html = html + value.whitespace;
+            if (element.position === "opening" && element.key != null) {
+                if (keepWhitespace && element.whitespace) {
+                    html = html + element.whitespace;
                 }
                 html = html + "<";
-                html = html + value.key;
-                _.each(value.attributes, function (value, key) {
+                html = html + element.key;
+                _.each(element.attributes, function (value, key) {
                     var attribute = "";
-                    if (value.interpretation == "dynamic") {
-                        if (value.directiveType == "boolean") {
+                    if (value.interpretation === "dynamic") {
+                        if (value.directiveType === "boolean") {
                             attribute = "v-" + key;
                         }
-                        else if (value.directiveType == "simple") {
+                        else if (value.directiveType === "simple") {
                             attribute = "v-" + key;
                         }
-                        else if (value.directiveType == "action") {
+                        else if (value.directiveType === "action") {
                             attribute = "v-on:" + key;
                         }
-                        else if (value.directiveType == "bind") {
+                        else if (value.directiveType === "bind") {
                             attribute = "v-bind:" + key;
                         }
                     }
-                    else if (value.interpretation == "static") {
+                    else if (value.interpretation === "static") {
                         attribute = key;
                     }
                     html = html + " " + attribute;
-                    if (value.directiveType != "boolean" && value.data) {
+                    if (value.directiveType !== "boolean" && value.data) {
                         html = html + "=\"" + value.data + "\"";
                     }
                 });
-                if (value.selfClosing) {
+                if (element.selfClosing) {
                     html = html + " /";
                 }
                 html = html + ">";
-                if (value.fill) {
-                    if (value.interpretation == "dynamic") {
-                        html = html + "{{" + value.fill + "}}";
+                if (element.fill) {
+                    if (element.interpretation === "dynamic") {
+                        html = html + "{{" + element.fill + "}}";
                     }
-                    else if (value.interpretation == "static") {
-                        html = html + value.fill;
+                    else if (element.interpretation === "static") {
+                        html = html + element.fill;
                     }
                 }
                 else {
-                    if (keepWhitespace && value.containsElement) {
+                    if (keepWhitespace && element.containsElement) {
                         html = html + "\n";
                     }
                 }
             }
-            else if (value.position == "closing" && value.key != null) {
-                if (keepWhitespace && value.containsElement && value.whitespace) {
-                    html = html + value.whitespace;
+            else if (element.position === "closing" && element.key !== null) {
+                if (keepWhitespace && element.containsElement && element.whitespace) {
+                    html = html + element.whitespace;
                 }
-                html = html + "</" + value.key + ">";
-                if (keepWhitespace && index < (content.length - 1)) {
+                html = html + "</" + element.key + ">";
+                if (keepWhitespace && index < (elements.length - 1)) {
                     html = html + "\n";
                 }
             }
         }
     }
     return html;
-}
-function generateWhitespace(indent) {
-    var indentation = "";
-    for (var i = 0; i < indent; i++) {
-        indentation = indentation + "\t";
-    }
-    return indentation;
 }

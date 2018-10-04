@@ -1,65 +1,60 @@
 module.exports = {
     determineClassification: determineClassification,
-    determinePrefix: determinePrefix,
-    determineSuffix: determineSuffix,
-    determineSelfClosing: determineSelfClosing,
-    determineInterpretation: determineInterpretation,
-    determineIndent: determineIndent,
     determineCrux: determineCrux,
     determineDirectiveType: determineDirectiveType,
     determineFill: determineFill,
+    determineIndent: determineIndent,
+    determineInterpretation: determineInterpretation,
     determineKey: determineKey,
     determineLineType: determineLineType,
+    determinePrefix: determinePrefix,
+    determineSelfClosing: determineSelfClosing,
+    determineSuffix: determineSuffix,
     determineWhitespace: determineWhitespace
 };
 var patterns = require("./patterns");
-function determineClassification(input) {
-    var content = input;
-    var classification = "";
-    if (content.crux == '#') {
-        classification = "attribute";
+function determineClassification(line) {
+    if (line.crux === "#") {
+        return "attribute";
     }
-    else if (content.crux == '.') {
-        classification = "attribute";
+    else if (line.crux === ".") {
+        return "attribute";
     }
-    else if (content.crux == '>') {
-        classification = "attribute";
+    else if (line.crux === ">") {
+        return "attribute";
     }
-    else if (content.prefix == '"') {
-        classification = "attribute";
+    else if (line.prefix === '"') {
+        return "attribute";
     }
-    else if (content.prefix == '-') {
-        classification = "attribute";
+    else if (line.prefix === "-") {
+        return "attribute";
     }
-    else if (content.prefix == '@') {
-        classification = "attribute";
+    else if (line.prefix === "@") {
+        return "attribute";
     }
-    else if (content.prefix == ':') {
-        classification = "attribute";
+    else if (line.prefix === ":") {
+        return "attribute";
     }
     else {
-        classification = "tag";
+        return "tag";
     }
-    return classification;
 }
-function determinePrefix(input) {
-    var content = input;
+function determinePrefix(line) {
     var prefix = "";
-    if (content.lineType == "louk") {
-        var matches = content.crux.match(patterns.prefix);
+    if (line.lineType === "louk") {
+        var matches = line.crux.match(patterns.prefix);
         if (matches) {
             prefix = matches[1];
         }
     }
     return prefix;
 }
-function determineSuffix(input) {
-    var content = input;
+function determineSuffix(line) {
     var suffix = "";
-    if (content.lineType == "louk") {
+    if (line.lineType === "louk") {
         var matches = "";
-        if (content.crux) {
-            matches = content.crux.match(patterns.suffix);
+        if (line.crux) {
+            matches = line.crux.match(patterns.suffix);
         }
         if (matches) {
             suffix = matches[1];
@@ -67,45 +62,41 @@ function determineSuffix(input) {
     }
     return suffix;
 }
-function determineSelfClosing(input) {
-    var content = input;
-    var selfClosing = false;
-    if (content.suffix == "/") {
-        selfClosing = true;
+function determineSelfClosing(line) {
+    if (line.suffix === "/") {
+        return true;
     }
-    else if (content.lineType == "html") {
-        selfClosing = true;
+    else if (line.lineType === "html") {
+        return true;
     }
-    else if (content.lineType == "comment") {
-        selfClosing = true;
+    else if (line.lineType === "comment") {
+        return true;
     }
     else {
-        selfClosing = false;
+        return false;
     }
-    return selfClosing;
 }
-function determineInterpretation(input) {
-    var content = input;
-    var interpretation = "";
-    if (content.lineType == "louk") {
-        if (content.classification == "tag" && content.suffix.match(patterns.staticSuffix)) {
-            interpretation = "static";
+function determineInterpretation(line) {
+    if (line.lineType === "louk") {
+        if (line.classification === "tag" && line.suffix.match(patterns.staticSuffix)) {
+            return "static";
         }
-        else if (content.crux.match(patterns.staticCrux)) {
-            interpretation = "static";
+        else if (line.crux.match(patterns.staticCrux)) {
+            return "static";
         }
-        else if (content.classification == "attribute" && content.prefix.match(patterns.staticPrefix)) {
-            interpretation = "static";
+        else if (line.classification === "attribute" && line.prefix.match(patterns.staticPrefix)) {
+            return "static";
         }
         else {
-            interpretation = "dynamic";
+            return "dynamic";
         }
     }
-    return interpretation;
+    else {
+        return "";
+    }
 }
-function determineIndent(input) {
-    var content = input;
-    var trimmed = content;
+function determineIndent(line) {
+    var trimmed = line;
     var indent = 0;
     while (trimmed.match(patterns.initialSpace)) {
         trimmed = trimmed.substr(1);
@@ -113,96 +104,88 @@ function determineIndent(input) {
     }
     return [indent, trimmed];
 }
-function determineCrux(input) {
-    var content = input;
-    var crux = "";
-    if (content.lineType == "louk") {
-        if (content.unindented.match(patterns.staticCrux)) {
-            crux = content.unindented.match(patterns.staticCrux)[1];
+function determineCrux(line) {
+    if (line.lineType === "louk") {
+        if (line.unindented.match(patterns.staticCrux)) {
+            return line.unindented.match(patterns.staticCrux)[1];
         }
-        else if (content.unindented.match(patterns.modifiedCrux)) {
-            crux = content.unindented.match(patterns.modifiedCrux)[1];
+        else if (line.unindented.match(patterns.modifiedCrux)) {
+            return line.unindented.match(patterns.modifiedCrux)[1];
         }
-        else if (content.unindented.match(patterns.plainCrux)) {
-            crux = content.unindented.match(patterns.plainCrux)[1];
+        else if (line.unindented.match(patterns.plainCrux)) {
+            return line.unindented.match(patterns.plainCrux)[1];
         }
         else {
-            crux = content.unindented;
+            return line.unindented;
         }
     }
-    return crux;
+    else {
+        return "";
+    }
 }
-function determineFill(input) {
-    var content = input;
-    var fill = "";
-    if (content.crux.match(patterns.staticFill)) {
-        fill = content.unindented.match(patterns.staticFill)[1];
+function determineFill(line) {
+    if (line.crux.match(patterns.staticFill)) {
+        return line.unindented.match(patterns.staticFill)[1];
     }
-    else if (content.unindented.match(patterns.fill)) {
-        fill = content.unindented.match(patterns.fill)[1];
+    else if (line.unindented.match(patterns.fill)) {
+        return line.unindented.match(patterns.fill)[1];
     }
-    else if (content.lineType == "comment") {
-        fill = content.unindented.match(patterns.comment)[1];
+    else if (line.lineType === "comment") {
+        return line.unindented.match(patterns.comment)[1];
     }
-    return fill;
 }
-function determineDirectiveType(input) {
-    var content = input;
+function determineDirectiveType(line) {
     var directiveType = "";
-    if (content.lineType == "louk") {
-        if (content.prefix == "-" && content.fill == "") {
+    if (line.lineType === "louk") {
+        if (line.prefix === "-" && line.fill === "") {
             directiveType = "boolean";
         }
-        else if (content.prefix == "-" && content.fill != "") {
+        else if (line.prefix === "-" && line.fill !== "") {
             directiveType = "simple";
         }
-        else if (content.prefix == "@") {
+        else if (line.prefix === "@") {
             directiveType = "action";
         }
-        else if (content.prefix == ":") {
+        else if (line.prefix === ":") {
             directiveType = "bind";
         }
     }
     return directiveType;
 }
-function determineKey(input) {
-    var content = input;
-    var key = "";
-    if (content.lineType == "louk") {
-        if (content.crux == ".") {
-            key = "class";
+function determineKey(line) {
+    if (line.lineType === "louk") {
+        if (line.crux === ".") {
+            return "class";
         }
-        else if (content.crux == "#") {
-            key = "id";
+        else if (line.crux === "#") {
+            return "id";
         }
-        else if (content.crux == ">") {
-            key = "href";
+        else if (line.crux === ">") {
+            return "href";
         }
-        else if (content.unindented.match(patterns.key)) {
-            key = content.unindented.match(patterns.key)[1];
+        else if (line.unindented.match(patterns.key)) {
+            return line.unindented.match(patterns.key)[1];
         }
         else {
-            key = null;
+            return "";
         }
     }
-    return key;
-}
-function determineLineType(input) {
-    var content = input;
-    var type = "";
-    if (content.unindented.match(patterns.comment)) {
-        type = "comment";
+    else {
+        return null;
     }
-    else if (content.unindented.match(patterns.html)) {
-        type = "html";
+}
+function determineLineType(line) {
+    if (line.unindented.match(patterns.comment)) {
+        return "comment";
+    }
+    else if (line.unindented.match(patterns.html)) {
+        return "html";
     }
     else {
-        type = "louk";
+        return "louk";
     }
-    return type;
 }
-function determineWhitespace(input) {
-    var content = input;
-    var whitespace = content.raw.match(patterns.whitespace)[1];
+function determineWhitespace(line) {
+    var whitespace = line.raw.match(patterns.whitespace)[1];
     return whitespace;
 }

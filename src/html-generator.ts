@@ -1,154 +1,124 @@
 module.exports = {
-    generateHTML: generateHTML
-}
+    generateHTML,
+};
 
-const _ = require("underscore")
+const _ = require("underscore");
 
-//Turns the completed array of element objects into raw HTML
-function generateHTML(input, options){
-    const content = input
-    let html = ""
+// Turns the completed array of element objects into raw HTML
+function generateHTML(elements, options) {
 
-    var keepWhitespace = true
+    let html = "";
 
-    if(options && options.whitespace !=null){
-        keepWhitespace = options.whitespace
+    let keepWhitespace = true;
+
+    if (options && options.whitespace != null) {
+        keepWhitespace = options.whitespace;
     }
 
-    for(let index = 0; index < content.length; index++){
-        let value = content[index]
+    for (let index = 0; index < elements.length; index++) {
+        const element = elements[index];
 
-        //HTML is passed straight through
-        if(value.lineType == "html"){
+        // HTML is passed straight through
+        if (element.lineType === "html") {
 
-            if(keepWhitespace){
-                html = html + value.raw
+            if (keepWhitespace) {
+                html = html + element.raw;
 
-                //Insert a newline as long as we're not at the last line.
-                if(index < (content.length - 1)){
-                    html = html + "\n"
+                // Insert a newline as long as we're not at the last line.
+                if (index < (elements.length - 1)) {
+                    html = html + "\n";
                 }
+            } else {
+                html = html + element.unindented;
             }
-            else{
-                html = html + value.unindented
+        } else if (element.lineType === "comment") {
+            // Do nothing; comments are completely discarded
+        } else if (element.passthrough === true) {
+
+            const passthroughContentArray = element.lines;
+            if (passthroughContentArray[passthroughContentArray.length - 1] === "") {
+                passthroughContentArray.splice(-1, 1);
             }
-        }
-
-        //Comments are discarded
-        else if(value.lineType == "comment"){
-            html = html
-        }
-
-        //Passthrough content (such as scripts or CSS) aren't processed
-        else if(value.passthrough == true){
-
-            let passthroughContentArray = value.lines
-            if(passthroughContentArray[passthroughContentArray.length-1] == ""){
-                passthroughContentArray.splice(-1,1)
+            if (passthroughContentArray[0] === "") {
+                passthroughContentArray.splice(0, 1);
             }
-            if(passthroughContentArray[0] == ""){
-                passthroughContentArray.splice(0,1)
-            }
-            let passthroughContentString = passthroughContentArray.join("\n")
+            const passthroughContentString = passthroughContentArray.join("\n");
 
-            html = html + "\n" + passthroughContentString + "\n"
+            html = html + "\n" + passthroughContentString + "\n";
 
-        }
+        } else {
+            // Generate opening tags
+            if (element.position === "opening" && element.key != null) {
 
-        //Louk notation goes through additional processing
-        else{
-            //Generate opening tags
-            if(value.position == "opening" && value.key != null){
-
-                if(keepWhitespace && value.whitespace){
-                    html = html + value.whitespace
+                if (keepWhitespace && element.whitespace) {
+                    html = html + element.whitespace;
                 }
 
-                html = html + "<"
-                html = html + value.key
+                html = html + "<";
+                html = html + element.key;
 
-                //Loop over all of the element's attributes
-                _.each(value.attributes, function(value, key){
-                    let attribute = ""
+                // Loop over all of the element's attributes
+                _.each(element.attributes, (value, key) => {
+                    let attribute = "";
 
-                    //If the attribute should be interpretted dynamically...
-                    if(value.interpretation == "dynamic"){
-                        if(value.directiveType == "boolean"){
-                            attribute = "v-" + key
+                    // If the attribute should be interpretted dynamically...
+                    if (value.interpretation === "dynamic") {
+                        if (value.directiveType === "boolean") {
+                            attribute = "v-" + key;
+                        } else if (value.directiveType === "simple") {
+                            attribute = "v-" + key;
+                        } else if (value.directiveType === "action") {
+                            attribute = "v-on:" + key;
+                        } else if (value.directiveType === "bind") {
+                            attribute = "v-bind:" + key;
                         }
-                        else if(value.directiveType == "simple"){
-                            attribute = "v-" + key
-                        }
-                        else if(value.directiveType == "action"){
-                            attribute = "v-on:" + key
-                        }
-                        else if(value.directiveType == "bind"){
-                            attribute = "v-bind:" + key
-                        }
+                    } else if (value.interpretation === "static") {
+                        attribute = key;
                     }
 
-                    //If the attribute should be interpretted statically...
-                    else if(value.interpretation == "static"){
-                        attribute = key
+                    // Put the above defined attribute and value into the HTML
+                    html = html + " " + attribute;
+
+                    // If the attribute is boolean, no explicit value is needed
+                    if (value.directiveType !== "boolean" && value.data) {
+                        html = html + "=\"" + value.data + "\"";
                     }
+                });
 
-                    //Put the above defined attribute and value into the HTML
-                    html = html + " " + attribute
-
-                    //If the attribute is boolean, no explicit value is needed
-                    if(value.directiveType != "boolean" && value.data){
-                        html = html + "=\"" + value.data + "\""
-                    }
-                })
-
-                if(value.selfClosing){
-                    html = html + " /"
+                if (element.selfClosing) {
+                    html = html + " /";
                 }
-                html = html + ">"
+                html = html + ">";
 
-                //If there's body content...
-                if(value.fill){
+                // If there's body content...
+                if (element.fill) {
 
-                    //If the body should be interpreted dynamically, we wrap it in Vue curly brackets
-                    if(value.interpretation == "dynamic"){
-                        html = html + "{{" + value.fill + "}}"
+                    // If the body should be interpreted dynamically, we wrap it in Vue curly brackets
+                    if (element.interpretation === "dynamic") {
+                        html = html + "{{" + element.fill + "}}";
+                    } else if (element.interpretation === "static") {
+                        html = html + element.fill;
                     }
-
-                    //Otherwise we just include it straight.
-                    else if(value.interpretation == "static"){
-                        html = html + value.fill
-                    }
-                }
-                else{
-                    if(keepWhitespace && value.containsElement){
-                        html = html +  "\n"
+                } else {
+                    if (keepWhitespace && element.containsElement) {
+                        html = html +  "\n";
                     }
                 }
 
-            }
-            //Generate closing tags
-            else if(value.position == "closing" && value.key != null){
+            } else if (element.position === "closing" && element.key !== null) {
 
-                if(keepWhitespace && value.containsElement && value.whitespace){
-                    html = html + value.whitespace
+                if (keepWhitespace && element.containsElement && element.whitespace) {
+                    html = html + element.whitespace;
                 }
 
-                html = html + "</" + value.key + ">"
+                html = html + "</" + element.key + ">";
 
-                //Add a return if we're not at the last element.
-                if(keepWhitespace && index < (content.length - 1)){
-                    html = html +  "\n"
+                // Add a return if we're not at the last element.
+                if (keepWhitespace && index < (elements.length - 1)) {
+                    html = html +  "\n";
                 }
             }
         }
     }
-    return html
-}
-
-function generateWhitespace(indent){
-    var indentation = ""
-    for(var i = 0; i < indent; i++){
-        indentation = indentation + "\t"
-    }
-    return indentation
+    return html;
 }

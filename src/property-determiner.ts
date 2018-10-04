@@ -1,275 +1,204 @@
 module.exports = {
-    determineClassification: determineClassification,
-    determinePrefix: determinePrefix,
-    determineSuffix: determineSuffix,
-    determineSelfClosing: determineSelfClosing,
-    determineInterpretation: determineInterpretation,
-    determineIndent: determineIndent,
-    determineCrux: determineCrux,
-    determineDirectiveType: determineDirectiveType,
-    determineFill: determineFill,
-    determineKey: determineKey,
-    determineLineType: determineLineType,
-    determineWhitespace: determineWhitespace
+    determineClassification,
+    determineCrux,
+    determineDirectiveType,
+    determineFill,
+    determineIndent,
+    determineInterpretation,
+    determineKey,
+    determineLineType,
+    determinePrefix,
+    determineSelfClosing,
+    determineSuffix,
+    determineWhitespace,
+};
+
+const patterns = require ("./patterns");
+
+// Determines whether each line represents an attribute or a tag
+function determineClassification(line) {
+    if (line.crux === "#") {
+        return "attribute";
+    } else if (line.crux === ".") {
+        return "attribute";
+    } else if (line.crux === ">") {
+        return "attribute";
+    } else if (line.prefix === '"') {
+        return  "attribute";
+    } else if (line.prefix === "-") {
+        return  "attribute";
+    } else if (line.prefix === "@") {
+        return "attribute";
+    } else if (line.prefix === ":") {
+        return  "attribute";
+    } else {
+        return  "tag";
+    }
 }
 
-const patterns = require("./patterns")
+function determinePrefix(line) {
 
-//Determines whether each line represents an attribute or a tag
-function determineClassification(input){
+    let prefix = "";
 
-    const content = input
-    let classification = ""
+    if (line.lineType === "louk") {
 
-    if(content.crux == '#'){
-        classification = "attribute"
-    }
-    else if(content.crux == '.'){
-        classification = "attribute"
-    }
-    else if(content.crux == '>'){
-        classification = "attribute"
-    }
-    else if(content.prefix == '"'){
-        classification = "attribute"
-    }
-    else if(content.prefix == '-'){
-        classification = "attribute"
-    }
-    else if(content.prefix == '@'){
-        classification = "attribute"
-    }
-    else if(content.prefix == ':'){
-        classification = "attribute"
-    }
-    else{
-        classification = "tag"
+        const matches = line.crux.match(patterns.prefix);
+        if (matches) {
+            prefix = matches[1];
+        }
     }
 
-    return classification;
+    return prefix;
 }
 
-function determinePrefix(input){
+function determineSuffix(line) {
 
-    const content = input
-    let prefix = ""
+    let suffix = "";
 
-    if(content.lineType == "louk"){
+    if (line.lineType === "louk") {
+        let matches = "";
 
-        let matches = content.crux.match(patterns.prefix)
-        if(matches){
-            prefix = matches[1]
+        if (line.crux) {
+            matches = line.crux.match(patterns.suffix);
+        }
+
+        if (matches) {
+            suffix = matches[1];
         }
     }
 
-    return prefix
+    return suffix;
 }
 
-function determineSuffix(input){
+function determineSelfClosing(line) {
 
-    const content = input
-    let suffix = ""
-
-    if(content.lineType == "louk"){
-        let matches = ""
-
-        if(content.crux){
-            matches = content.crux.match(patterns.suffix)
-        }
-
-        if(matches){
-            suffix = matches[1]
-        }
+    if (line.suffix === "/") {
+        return true;
+    } else if (line.lineType === "html") {
+        return true;
+    } else if (line.lineType === "comment") {
+        return true;
+    } else {
+        return false;
     }
-
-    return suffix
 }
 
-function determineSelfClosing(input){
+/* Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue)
+or statically (as plain HTML) */
+function determineInterpretation(line) {
 
-    const content = input
-    let selfClosing = false
-
-    if(content.suffix == "/"){
-        selfClosing = true
+    if (line.lineType === "louk") {
+        if (line.classification === "tag" && line.suffix.match(patterns.staticSuffix)) {
+            return "static";
+        } else if (line.crux.match(patterns.staticCrux)) {
+            return "static";
+        } else if (line.classification === "attribute" && line.prefix.match(patterns.staticPrefix)) {
+            return "static";
+        } else {
+            return "dynamic";
+        }
+    } else {
+        return "";
     }
-    else if(content.lineType == "html"){
-        selfClosing = true
-    }
-    else if(content.lineType == "comment"){
-        selfClosing = true
-    }
-    else {
-        selfClosing = false
-    }
-    return selfClosing
 }
 
+// Determines how far a line is indented
+function determineIndent(line) {
 
-//Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue) or statically (as plain HTML)
-function determineInterpretation(input){
+    let trimmed = line;
+    let indent = 0;
 
-    const content = input
-    let interpretation = ""
-
-    if(content.lineType == "louk"){
-        if(content.classification == "tag" && content.suffix.match(patterns.staticSuffix)){
-            interpretation = "static"
-        }
-        else if(content.crux.match(patterns.staticCrux)){
-            interpretation = "static"
-
-        }
-        else if(content.classification == "attribute" && content.prefix.match(patterns.staticPrefix)){
-            interpretation = "static"
-        }
-        else{
-            interpretation = "dynamic"
-        }
+    while (trimmed.match(patterns.initialSpace)) {
+        trimmed = trimmed.substr(1);
+        indent = indent + 1;
     }
-    return interpretation
+    return [indent, trimmed];
 }
 
-//Determines how far a line is indented
-function determineIndent(input){
+function determineCrux(line) {
 
-    const content = input
-    let trimmed = content
-    let indent = 0
-
-    while(trimmed.match(patterns.initialSpace)){
-        trimmed = trimmed.substr(1)
-        indent = indent + 1
+    if (line.lineType === "louk") {
+        if (line.unindented.match(patterns.staticCrux)) {
+            return line.unindented.match(patterns.staticCrux)[1];
+        } else if (line.unindented.match(patterns.modifiedCrux)) {
+            return line.unindented.match(patterns.modifiedCrux)[1];
+        } else if (line.unindented.match(patterns.plainCrux)) {
+            return line.unindented.match(patterns.plainCrux)[1];
+        } else {
+            return line.unindented;
+        }
+    } else {
+        return "";
     }
-    return [indent, trimmed]
+
 }
 
+// Figures out what tag a tag is and what attribute an attribute is
+function determineFill(line) {
 
-function determineCrux(input){
-
-    const content = input
-    let crux = ""
-
-    if(content.lineType == "louk"){
-
-        if(content.unindented.match(patterns.staticCrux)){
-            crux = content.unindented.match(patterns.staticCrux)[1]
-        }
-
-        else if(content.unindented.match(patterns.modifiedCrux)){
-            crux = content.unindented.match(patterns.modifiedCrux)[1]
-        }
-
-        else if(content.unindented.match(patterns.plainCrux)){
-            crux = content.unindented.match(patterns.plainCrux)[1]
-        }
-        //If none of those match, then the crux is simply the undindented content.
-        //In practice, this final block should never be hit.
-        else{
-            crux = content.unindented
-        }
+    // Handles static attribute shorthands (> . #)
+    if (line.crux.match(patterns.staticFill)) {
+        return line.unindented.match(patterns.staticFill)[1];
+    } else if (line.unindented.match(patterns.fill)) {
+        return line.unindented.match(patterns.fill)[1];
+    } else if (line.lineType === "comment") {
+        return line.unindented.match(patterns.comment)[1];
     }
-
-    return crux
 }
 
-//Figures out what tag a tag is and what attribute an attribute is
-function determineFill(input){
+function determineDirectiveType(line) {
 
-    const content = input
-    let fill = ""
+    let directiveType = "";
 
-    //Handles static attribute shorthands (> . #)
-    if(content.crux.match(patterns.staticFill)){
-        fill = content.unindented.match(patterns.staticFill)[1]
+    if (line.lineType === "louk") {
+
+        if (line.prefix === "-" && line.fill === "") {
+            directiveType = "boolean";
+        } else if (line.prefix === "-" && line.fill !== "") {
+            directiveType = "simple";
+        } else if (line.prefix === "@") {
+            directiveType = "action";
+        } else if (line.prefix === ":") {
+            directiveType = "bind";
+        }
     }
 
-    //Handles elements and attributes
-    else if(content.unindented.match(patterns.fill)){
-        fill = content.unindented.match(patterns.fill)[1]
-    }
-
-    //Handles comments
-    else if(content.lineType == "comment"){
-        fill = content.unindented.match(patterns.comment)[1]
-    }
-    return fill
+    return directiveType;
 }
 
-function determineDirectiveType(input){
+// Expands key shorthands
+// For example, converts "#" to "id"
+function determineKey(line) {
 
-    const content = input
-    let directiveType = ""
+    if (line.lineType === "louk") {
 
-    if(content.lineType == "louk"){
-
-        if(content.prefix == "-" && content.fill == ""){
-            directiveType = "boolean"
+        if (line.crux === ".") {
+            return "class";
+        } else if (line.crux === "#") {
+            return "id";
+        } else if (line.crux === ">") {
+            return "href";
+        } else if (line.unindented.match(patterns.key)) {
+            return line.unindented.match(patterns.key)[1];
+        } else {
+            return "";
         }
-        else if(content.prefix == "-" && content.fill != ""){
-            directiveType = "simple"
-        }
-        else if(content.prefix == "@"){
-            directiveType = "action"
-        }
-        else if(content.prefix == ":"){
-            directiveType = "bind"
-        }
+    } else {
+        return null;
     }
-
-    return directiveType
 }
 
-//Expands key shorthands
-//For example, converts "#" to "id"
-function determineKey(input){
-
-    const content = input
-    let key = ""
-
-    if(content.lineType == "louk"){
-
-        if(content.crux == "."){
-            key = "class"
-        }
-        else if(content.crux == "#"){
-            key = "id"
-        }
-        else if(content.crux == ">"){
-            key = "href"
-        }
-        else if(content.unindented.match(patterns.key)){
-            key = content.unindented.match(patterns.key)[1]
-        }
-        else{
-            key = null
-        }
+function determineLineType(line) {
+    if (line.unindented.match(patterns.comment)) {
+        return "comment";
+    } else if (line.unindented.match(patterns.html)) {
+        return "html";
+    } else {
+        return "louk";
     }
-
-    return key
 }
 
-function determineLineType(input){
-
-    const content = input
-    let type = ""
-
-    if(content.unindented.match(patterns.comment)){
-        type = "comment"
-    }
-    else if(content.unindented.match(patterns.html)){
-        type = "html"
-    }
-    else{
-        type = "louk"
-    }
-    return type
-}
-
-function determineWhitespace(input){
-
-    const content = input
-    const whitespace = content.raw.match(patterns.whitespace)[1]
-
-    return whitespace
+function determineWhitespace(line) {
+    const whitespace = line.raw.match(patterns.whitespace)[1];
+    return whitespace;
 }

@@ -1,13 +1,14 @@
 module.exports = {
-    write: write,
-    log: log,
+    clone: clone,
     file: file,
-    setDir: setDir
+    log: log,
+    setDir: setDir,
+    write: write
 };
 var logging = false;
 var dir = "../dist";
 function write(content) {
-    if (logging == true) {
+    if (logging === true) {
         console.log(content);
     }
 }
@@ -19,4 +20,7 @@ function file(path) {
 }
 function setDir(path) {
     dir = path;
+}
+function clone(input) {
+    return JSON.parse(JSON.stringify(input));
 }

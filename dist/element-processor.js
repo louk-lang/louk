@@ -7,7 +7,11 @@ module.exports = {
 var _ = require("underscore");
 function assignAttributes(content) {
     var elements = [];
-    var currentTag = {};
+    var currentTag = {
+        attributes: {},
+        matched: false,
+        position: ""
+    };
     for (var index = 0; index < content.length; index++) {
         var value = content[index];
         if (value.classification === "tag") {

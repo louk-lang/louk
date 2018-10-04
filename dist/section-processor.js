@@ -46,7 +46,7 @@ function findSections(lines) {
         else if (line.match(patterns_1["default"].unindentedElement)) {
             if (section.marker.lines.length > 0) {
                 sections.push(section);
-                section = clone(sectionDefault);
+                section = utils_1["default"].clone(sectionDefault);
             }
             section.isMarked = false;
             section.isLouk = true;

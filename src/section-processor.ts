@@ -5,9 +5,10 @@ module.exports = {
 };
 
 import patterns from "./patterns";
+import utils from "./utils";
+
 const lineProcessor = require("./line-processor");
 const elementProcessor = require("./element-processor");
-import utils from "./utils";
 
 function findSections(lines) {
 
@@ -60,7 +61,7 @@ function findSections(lines) {
             if (section.marker.lines.length > 0) {
                 // Push the current section and reset
                 sections.push(section);
-                section = clone(sectionDefault);
+                section = utils.clone(sectionDefault);
             }
 
             section.isMarked = false;

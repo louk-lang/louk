@@ -1,8 +1,5 @@
-module.exports = {
-    assignAttributes: assignAttributes,
-    assignMatches: assignMatches,
-    insertMatches: insertMatches,
-};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function assignAttributes(content) {
     var elements = [];
     var currentTag = {
@@ -32,6 +29,7 @@ function assignAttributes(content) {
     elements.push(currentTag);
     return elements;
 }
+exports.assignAttributes = assignAttributes;
 function assignMatches(elements) {
     var elementsForInsertion = {};
     var level = 0;
@@ -70,7 +68,9 @@ function assignMatches(elements) {
         if (!element.preceding) {
             element.preceding = [];
         }
-        element.preceding.push(closingTag(currentLevelElement));
+        if (currentLevelElement) {
+            element.preceding.push(closingTag(currentLevelElement));
+        }
     }
     var endElement = {
         preceding: [],
@@ -100,6 +100,7 @@ function assignMatches(elements) {
     }
     return elements;
 }
+exports.assignMatches = assignMatches;
 function insertMatches(nestedElements) {
     var elements = [];
     for (var _i = 0, nestedElements_1 = nestedElements; _i < nestedElements_1.length; _i++) {
@@ -116,7 +117,9 @@ function insertMatches(nestedElements) {
     }
     return elements;
 }
+exports.insertMatches = insertMatches;
 function closingTag(element) {
     element.position = "closing";
     return element;
 }
+exports.closingTag = closingTag;

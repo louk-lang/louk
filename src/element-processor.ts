@@ -1,10 +1,4 @@
-module.exports = {
-    assignAttributes,
-    assignMatches,
-    insertMatches,
-};
-
-function assignAttributes(content) {
+export function assignAttributes(content) {
     const elements = [];
     let currentTag = {
         attributes: {},
@@ -36,7 +30,7 @@ function assignAttributes(content) {
 }
 
 // Determines where matching closing tags need to be inserted
-function assignMatches(elements) {
+export function assignMatches(elements) {
 
     // Temporarily stores the elements we know we need to insert when we reach the right point
     const elementsForInsertion = {};
@@ -97,7 +91,9 @@ function assignMatches(elements) {
             element.preceding = [];
         }
 
-        element.preceding.push(closingTag(currentLevelElement));
+        if (currentLevelElement) {
+            element.preceding.push(closingTag(currentLevelElement));
+        }
 
     }
     // This is a special element we use to represent the end of the html
@@ -142,7 +138,7 @@ function assignMatches(elements) {
 }
 
 // Takes the matches temporarily stored in other elements and inserts them into the main array
-function insertMatches(nestedElements) {
+export function insertMatches(nestedElements) {
     const elements = [];
 
     for (const element of nestedElements) {
@@ -163,7 +159,7 @@ function insertMatches(nestedElements) {
 }
 
 // Adds property to indicate that the element is a closing tag
-function closingTag(element) {
+export function closingTag(element) {
     element.position = "closing";
     return element;
 }

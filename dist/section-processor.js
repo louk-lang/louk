@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var patterns_1 = require("./patterns");
-var utils = require("./utils");
 var elementProcessor = require("./element-processor");
 var lineProcessor = require("./line-processor");
+var patterns_1 = require("./patterns");
+var utils = require("./utils");
 function findSections(lines) {
     var sections = [];
     var sectionDefault = {

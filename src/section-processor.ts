@@ -1,8 +1,7 @@
-import patterns from "./patterns";
-import * as utils from "./utils";
-
 import * as elementProcessor from "./element-processor";
 import * as lineProcessor from "./line-processor";
+import patterns from "./patterns";
+import * as utils from "./utils";
 
 export function findSections(lines) {
 

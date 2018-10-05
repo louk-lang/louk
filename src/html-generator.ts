@@ -59,9 +59,7 @@ export function generateHTML(elements, options) {
 
                     // If the attribute should be interpretted dynamically...
                     if (attributeInfo.interpretation === "dynamic") {
-                        if (attributeInfo.directiveType === "boolean") {
-                            attribute = "v-" + key;
-                        } else if (attributeInfo.directiveType === "simple") {
+                        if (attributeInfo.directiveType === "simple") {
                             attribute = "v-" + key;
                         } else if (attributeInfo.directiveType === "action") {
                             attribute = "v-on:" + key;

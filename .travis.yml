@@ -5,4 +5,5 @@ before_script:
   - npm install -g gulp-cli
   - npm install -g codecov
 after_success:
+  - nyc report --reporter=text-lcov > coverage.lcov
   - codecov

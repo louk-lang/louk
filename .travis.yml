@@ -8,5 +8,4 @@ script:
   - gulp build
   - gulp test
 after_success:
-  - nyc report --reporter=text-lcov > coverage.lcov
   - codecov

@@ -39,10 +39,8 @@ export function objectifyLines(lines) {
 export function determineProperties(lines) {
 
     for (let index = 0; index < lines.length; index++) {
-        const value = lines[index];
         lines[index].line = index;
-        const indentInfo = propertyDeterminer.determineIndent(value.raw);
-        lines[index].index = index;
+        const indentInfo = propertyDeterminer.determineIndent(lines[index].raw);
         lines[index].whitespace = propertyDeterminer.determineWhitespace(lines[index]);
         lines[index].indent = indentInfo[0];
         lines[index].unindented = indentInfo[1];

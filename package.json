@@ -4,7 +4,7 @@
     "description": "Vue without the HTML",
     "main": "dist/index.js",
     "scripts": {
-        "test": "gulp test",
+        "test": "nyc gulp test",
         "build": "gulp build",
         "watch": "gulp watch"
     },
@@ -37,5 +37,8 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/louk-lang/louk.git"
+    },
+    "nyc": {
+      "include": ["dist/**/*.js"]
     }
 }

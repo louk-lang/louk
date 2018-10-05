@@ -43,10 +43,7 @@ function generateHTML(elements, options) {
                     var attributeInfo = element.attributes[key];
                     var attribute = "";
                     if (attributeInfo.interpretation === "dynamic") {
-                        if (attributeInfo.directiveType === "boolean") {
-                            attribute = "v-" + key;
-                        }
-                        else if (attributeInfo.directiveType === "simple") {
+                        if (attributeInfo.directiveType === "simple") {
                             attribute = "v-" + key;
                         }
                         else if (attributeInfo.directiveType === "action") {

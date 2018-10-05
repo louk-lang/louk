@@ -31,10 +31,8 @@ function objectifyLines(lines) {
 exports.objectifyLines = objectifyLines;
 function determineProperties(lines) {
     for (var index = 0; index < lines.length; index++) {
-        var value = lines[index];
         lines[index].line = index;
-        var indentInfo = propertyDeterminer.determineIndent(value.raw);
-        lines[index].index = index;
+        var indentInfo = propertyDeterminer.determineIndent(lines[index].raw);
         lines[index].whitespace = propertyDeterminer.determineWhitespace(lines[index]);
         lines[index].indent = indentInfo[0];
         lines[index].unindented = indentInfo[1];

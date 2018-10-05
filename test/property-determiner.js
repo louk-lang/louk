@@ -1,6 +1,5 @@
-var config = require("./config.json");
-var dir = config.testTarget;
-function file(path) { return dir + path;}
+var config = require("./config.js");
+var file = config.file;
 
 var louk = require(file("index.js"));
 var chai = require("chai");

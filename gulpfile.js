@@ -1,11 +1,11 @@
-const gulp = require('gulp');
-const ts = require('gulp-typescript');
-const mocha = require('gulp-mocha');
+var gulp = require('gulp');
+var ts = require('gulp-typescript');
+var mocha = require('gulp-mocha');
 
-const tsconfig = require('./tsconfig.json');
-const outDir = tsconfig.compilerOptions.outDir;
+var tsconfig = require('./tsconfig.json');
+var outDir = tsconfig.compilerOptions.outDir;
 
-const tsProject = ts.createProject('tsconfig.json');
+var tsProject = ts.createProject('tsconfig.json');
 
 gulp.task('build', function() {
     return gulp.src('src/**/*.ts')
@@ -15,7 +15,7 @@ gulp.task('build', function() {
 
 gulp.task('test', function(){
     return gulp.src('./test/test.js', {read: false})
-        .pipe(mocha())
+        .pipe(mocha());
 });
 
 gulp.task('watch', ['default'], function() {
@@ -24,4 +24,4 @@ gulp.task('watch', ['default'], function() {
 
 gulp.task('default', ['build', 'test'], function(){
 
-})
+});

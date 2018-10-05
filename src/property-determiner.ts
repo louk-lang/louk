@@ -30,7 +30,7 @@ export function determinePrefix(line) {
             return matches[1];
         }
     } else {
-        return null
+        return null;
     }
 
 }
@@ -48,7 +48,7 @@ export function determineSuffix(line) {
             return matches[1];
         }
     } else {
-        return null
+        return null;
     }
 }
 

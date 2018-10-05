@@ -54,7 +54,7 @@ export function generateHTML(elements, options) {
                 // Loop over all of the element's attributes
                 Object.keys(element.attributes).forEach((key) => {
 
-                    const attributeInfo = element.attributes[key]
+                    const attributeInfo = element.attributes[key];
                     let attribute = "";
 
                     // If the attribute should be interpretted dynamically...

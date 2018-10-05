@@ -1,39 +1,26 @@
-module.exports = {
-    parse,
-};
-
 import * as htmlGenerator from "./html-generator";
 import * as lineProcessor from "./line-processor";
 import * as sectionProcessor from "./section-processor";
-// import * as elementProcessor from "./element-processor";
-// const elementProcessor = require("./element-processor");
-// const htmlGenerator = require("./html-generator");
 
-function parse(input, options) {
-
-    let raw = "";
-    let lines = [];
-    let sections = [];
-    let elements = [];
-    let html = "";
+export function parse(input, options) {
 
     // Start with the raw input
-    raw = input;
+    const raw = input;
 
     // Break the input by line
-    lines = lineProcessor.breakLines(raw);
+    const lines = lineProcessor.breakLines(raw);
 
     // Identify file sections based on top-level markers
-    sections = sectionProcessor.findSections(lines);
+    const unprocessedSections = sectionProcessor.findSections(lines);
 
     // Process the information inside
-    sections = sectionProcessor.processSections(sections, options);
+    const sections = sectionProcessor.processSections(unprocessedSections, options);
 
     // Take the elements out of each section and make them a flat list
-    elements = sectionProcessor.flattenElements(sections);
+    const elements = sectionProcessor.flattenElements(sections);
 
     // Turn the elements list into HTML
-    html = htmlGenerator.generateHTML(elements, options);
+    const html = htmlGenerator.generateHTML(elements, options);
 
     return html;
 

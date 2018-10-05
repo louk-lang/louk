@@ -1,7 +1,6 @@
 module.exports = {
     assignAttributes,
     assignMatches,
-    closingTag,
     insertMatches,
 };
 
@@ -164,8 +163,7 @@ function insertMatches(nestedElements) {
 }
 
 // Adds property to indicate that the element is a closing tag
-function closingTag(content) {
-    const element = content;
+function closingTag(element) {
     element.position = "closing";
     return element;
 }

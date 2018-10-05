@@ -1,7 +1,6 @@
 module.exports = {
     assignAttributes: assignAttributes,
     assignMatches: assignMatches,
-    closingTag: closingTag,
     insertMatches: insertMatches,
 };
 function assignAttributes(content) {
@@ -117,8 +116,7 @@ function insertMatches(nestedElements) {
     }
     return elements;
 }
-function closingTag(content) {
-    var element = content;
+function closingTag(element) {
     element.position = "closing";
     return element;
 }

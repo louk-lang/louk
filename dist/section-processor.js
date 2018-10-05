@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var patterns_1 = require("./patterns");
 var utils = require("./utils");
-var lineProcessor = require("./line-processor");
 var elementProcessor = require("./element-processor");
+var lineProcessor = require("./line-processor");
 function findSections(lines) {
     var sections = [];
     var sectionDefault = {

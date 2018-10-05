@@ -1,4 +1,5 @@
-const propertyDeterminer = require("./property-determiner");
+import * as propertyDeterminer from "./property-determiner";
+// const propertyDeterminer = require("./property-determiner");
 
 export function breakLines(content) {
 

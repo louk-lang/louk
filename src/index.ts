@@ -1,5 +1,5 @@
-const parser = require("./parser")
+import * as parser from "./parser";
 
-module.exports = function(content, options) {
+module.exports = (content, options) => {
     return parser.parse(content, options);
 };

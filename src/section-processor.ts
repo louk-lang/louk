@@ -1,9 +1,8 @@
 import patterns from "./patterns";
 import * as utils from "./utils";
 
-const lineProcessor = require("./line-processor");
 import * as elementProcessor from "./element-processor";
-// const elementProcessor = require("./element-processor");
+import * as lineProcessor from "./line-processor";
 
 export function findSections(lines) {
 

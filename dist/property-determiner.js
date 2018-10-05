@@ -1,19 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-module.exports = {
-    determineClassification: determineClassification,
-    determineCrux: determineCrux,
-    determineDirectiveType: determineDirectiveType,
-    determineFill: determineFill,
-    determineIndent: determineIndent,
-    determineInterpretation: determineInterpretation,
-    determineKey: determineKey,
-    determineLineType: determineLineType,
-    determinePrefix: determinePrefix,
-    determineSelfClosing: determineSelfClosing,
-    determineSuffix: determineSuffix,
-    determineWhitespace: determineWhitespace,
-};
 var patterns_1 = require("./patterns");
 function determineClassification(line) {
     if (line.crux === "#") {
@@ -41,29 +27,34 @@ function determineClassification(line) {
         return "tag";
     }
 }
+exports.determineClassification = determineClassification;
 function determinePrefix(line) {
-    var prefix = "";
     if (line.lineType === "louk") {
         var matches = line.crux.match(patterns_1.default.prefix);
         if (matches) {
-            prefix = matches[1];
+            return matches[1];
         }
     }
-    return prefix;
+    else {
+        return null;
+    }
 }
+exports.determinePrefix = determinePrefix;
 function determineSuffix(line) {
-    var suffix = "";
     if (line.lineType === "louk") {
         var matches = "";
         if (line.crux) {
             matches = line.crux.match(patterns_1.default.suffix);
         }
         if (matches) {
-            suffix = matches[1];
+            return matches[1];
         }
     }
-    return suffix;
+    else {
+        return null;
+    }
 }
+exports.determineSuffix = determineSuffix;
 function determineSelfClosing(line) {
     if (line.suffix === "/") {
         return true;
@@ -78,9 +69,10 @@ function determineSelfClosing(line) {
         return false;
     }
 }
+exports.determineSelfClosing = determineSelfClosing;
 function determineInterpretation(line) {
     if (line.lineType === "louk") {
-        if (line.classification === "tag" && line.suffix.match(patterns_1.default.staticSuffix)) {
+        if (line.classification === "tag" && line.suffix && line.suffix.match(patterns_1.default.staticSuffix)) {
             return "static";
         }
         else if (line.crux.match(patterns_1.default.staticCrux)) {
@@ -94,9 +86,10 @@ function determineInterpretation(line) {
         }
     }
     else {
-        return "";
+        return null;
     }
 }
+exports.determineInterpretation = determineInterpretation;
 function determineIndent(line) {
     var trimmed = line;
     var indent = 0;
@@ -106,6 +99,7 @@ function determineIndent(line) {
     }
     return [indent, trimmed];
 }
+exports.determineIndent = determineIndent;
 function determineCrux(line) {
     if (line.lineType === "louk") {
         if (line.unindented.match(patterns_1.default.staticCrux)) {
@@ -122,11 +116,12 @@ function determineCrux(line) {
         }
     }
     else {
-        return "";
+        return null;
     }
 }
+exports.determineCrux = determineCrux;
 function determineFill(line) {
-    if (line.crux.match(patterns_1.default.staticFill)) {
+    if (line.crux && line.crux.match(patterns_1.default.staticFill)) {
         return line.unindented.match(patterns_1.default.staticFill)[1];
     }
     else if (line.unindented.match(patterns_1.default.fill)) {
@@ -136,24 +131,27 @@ function determineFill(line) {
         return line.unindented.match(patterns_1.default.comment)[1];
     }
 }
+exports.determineFill = determineFill;
 function determineDirectiveType(line) {
-    var directiveType = "";
     if (line.lineType === "louk") {
         if (line.prefix === "-" && line.fill === "") {
-            directiveType = "boolean";
+            return "boolean";
         }
         else if (line.prefix === "-" && line.fill !== "") {
-            directiveType = "simple";
+            return "simple";
         }
         else if (line.prefix === "@") {
-            directiveType = "action";
+            return "action";
         }
         else if (line.prefix === ":") {
-            directiveType = "bind";
+            return "bind";
         }
     }
-    return directiveType;
+    else {
+        return null;
+    }
 }
+exports.determineDirectiveType = determineDirectiveType;
 function determineKey(line) {
     if (line.lineType === "louk") {
         if (line.crux === ".") {
@@ -176,6 +174,7 @@ function determineKey(line) {
         return null;
     }
 }
+exports.determineKey = determineKey;
 function determineLineType(line) {
     if (line.unindented.match(patterns_1.default.comment)) {
         return "comment";
@@ -187,7 +186,9 @@ function determineLineType(line) {
         return "louk";
     }
 }
+exports.determineLineType = determineLineType;
 function determineWhitespace(line) {
     var whitespace = line.raw.match(patterns_1.default.whitespace)[1];
     return whitespace;
 }
+exports.determineWhitespace = determineWhitespace;

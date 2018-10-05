@@ -1,22 +1,7 @@
-module.exports = {
-    determineClassification,
-    determineCrux,
-    determineDirectiveType,
-    determineFill,
-    determineIndent,
-    determineInterpretation,
-    determineKey,
-    determineLineType,
-    determinePrefix,
-    determineSelfClosing,
-    determineSuffix,
-    determineWhitespace,
-};
-
 import patterns from "./patterns";
 
 // Determines whether each line represents an attribute or a tag
-function determineClassification(line) {
+export function determineClassification(line) {
     if (line.crux === "#") {
         return "attribute";
     } else if (line.crux === ".") {
@@ -36,24 +21,21 @@ function determineClassification(line) {
     }
 }
 
-function determinePrefix(line) {
-
-    let prefix = "";
+export function determinePrefix(line) {
 
     if (line.lineType === "louk") {
 
         const matches = line.crux.match(patterns.prefix);
         if (matches) {
-            prefix = matches[1];
+            return matches[1];
         }
+    } else {
+        return null
     }
 
-    return prefix;
 }
 
-function determineSuffix(line) {
-
-    let suffix = "";
+export function determineSuffix(line) {
 
     if (line.lineType === "louk") {
         let matches = "";
@@ -63,14 +45,14 @@ function determineSuffix(line) {
         }
 
         if (matches) {
-            suffix = matches[1];
+            return matches[1];
         }
+    } else {
+        return null
     }
-
-    return suffix;
 }
 
-function determineSelfClosing(line) {
+export function determineSelfClosing(line) {
 
     if (line.suffix === "/") {
         return true;
@@ -85,10 +67,10 @@ function determineSelfClosing(line) {
 
 /* Determines whether something should be interpretted dynamically (that is, as JavaScript in Vue)
 or statically (as plain HTML) */
-function determineInterpretation(line) {
+export function determineInterpretation(line) {
 
     if (line.lineType === "louk") {
-        if (line.classification === "tag" && line.suffix.match(patterns.staticSuffix)) {
+        if (line.classification === "tag" && line.suffix && line.suffix.match(patterns.staticSuffix)) {
             return "static";
         } else if (line.crux.match(patterns.staticCrux)) {
             return "static";
@@ -98,12 +80,12 @@ function determineInterpretation(line) {
             return "dynamic";
         }
     } else {
-        return "";
+        return null;
     }
 }
 
 // Determines how far a line is indented
-function determineIndent(line) {
+export function determineIndent(line) {
 
     let trimmed = line;
     let indent = 0;
@@ -115,7 +97,7 @@ function determineIndent(line) {
     return [indent, trimmed];
 }
 
-function determineCrux(line) {
+export function determineCrux(line) {
 
     if (line.lineType === "louk") {
         if (line.unindented.match(patterns.staticCrux)) {
@@ -128,16 +110,16 @@ function determineCrux(line) {
             return line.unindented;
         }
     } else {
-        return "";
+        return null;
     }
 
 }
 
 // Figures out what tag a tag is and what attribute an attribute is
-function determineFill(line) {
+export function determineFill(line) {
 
     // Handles static attribute shorthands (> . #)
-    if (line.crux.match(patterns.staticFill)) {
+    if (line.crux && line.crux.match(patterns.staticFill)) {
         return line.unindented.match(patterns.staticFill)[1];
     } else if (line.unindented.match(patterns.fill)) {
         return line.unindented.match(patterns.fill)[1];
@@ -146,29 +128,28 @@ function determineFill(line) {
     }
 }
 
-function determineDirectiveType(line) {
-
-    let directiveType = "";
+export function determineDirectiveType(line) {
 
     if (line.lineType === "louk") {
 
         if (line.prefix === "-" && line.fill === "") {
-            directiveType = "boolean";
+            return "boolean";
         } else if (line.prefix === "-" && line.fill !== "") {
-            directiveType = "simple";
+            return "simple";
         } else if (line.prefix === "@") {
-            directiveType = "action";
+            return "action";
         } else if (line.prefix === ":") {
-            directiveType = "bind";
+            return "bind";
         }
-    }
 
-    return directiveType;
+    } else {
+        return null;
+    }
 }
 
 // Expands key shorthands
 // For example, converts "#" to "id"
-function determineKey(line) {
+export function determineKey(line) {
 
     if (line.lineType === "louk") {
 
@@ -188,7 +169,7 @@ function determineKey(line) {
     }
 }
 
-function determineLineType(line) {
+export function determineLineType(line) {
     if (line.unindented.match(patterns.comment)) {
         return "comment";
     } else if (line.unindented.match(patterns.html)) {
@@ -198,7 +179,7 @@ function determineLineType(line) {
     }
 }
 
-function determineWhitespace(line) {
+export function determineWhitespace(line) {
     const whitespace = line.raw.match(patterns.whitespace)[1];
     return whitespace;
 }

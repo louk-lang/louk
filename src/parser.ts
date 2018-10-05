@@ -4,11 +4,8 @@ import * as sectionProcessor from "./section-processor";
 
 export function parse(input, options) {
 
-    // Start with the raw input
-    const raw = input;
-
     // Break the input by line
-    const lines = lineProcessor.breakLines(raw);
+    const lines = lineProcessor.breakLines(input);
 
     // Identify file sections based on top-level markers
     const unprocessedSections = sectionProcessor.findSections(lines);

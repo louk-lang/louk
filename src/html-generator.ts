@@ -74,7 +74,7 @@ export function generateHTML(elements, options) {
                     html = html + " " + attribute;
 
                     // If the attribute is boolean, no explicit value is needed
-                    if (attributeInfo.directiveType !== "boolean" && attributeInfo.data) {
+                    if (attributeInfo.data) {
                         html = html + "=\"" + attributeInfo.data + "\"";
                     }
                 });

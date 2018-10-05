@@ -57,7 +57,7 @@ function generateHTML(elements, options) {
                         attribute = key;
                     }
                     html = html + " " + attribute;
-                    if (attributeInfo.directiveType !== "boolean" && attributeInfo.data) {
+                    if (attributeInfo.data) {
                         html = html + "=\"" + attributeInfo.data + "\"";
                     }
                 });

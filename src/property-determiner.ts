@@ -106,8 +106,6 @@ export function determineCrux(line) {
             return line.unindented.match(patterns.modifiedCrux)[1];
         } else if (line.unindented.match(patterns.plainCrux)) {
             return line.unindented.match(patterns.plainCrux)[1];
-        } else {
-            return line.unindented;
         }
     } else {
         return null;
@@ -123,8 +121,6 @@ export function determineFill(line) {
         return line.unindented.match(patterns.staticFill)[1];
     } else if (line.unindented.match(patterns.fill)) {
         return line.unindented.match(patterns.fill)[1];
-    } else if (line.lineType === "comment") {
-        return line.unindented.match(patterns.comment)[1];
     }
 }
 
@@ -132,9 +128,7 @@ export function determineDirectiveType(line) {
 
     if (line.lineType === "louk") {
 
-        if (line.prefix === "-" && line.fill === "") {
-            return "boolean";
-        } else if (line.prefix === "-" && line.fill !== "") {
+        if (line.prefix === "-" && line.fill !== "") {
             return "simple";
         } else if (line.prefix === "@") {
             return "action";
@@ -161,8 +155,6 @@ export function determineKey(line) {
             return "href";
         } else if (line.unindented.match(patterns.key)) {
             return line.unindented.match(patterns.key)[1];
-        } else {
-            return "";
         }
     } else {
         return null;

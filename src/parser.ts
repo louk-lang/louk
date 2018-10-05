@@ -2,13 +2,12 @@ module.exports = {
     parse,
 };
 
-const _ = require("underscore");
-
+import * as htmlGenerator from "./html-generator";
 import * as lineProcessor from "./line-processor";
 import * as sectionProcessor from "./section-processor";
-import * as elementProcessor from "./element-processor";
+// import * as elementProcessor from "./element-processor";
 // const elementProcessor = require("./element-processor");
-const htmlGenerator = require("./html-generator");
+// const htmlGenerator = require("./html-generator");
 
 function parse(input, options) {
 

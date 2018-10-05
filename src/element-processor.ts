@@ -5,8 +5,6 @@ module.exports = {
     insertMatches,
 };
 
-const _ = require("underscore");
-
 function assignAttributes(content) {
     const elements = [];
     let currentTag = {
@@ -111,8 +109,9 @@ function assignMatches(elements) {
 
     // After working through all the elements, we'll need to close any elements that are still open
     const remainingElements = [];
-    _.each(elementsForInsertion, (value, key) => {
-        remainingElements[key] = value;
+
+    Object.keys(elementsForInsertion).forEach((key) => {
+        remainingElements[key] = elementsForInsertion[key];
     });
 
     // We insert these elements in reverse

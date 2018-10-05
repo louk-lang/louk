@@ -1,11 +1,5 @@
-module.exports = {
-    generateHTML,
-};
-
-const _ = require("underscore");
-
 // Turns the completed array of element objects into raw HTML
-function generateHTML(elements, options) {
+export function generateHTML(elements, options) {
 
     let html = "";
 
@@ -58,21 +52,23 @@ function generateHTML(elements, options) {
                 html = html + element.key;
 
                 // Loop over all of the element's attributes
-                _.each(element.attributes, (value, key) => {
+                Object.keys(element.attributes).forEach((key) => {
+
+                    const attributeInfo = element.attributes[key]
                     let attribute = "";
 
                     // If the attribute should be interpretted dynamically...
-                    if (value.interpretation === "dynamic") {
-                        if (value.directiveType === "boolean") {
+                    if (attributeInfo.interpretation === "dynamic") {
+                        if (attributeInfo.directiveType === "boolean") {
                             attribute = "v-" + key;
-                        } else if (value.directiveType === "simple") {
+                        } else if (attributeInfo.directiveType === "simple") {
                             attribute = "v-" + key;
-                        } else if (value.directiveType === "action") {
+                        } else if (attributeInfo.directiveType === "action") {
                             attribute = "v-on:" + key;
-                        } else if (value.directiveType === "bind") {
+                        } else if (attributeInfo.directiveType === "bind") {
                             attribute = "v-bind:" + key;
                         }
-                    } else if (value.interpretation === "static") {
+                    } else if (attributeInfo.interpretation === "static") {
                         attribute = key;
                     }
 
@@ -80,8 +76,8 @@ function generateHTML(elements, options) {
                     html = html + " " + attribute;
 
                     // If the attribute is boolean, no explicit value is needed
-                    if (value.directiveType !== "boolean" && value.data) {
-                        html = html + "=\"" + value.data + "\"";
+                    if (attributeInfo.directiveType !== "boolean" && attributeInfo.data) {
+                        html = html + "=\"" + attributeInfo.data + "\"";
                     }
                 });
 

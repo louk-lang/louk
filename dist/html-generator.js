@@ -1,14 +1,12 @@
-module.exports = {
-    generateHTML: generateHTML,
-};
-var _ = require("underscore");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function generateHTML(elements, options) {
     var html = "";
     var keepWhitespace = true;
     if (options && options.whitespace != null) {
         keepWhitespace = options.whitespace;
     }
-    for (var index = 0; index < elements.length; index++) {
+    var _loop_1 = function (index) {
         var element = elements[index];
         if (element.lineType === "html") {
             if (keepWhitespace) {
@@ -41,28 +39,29 @@ function generateHTML(elements, options) {
                 }
                 html = html + "<";
                 html = html + element.key;
-                _.each(element.attributes, function (value, key) {
+                Object.keys(element.attributes).forEach(function (key) {
+                    var attributeInfo = element.attributes[key];
                     var attribute = "";
-                    if (value.interpretation === "dynamic") {
-                        if (value.directiveType === "boolean") {
+                    if (attributeInfo.interpretation === "dynamic") {
+                        if (attributeInfo.directiveType === "boolean") {
                             attribute = "v-" + key;
                         }
-                        else if (value.directiveType === "simple") {
+                        else if (attributeInfo.directiveType === "simple") {
                             attribute = "v-" + key;
                         }
-                        else if (value.directiveType === "action") {
+                        else if (attributeInfo.directiveType === "action") {
                             attribute = "v-on:" + key;
                         }
-                        else if (value.directiveType === "bind") {
+                        else if (attributeInfo.directiveType === "bind") {
                             attribute = "v-bind:" + key;
                         }
                     }
-                    else if (value.interpretation === "static") {
+                    else if (attributeInfo.interpretation === "static") {
                         attribute = key;
                     }
                     html = html + " " + attribute;
-                    if (value.directiveType !== "boolean" && value.data) {
-                        html = html + "=\"" + value.data + "\"";
+                    if (attributeInfo.directiveType !== "boolean" && attributeInfo.data) {
+                        html = html + "=\"" + attributeInfo.data + "\"";
                     }
                 });
                 if (element.selfClosing) {
@@ -93,6 +92,10 @@ function generateHTML(elements, options) {
                 }
             }
         }
+    };
+    for (var index = 0; index < elements.length; index++) {
+        _loop_1(index);
     }
     return html;
 }
+exports.generateHTML = generateHTML;

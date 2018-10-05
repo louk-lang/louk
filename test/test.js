@@ -1,5 +1,5 @@
 //Can use src or dist
-const dir = "../src/"
+const dir = "../dist/"
 
 function file(path) { return dir + path;}
 

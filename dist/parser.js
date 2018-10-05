@@ -3,10 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 module.exports = {
     parse: parse,
 };
-var _ = require("underscore");
+var htmlGenerator = require("./html-generator");
 var lineProcessor = require("./line-processor");
 var sectionProcessor = require("./section-processor");
-var htmlGenerator = require("./html-generator");
 function parse(input, options) {
     var raw = "";
     var lines = [];

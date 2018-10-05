@@ -1,6 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var _ = require("underscore");
+module.exports = {
+    assignAttributes: assignAttributes,
+    assignMatches: assignMatches,
+    closingTag: closingTag,
+    insertMatches: insertMatches,
+};
 function assignAttributes(content) {
     var elements = [];
     var currentTag = {
@@ -30,7 +33,6 @@ function assignAttributes(content) {
     elements.push(currentTag);
     return elements;
 }
-exports.assignAttributes = assignAttributes;
 function assignMatches(elements) {
     var elementsForInsertion = {};
     var level = 0;
@@ -76,8 +78,8 @@ function assignMatches(elements) {
         system: "end",
     };
     var remainingElements = [];
-    _.each(elementsForInsertion, function (value, key) {
-        remainingElements[key] = value;
+    Object.keys(elementsForInsertion).forEach(function (key) {
+        remainingElements[key] = elementsForInsertion[key];
     });
     remainingElements.reverse();
     for (var _a = 0, remainingElements_1 = remainingElements; _a < remainingElements_1.length; _a++) {
@@ -99,7 +101,6 @@ function assignMatches(elements) {
     }
     return elements;
 }
-exports.assignMatches = assignMatches;
 function insertMatches(nestedElements) {
     var elements = [];
     for (var _i = 0, nestedElements_1 = nestedElements; _i < nestedElements_1.length; _i++) {
@@ -116,10 +117,8 @@ function insertMatches(nestedElements) {
     }
     return elements;
 }
-exports.insertMatches = insertMatches;
 function closingTag(content) {
     var element = content;
     element.position = "closing";
     return element;
 }
-exports.closingTag = closingTag;

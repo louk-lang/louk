@@ -154,6 +154,12 @@ describe("Louk", function(){
         }
         assert.equal(louk('style,\n"lang sass',options),'<style lang="sass">\n\n</style>')
     })
+    it("should handle a plain boolean attribute", function(){
+        assert.equal(louk('style,\n"scoped'),'<style scoped>\n\n</style>')
+    })
+    it("should handle a Vue boolean attribute", function(){
+        assert.equal(louk('div\n-cloak'),'<div v-cloak></div>')
+    })
     it("should return correct values for documentation examples", function(){
         assert.equal(louk('h1\ndiv\n\tbr/'),'<h1></h1>\n<div>\n\t<br /></div>')
         assert.equal(louk('div string'),'<div>{{string}}</div>')

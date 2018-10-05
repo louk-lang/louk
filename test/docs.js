@@ -1,5 +1,4 @@
 var config = require("./config.js");
-var dir = config.testTarget;
 var file = config.file;
 
 var louk = require(file("index.js"));

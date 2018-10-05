@@ -30,7 +30,7 @@
         "stryker": "^0.29.5",
         "stryker-api": "^0.21.2",
         "stryker-html-reporter": "^0.16.3",
-        "stryker-javascript-mutator": "^0.10.1",
+        "stryker-javascript-mutator": "^0.10.2",
         "stryker-mocha-framework": "^0.12.2",
         "stryker-mocha-runner": "^0.14.2",
         "typescript": "^3.0.1"

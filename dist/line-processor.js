@@ -1,13 +1,10 @@
-module.exports = {
-    breakLines: breakLines,
-    deleteComments: deleteComments,
-    determineProperties: determineProperties,
-    objectifyLines: objectifyLines
-};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var propertyDeterminer = require("./property-determiner");
 function breakLines(content) {
     return content.split("\n");
 }
+exports.breakLines = breakLines;
 function deleteComments(lines) {
     var prunedLines = [];
     for (var _i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
@@ -18,18 +15,20 @@ function deleteComments(lines) {
     }
     return prunedLines;
 }
+exports.deleteComments = deleteComments;
 function objectifyLines(lines) {
     var objectifiedLines = [];
     for (var _i = 0, lines_2 = lines; _i < lines_2.length; _i++) {
         var line = lines_2[_i];
         if (line !== "") {
             objectifiedLines.push({
-                raw: line
+                raw: line,
             });
         }
     }
     return objectifiedLines;
 }
+exports.objectifyLines = objectifyLines;
 function determineProperties(lines) {
     for (var index = 0; index < lines.length; index++) {
         var value = lines[index];
@@ -53,3 +52,4 @@ function determineProperties(lines) {
     }
     return lines;
 }
+exports.determineProperties = determineProperties;

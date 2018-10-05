@@ -1,16 +1,12 @@
-module.exports = {
-    assignAttributes: assignAttributes,
-    assignMatches: assignMatches,
-    closingTag: closingTag,
-    insertMatches: insertMatches
-};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("underscore");
 function assignAttributes(content) {
     var elements = [];
     var currentTag = {
         attributes: {},
         matched: false,
-        position: ""
+        position: "",
     };
     for (var index = 0; index < content.length; index++) {
         var value = content[index];
@@ -27,13 +23,14 @@ function assignAttributes(content) {
             currentTag.attributes[value.key] = {
                 data: value.fill,
                 directiveType: value.directiveType,
-                interpretation: value.interpretation
+                interpretation: value.interpretation,
             };
         }
     }
     elements.push(currentTag);
     return elements;
 }
+exports.assignAttributes = assignAttributes;
 function assignMatches(elements) {
     var elementsForInsertion = {};
     var level = 0;
@@ -53,7 +50,7 @@ function assignMatches(elements) {
             elementsForInsertion[level] = {
                 indent: element.indent,
                 key: element.key,
-                whitespace: element.whitespace
+                whitespace: element.whitespace,
             };
             for (var subindex = (level - 1); subindex >= 0; subindex--) {
                 if (elementsForInsertion[subindex]) {
@@ -76,7 +73,7 @@ function assignMatches(elements) {
     }
     var endElement = {
         preceding: [],
-        system: "end"
+        system: "end",
     };
     var remainingElements = [];
     _.each(elementsForInsertion, function (value, key) {
@@ -102,6 +99,7 @@ function assignMatches(elements) {
     }
     return elements;
 }
+exports.assignMatches = assignMatches;
 function insertMatches(nestedElements) {
     var elements = [];
     for (var _i = 0, nestedElements_1 = nestedElements; _i < nestedElements_1.length; _i++) {
@@ -118,8 +116,10 @@ function insertMatches(nestedElements) {
     }
     return elements;
 }
+exports.insertMatches = insertMatches;
 function closingTag(content) {
     var element = content;
     element.position = "closing";
     return element;
 }
+exports.closingTag = closingTag;

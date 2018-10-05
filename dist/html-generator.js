@@ -1,5 +1,5 @@
 module.exports = {
-    generateHTML: generateHTML
+    generateHTML: generateHTML,
 };
 var _ = require("underscore");
 function generateHTML(elements, options) {

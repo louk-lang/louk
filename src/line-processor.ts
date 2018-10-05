@@ -1,19 +1,12 @@
-module.exports = {
-    breakLines,
-    deleteComments,
-    determineProperties,
-    objectifyLines,
-};
-
 const propertyDeterminer = require("./property-determiner");
 
-function breakLines(content) {
+export function breakLines(content) {
 
     return content.split("\n");
 
 }
 
-function deleteComments(lines) {
+export function deleteComments(lines) {
 
     // Lines without comments
     const prunedLines = [];
@@ -28,7 +21,7 @@ function deleteComments(lines) {
     return prunedLines;
 }
 
-function objectifyLines(lines) {
+export function objectifyLines(lines) {
 
     const objectifiedLines = [];
 
@@ -43,7 +36,7 @@ function objectifyLines(lines) {
     return objectifiedLines;
 }
 
-function determineProperties(lines) {
+export function determineProperties(lines) {
 
     for (let index = 0; index < lines.length; index++) {
         const value = lines[index];

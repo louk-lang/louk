@@ -1,6 +1,6 @@
 "use strict";
-exports.__esModule = true;
-exports["default"] = {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
     prefix: /^([":@-])/,
     staticPrefix: /^(["])/,
     suffix: /(["/,])$/,
@@ -18,5 +18,5 @@ exports["default"] = {
     html: /^([<])/,
     initialSpace: /^(\s)/,
     whitespace: /^(\s*)/,
-    unindented: /^\S/
+    unindented: /^\S/,
 };

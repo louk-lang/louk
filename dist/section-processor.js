@@ -1,20 +1,15 @@
 "use strict";
-exports.__esModule = true;
-module.exports = {
-    findSections: findSections,
-    flattenElements: flattenElements,
-    processSections: processSections
-};
+Object.defineProperty(exports, "__esModule", { value: true });
 var patterns_1 = require("./patterns");
+var utils = require("./utils");
 var lineProcessor = require("./line-processor");
 var elementProcessor = require("./element-processor");
-var utils_1 = require("./utils");
 function findSections(lines) {
     var sections = [];
     var sectionDefault = {
         body: {
             elements: [],
-            lines: []
+            lines: [],
         },
         elements: [],
         isLouk: null,
@@ -22,20 +17,20 @@ function findSections(lines) {
         marker: {
             elements: [],
             lines: [],
-            tag: ""
-        }
+            tag: "",
+        },
     };
-    var section = utils_1["default"].clone(sectionDefault);
+    var section = utils.clone(sectionDefault);
     for (var _i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
         var line = lines_1[_i];
-        if (line.match(patterns_1["default"].sectionCrux)) {
+        if (line.match(patterns_1.default.sectionCrux)) {
             if (section.marker.lines.length > 0 || section.body.lines.length > 0) {
                 sections.push(section);
-                section = utils_1["default"].clone(sectionDefault);
+                section = utils.clone(sectionDefault);
             }
             section.isMarked = true;
             section.marker.lines.push(line);
-            section.marker.tag = line.match(patterns_1["default"].sectionCrux)[1];
+            section.marker.tag = line.match(patterns_1.default.sectionCrux)[1];
             if (section.marker.tag === "template") {
                 section.isLouk = true;
             }
@@ -43,18 +38,18 @@ function findSections(lines) {
                 section.isLouk = false;
             }
         }
-        else if (line.match(patterns_1["default"].unindentedElement)) {
+        else if (line.match(patterns_1.default.unindentedElement)) {
             if (section.marker.lines.length > 0) {
                 sections.push(section);
-                section = utils_1["default"].clone(sectionDefault);
+                section = utils.clone(sectionDefault);
             }
             section.isMarked = false;
             section.isLouk = true;
             section.body.lines.push(line);
         }
-        else if (line.match(patterns_1["default"].unindented) && section.isMarked) {
+        else if (line.match(patterns_1.default.unindented) && section.isMarked) {
             section.marker.lines.push(line);
-            if (line.match(patterns_1["default"].loukLangAttribute)) {
+            if (line.match(patterns_1.default.loukLangAttribute)) {
                 section.isLouk = true;
             }
         }
@@ -68,6 +63,7 @@ function findSections(lines) {
     sections.push(section);
     return sections;
 }
+exports.findSections = findSections;
 function processSections(sections, options) {
     for (var _i = 0, sections_1 = sections; _i < sections_1.length; _i++) {
         var section = sections_1[_i];
@@ -81,7 +77,7 @@ function processSections(sections, options) {
             if (options.langs[tag]) {
                 section.marker.elements[0].attributes.lang = {
                     data: lang,
-                    interpretation: "static"
+                    interpretation: "static",
                 };
             }
         }
@@ -96,7 +92,7 @@ function processSections(sections, options) {
         else {
             section.elements.push({
                 lines: section.body.lines,
-                passthrough: true
+                passthrough: true,
             });
         }
         section.elements = elementProcessor.assignMatches(section.elements);
@@ -104,6 +100,7 @@ function processSections(sections, options) {
     }
     return sections;
 }
+exports.processSections = processSections;
 function flattenElements(sections) {
     var elements = [];
     for (var _i = 0, sections_2 = sections; _i < sections_2.length; _i++) {
@@ -112,3 +109,4 @@ function flattenElements(sections) {
     }
     return elements;
 }
+exports.flattenElements = flattenElements;

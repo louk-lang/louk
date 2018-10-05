@@ -1,10 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 module.exports = {
-    parse: parse
+    parse: parse,
 };
 var _ = require("underscore");
 var lineProcessor = require("./line-processor");
 var sectionProcessor = require("./section-processor");
-var elementProcessor = require("./element-processor");
 var htmlGenerator = require("./html-generator");
 function parse(input, options) {
     var raw = "";

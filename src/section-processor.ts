@@ -1,16 +1,11 @@
-module.exports = {
-    findSections,
-    flattenElements,
-    processSections,
-};
-
 import patterns from "./patterns";
-import utils from "./utils";
+import * as utils from "./utils";
 
 const lineProcessor = require("./line-processor");
-const elementProcessor = require("./element-processor");
+import * as elementProcessor from "./element-processor";
+// const elementProcessor = require("./element-processor");
 
-function findSections(lines) {
+export function findSections(lines) {
 
     const sections = [];
 
@@ -86,7 +81,7 @@ function findSections(lines) {
     return sections;
 }
 
-function processSections(sections, options) {
+export function processSections(sections, options) {
 
     for (const section of sections) {
 
@@ -141,7 +136,7 @@ function processSections(sections, options) {
     return sections;
 }
 
-function flattenElements(sections) {
+export function flattenElements(sections) {
 
     let elements = [];
 

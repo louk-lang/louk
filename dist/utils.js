@@ -1,8 +1,6 @@
 "use strict";
-exports.__esModule = true;
-exports["default"] = {
-    clone: clone
-};
+Object.defineProperty(exports, "__esModule", { value: true });
 function clone(input) {
     return JSON.parse(JSON.stringify(input));
 }
+exports.clone = clone;

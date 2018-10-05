@@ -7,20 +7,22 @@ export function assignAttributes(content) {
     };
 
     for (let index = 0; index < content.length; index++) {
-        const value = content[index];
-        if (value.classification === "tag") {
+
+        const element = content[index];
+
+        if (element.classification === "tag") {
             if (index > 0) {
                 elements.push(currentTag);
             }
-            currentTag = value;
+            currentTag = element;
             currentTag.position = "opening";
             currentTag.matched = false;
             currentTag.attributes = {};
-        } else if (value.classification === "attribute") {
-            currentTag.attributes[value.key] = {
-                data: value.fill,
-                directiveType: value.directiveType,
-                interpretation: value.interpretation,
+        } else if (element.classification === "attribute") {
+            currentTag.attributes[element.key] = {
+                data: element.fill,
+                directiveType: element.directiveType,
+                interpretation: element.interpretation,
             };
         }
     }

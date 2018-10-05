@@ -18,6 +18,7 @@ export function deleteComments(lines) {
         }
 
     }
+
     return prunedLines;
 }
 

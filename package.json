@@ -1,6 +1,6 @@
 {
     "name": "louk",
-    "version": "0.7.4",
+    "version": "0.7.5",
     "description": "Vue without the HTML",
     "main": "dist/index.js",
     "scripts": {
@@ -21,7 +21,7 @@
     "devDependencies": {
         "@types/underscore": "^1.8.9",
         "chai": "^4.2.0",
-        "gulp": "^3.9.1",
+        "gulp": "^4.0.0",
         "gulp-mocha": "^6.0.0",
         "gulp-typescript": "^4.0.0",
         "markunit": "^1.0.0",
@@ -29,8 +29,8 @@
         "nyc": "^13.1.0",
         "stryker": "^0.29.5",
         "stryker-api": "^0.21.2",
-        "stryker-javascript-mutator": "^0.10.2",
         "stryker-html-reporter": "^0.16.4",
+        "stryker-javascript-mutator": "^0.10.2",
         "stryker-mocha-framework": "^0.12.3",
         "stryker-mocha-runner": "^0.14.3",
         "typescript": "^3.1.1"

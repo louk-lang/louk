@@ -6,6 +6,7 @@ _Vue without the HTML_
 [![Build Status](https://img.shields.io/travis/louk-lang/louk.svg?style=flat-square)](https://travis-ci.org/louk-lang/louk)
 [![Codecov](https://img.shields.io/codecov/c/github/louk-lang/louk.svg?style=flat-square)](https://codecov.io/gh/louk-lang/louk)
 [![Depfu](https://img.shields.io/depfu/louk-lang/louk.svg?style=flat-square)](https://depfu.com/repos/louk-lang/louk)
+[![Known Vulnerabilities](https://snyk.io/test/github/louk-lang/louk/badge.svg?targetFile=package.json)](https://snyk.io/test/github/louk-lang/louk?targetFile=package.json)
 [![Version](https://img.shields.io/npm/v/louk.svg?style=flat-square)](https://www.npmjs.com/package/louk)
 [![License](https://img.shields.io/github/license/louk-lang/louk.svg?style=flat-square)](https://github.com/louk-lang/louk/blob/master/LICENSE)
 

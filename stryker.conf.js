@@ -1,12 +1,13 @@
 module.exports = function(config) {
   config.set({
-    mutator: "javascript",
+    mutator: "typescript",
     packageManager: "npm",
     reporters: ["html", "clear-text", "progress"],
     testRunner: "mocha",
-    transpilers: [],
+    transpilers: ["typescript"],
     testFramework: "mocha",
+    tsconfigFile: "tsconfig.json",
     coverageAnalysis: "perTest",
-    mutate: ["dist/**/*.js"]
+    mutate: ["src/**/*.ts"]
   });
 };

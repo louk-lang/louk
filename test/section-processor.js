@@ -6,7 +6,7 @@ var louk = require(file("index.js"));
 
 var sectionProcessor = require(file("section-processor"));
 
-describe("Section processor", function(){
+describe("Section Processor", function(){
     it("should find a section marker", function(){
         assert.equal(sectionProcessor.findSections(["template,"]).length, 1);
     });
@@ -24,5 +24,22 @@ describe("Section processor", function(){
     });
     it("should identify the body of a section", function(){
         assert.equal(sectionProcessor.findSections(["template,",'\t"a'])[0].body.lines[0], '\t"a');
+    });
+    it("Process sections", function(){
+        var unprocessedSections = [{
+            body: { elements: [], lines: ["\ta","\t\tb"] },
+            elements: [],
+            isLouk: true,
+            isMarked: true,
+            marker: { elements: [], lines: ["template,"], tag: 'template' }
+        }];
+        var processedSections = sectionProcessor.processSections(unprocessedSections);
+        // There should be one element in the marker ("template)")
+        assert.equal(processedSections[0].marker.elements.length, 1);
+        // And two elements in the body ("a" and "b")
+        assert.equal(processedSections[0].body.elements.length, 2);
+    });
+    it("Flatten element", function(){
+        assert.equal(sectionProcessor.flattenElements([{elements:[1,2]},{elements:[3,4]}]).length, 4);
     });
 });

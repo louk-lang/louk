@@ -2,7 +2,7 @@ var config = require("./config.js");
 var file = config.file;
 var assert = config.assert;
 
-var louk = require(file("index.js"));
+var louk = require(file("index"));
 
 var elementProcessor = require(file("element-processor"));
 
@@ -19,6 +19,16 @@ describe("Element Processor", function(){
             }
         ];
         assert.equal(elementProcessor.assignMatches(input).length, 2);
+    });
+    it.skip("should assign a closing tag", function(){
+        var input = [
+            {
+                classification: 'tag',
+                key: 'a',
+                preceding: []
+            }
+        ];
+        // assert.equal(elementProcessor.assignMatches(input).length, 2);
     });
     it.skip("insertMatches", function(){
         // insertMatches

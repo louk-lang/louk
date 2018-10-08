@@ -37,16 +37,16 @@ export function determinePrefix(line) {
 
 export function determineSuffix(line) {
 
-    if (line.lineType === "louk") {
-        let matches = "";
+    if (line.lineType === "louk" && line.crux) {
 
-        if (line.crux) {
-            matches = line.crux.match(patterns.suffix);
-        }
+        const matches = line.crux.match(patterns.suffix);
 
         if (matches) {
             return matches[1];
+        } else {
+            return null;
         }
+
     } else {
         return null;
     }
@@ -121,6 +121,8 @@ export function determineFill(line) {
         return line.unindented.match(patterns.staticFill)[1];
     } else if (line.unindented.match(patterns.fill)) {
         return line.unindented.match(patterns.fill)[1];
+    } else {
+        return null;
     }
 }
 

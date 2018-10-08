@@ -18,7 +18,7 @@ export function findSections(lines) {
         marker: {
             elements: [],
             lines: [],
-            tag: "",
+            tag: null,
         },
     };
 
@@ -141,5 +141,6 @@ export function flattenElements(sections) {
     for (const section of sections) {
         elements = elements.concat(section.elements);
     }
+
     return elements;
 }

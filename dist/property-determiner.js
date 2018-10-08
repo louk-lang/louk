@@ -41,13 +41,13 @@ function determinePrefix(line) {
 }
 exports.determinePrefix = determinePrefix;
 function determineSuffix(line) {
-    if (line.lineType === "louk") {
-        var matches = "";
-        if (line.crux) {
-            matches = line.crux.match(patterns_1.default.suffix);
-        }
+    if (line.lineType === "louk" && line.crux) {
+        var matches = line.crux.match(patterns_1.default.suffix);
         if (matches) {
             return matches[1];
+        }
+        else {
+            return null;
         }
     }
     else {

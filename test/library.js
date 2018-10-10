@@ -1,9 +1,8 @@
 var config = require("./config.js");
 var file = config.file;
+var assert = config.assert;
 
 var louk = require(file("index.js"));
-var chai = require("chai");
-var assert = chai.assert;
 
 var markunit = require("markunit");
 var fs = require('fs');

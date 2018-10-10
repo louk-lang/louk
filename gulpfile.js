@@ -6,7 +6,7 @@ var tsconfig = require('./tsconfig.json');
 var outDir = tsconfig.compilerOptions.outDir;
 
 var sourceGlob = 'src/**/*.ts';
-var testGlob = './test/**/*.js';
+var testGlob = 'test/**/*.js';
 
 var tsProject = ts.createProject('tsconfig.json');
 

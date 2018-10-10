@@ -41,13 +41,13 @@ function determinePrefix(line) {
 }
 exports.determinePrefix = determinePrefix;
 function determineSuffix(line) {
-    if (line.lineType === "louk") {
-        var matches = "";
-        if (line.crux) {
-            matches = line.crux.match(patterns_1.default.suffix);
-        }
+    if (line.lineType === "louk" && line.crux) {
+        var matches = line.crux.match(patterns_1.default.suffix);
         if (matches) {
             return matches[1];
+        }
+        else {
+            return null;
         }
     }
     else {
@@ -75,10 +75,10 @@ function determineInterpretation(line) {
         if (line.classification === "tag" && line.suffix && line.suffix.match(patterns_1.default.staticSuffix)) {
             return "static";
         }
-        else if (line.crux.match(patterns_1.default.staticCrux)) {
+        else if (line.crux && line.crux.match(patterns_1.default.staticCrux)) {
             return "static";
         }
-        else if (line.classification === "attribute" && line.prefix.match(patterns_1.default.staticPrefix)) {
+        else if (line.classification === "attribute" && line.prefix && line.prefix.match(patterns_1.default.staticPrefix)) {
             return "static";
         }
         else {
@@ -123,6 +123,9 @@ function determineFill(line) {
     }
     else if (line.unindented.match(patterns_1.default.fill)) {
         return line.unindented.match(patterns_1.default.fill)[1];
+    }
+    else {
+        return null;
     }
 }
 exports.determineFill = determineFill;

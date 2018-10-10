@@ -17,7 +17,7 @@ function findSections(lines) {
         marker: {
             elements: [],
             lines: [],
-            tag: "",
+            tag: null,
         },
     };
     var section = utils.clone(sectionDefault);

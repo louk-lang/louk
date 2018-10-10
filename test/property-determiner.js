@@ -32,6 +32,7 @@ describe("Property Determiner", function(){
     });
     it("should identify self-closing elements", function(){
         assert.equal(propertyDeterminer.determineSelfClosing({suffix:'/'}), true);
+        assert.equal(propertyDeterminer.determineSelfClosing({lineType:'louk'}), false);
         assert.equal(propertyDeterminer.determineSelfClosing({lineType:'html'}), true);
         assert.equal(propertyDeterminer.determineSelfClosing({lineType:'comment'}), true);
     });
@@ -45,16 +46,30 @@ describe("Property Determiner", function(){
         assert.equal(propertyDeterminer.determineFill({crux:"a", unindented:"a b"}), "b");
         assert.equal(propertyDeterminer.determineFill({crux:'"a c', unindented:'"a c'}), "c");
     });
-    it.skip("should determine interpretation", function(){
-
+    it("should determine interpretation", function(){
+        assert.equal(propertyDeterminer.determineInterpretation({lineType:'comment'}), null);
+        assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',classification:'tag',suffix:'"'}), "static");
+        assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',crux:'.a'}), "static");
+        assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',classification:'attribute',crux:'#a'}), "static");
+        assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk'}), "dynamic");
     });
-    it.skip("should determine cruxes", function(){
-
+    it("should determine cruxes", function(){
+        assert.equal(propertyDeterminer.determineCrux({lineType:'comment'}), null);
+        assert.equal(propertyDeterminer.determineCrux({lineType:'louk',unindented:'.a'}), ".");
+        assert.equal(propertyDeterminer.determineCrux({lineType:'louk',unindented:'a b'}), "a");
+        assert.equal(propertyDeterminer.determineCrux({lineType:'louk',unindented:'c'}), "c");
     });
-    it.skip("should determine directive types", function(){
-
+    it("should determine directive types", function(){
+        assert.equal(propertyDeterminer.determineDirectiveType({lineType:'comment'}), null);
+        assert.equal(propertyDeterminer.determineDirectiveType({lineType:'louk',prefix:"-",fill:"for"}), "simple");
+        assert.equal(propertyDeterminer.determineDirectiveType({lineType:'louk',prefix:"@",fill:"click"}), "action");
+        assert.equal(propertyDeterminer.determineDirectiveType({lineType:'louk',prefix:":",fill:"class"}), "bind");
     });
-    it.skip("should determine keys", function(){
-
+    it("should determine keys", function(){
+        assert.equal(propertyDeterminer.determineKey({lineType:'comment'}), null);
+        assert.equal(propertyDeterminer.determineKey({lineType:'louk',crux:'.'}), "class");
+        assert.equal(propertyDeterminer.determineKey({lineType:'louk',crux:'#'}), "id");
+        assert.equal(propertyDeterminer.determineKey({lineType:'louk',crux:'>'}), "href");
+        assert.equal(propertyDeterminer.determineKey({lineType:'louk',crux:'a',unindented:'a'}), "a");
     });
 });

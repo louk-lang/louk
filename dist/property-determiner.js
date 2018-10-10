@@ -75,10 +75,10 @@ function determineInterpretation(line) {
         if (line.classification === "tag" && line.suffix && line.suffix.match(patterns_1.default.staticSuffix)) {
             return "static";
         }
-        else if (line.crux.match(patterns_1.default.staticCrux)) {
+        else if (line.crux && line.crux.match(patterns_1.default.staticCrux)) {
             return "static";
         }
-        else if (line.classification === "attribute" && line.prefix.match(patterns_1.default.staticPrefix)) {
+        else if (line.classification === "attribute" && line.prefix && line.prefix.match(patterns_1.default.staticPrefix)) {
             return "static";
         }
         else {
@@ -123,6 +123,9 @@ function determineFill(line) {
     }
     else if (line.unindented.match(patterns_1.default.fill)) {
         return line.unindented.match(patterns_1.default.fill)[1];
+    }
+    else {
+        return null;
     }
 }
 exports.determineFill = determineFill;

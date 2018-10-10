@@ -32,7 +32,6 @@ export function determinePrefix(line) {
     } else {
         return null;
     }
-
 }
 
 export function determineSuffix(line) {
@@ -72,9 +71,9 @@ export function determineInterpretation(line) {
     if (line.lineType === "louk") {
         if (line.classification === "tag" && line.suffix && line.suffix.match(patterns.staticSuffix)) {
             return "static";
-        } else if (line.crux.match(patterns.staticCrux)) {
+        } else if (line.crux && line.crux.match(patterns.staticCrux)) {
             return "static";
-        } else if (line.classification === "attribute" && line.prefix.match(patterns.staticPrefix)) {
+        } else if (line.classification === "attribute" && line.prefix && line.prefix.match(patterns.staticPrefix)) {
             return "static";
         } else {
             return "dynamic";
@@ -110,7 +109,6 @@ export function determineCrux(line) {
     } else {
         return null;
     }
-
 }
 
 // Figures out what tag a tag is and what attribute an attribute is

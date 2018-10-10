@@ -4,7 +4,6 @@ var elementProcessor = require("./element-processor");
 var lineProcessor = require("./line-processor");
 var patterns_1 = require("./patterns");
 var utils = require("./utils");
-var fs = require("fs");
 function findSections(lines) {
     var sections = [];
     var sectionDefault = {
@@ -103,7 +102,6 @@ function processSections(sections, options) {
 }
 exports.processSections = processSections;
 function flattenElements(sections) {
-    fs.writeFileSync("sections.js", JSON.stringify(sections));
     var elements = [];
     for (var _i = 0, sections_2 = sections; _i < sections_2.length; _i++) {
         var section = sections_2[_i];

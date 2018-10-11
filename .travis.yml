@@ -4,9 +4,11 @@ node_js:
 before_script:
   - npm install -g gulp-cli
   - npm install -g codecov
+  - npm install -g stryker
 script:
   - gulp build
   - npm test
+  - stryker run
 after_success:
   - nyc report --reporter=text-lcov > coverage.lcov
   - codecov

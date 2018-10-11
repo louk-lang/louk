@@ -3,7 +3,7 @@ export function assignAttributes(content) {
     let currentTag = {
         attributes: {},
         matched: false,
-        position: "",
+        position: null,
     };
 
     for (let index = 0; index < content.length; index++) {
@@ -115,9 +115,7 @@ export function assignMatches(elements) {
     remainingElements.reverse();
 
     for (const element of remainingElements) {
-        if (element) {
             endElement.preceding.push((closingTag(element)));
-        }
     }
 
     // Add the special end element to the end

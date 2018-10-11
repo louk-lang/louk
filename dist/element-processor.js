@@ -5,7 +5,7 @@ function assignAttributes(content) {
     var currentTag = {
         attributes: {},
         matched: false,
-        position: "",
+        position: null,
     };
     for (var index = 0; index < content.length; index++) {
         var element = content[index];
@@ -83,9 +83,7 @@ function assignMatches(elements) {
     remainingElements.reverse();
     for (var _a = 0, remainingElements_1 = remainingElements; _a < remainingElements_1.length; _a++) {
         var element = remainingElements_1[_a];
-        if (element) {
-            endElement.preceding.push((closingTag(element)));
-        }
+        endElement.preceding.push((closingTag(element)));
     }
     elements.push(endElement);
     for (var index = 0; index < elements.length; index++) {

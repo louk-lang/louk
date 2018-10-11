@@ -47,6 +47,11 @@ describe("Element Processor", function(){
         ];
         assert.equal(elementProcessor.assignMatches(input).length, 2);
     });
+    it("should mark the last element as not containing any elements", function(){
+        var input = [{},{}];
+        var processedElements = elementProcessor.assignMatches(input);
+        assert.equal(processedElements[processedElements.length-1].containsElement, false);
+    });
     it("should insert matches", function(){
         var input = [
           { raw: 'a',
@@ -92,7 +97,7 @@ describe("Element Processor", function(){
             containsElement: false } ];
             assert.equal(elementProcessor.insertMatches(input).length, 4);
         });
-    it("closingTag", function(){
+    it("should assign the closing tag attribute", function(){
         assert.equal(elementProcessor.closingTag({}).position, "closing");
     });
 });

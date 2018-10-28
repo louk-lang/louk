@@ -19,9 +19,7 @@ The key is that most things are interpreted as dynamic Vue entities (bound conte
 Louk runs on Node, and compiles into Vue HTML. Standalone Louk files can be compiled into full Vue components, or Louk notation can be embedded in Vue component sections.
 
 ## Getting Started
-The quickest way to get started with Louk is the [`louk-intro` template](https://github.com/louk-lang/louk-intro), which sets up a basic end-to-end development environment.
-
-If you’re integrating Louk into an existing project, and can instead download the libraries directly and then [configure `louk-loader`](https://www.npmjs.com/package/louk-loader).
+The quickest way to get started with Louk is the [`louk-intro` template](https://github.com/louk-lang/louk-intro), which sets up a basic end-to-end development environment. If you’re integrating Louk into an existing project, download the libraries directly instead, and then [configure `louk-loader`](https://www.npmjs.com/package/louk-loader).
 
 ```sh
 npm install -D louk louk-loader

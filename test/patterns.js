@@ -19,94 +19,59 @@ describe("Patterns", function(){
         });
     });
 
-    // prefix: /^([":@-])/,
-
-    it.skip("should match a prefix", function(){
-        assert.equal(" \t  ".match(patterns.prefix)[0], " \t  ");
-        assert.equal("   a".match(patterns.prefix), null);
+    it("should match a prefix", function(){
+        assert.equal(":abc".match(patterns.prefix)[1], ":");
+        assert.equal("abc:".match(patterns.prefix), null);
     });
 
-    // Prefixes that can make an attribute static: "
-    // staticPrefix: /^(["])/,
-
-    it.skip("should match a static prefix", function(){
-        assert.equal(" \t  ".match(patterns.staticPrefix)[0], " \t  ");
-        assert.equal("   a".match(patterns.staticPrefix), null);
+    it("should match a static prefix", function(){
+        assert.equal("\"abc".match(patterns.staticPrefix)[1], "\"");
+        assert.equal("\'abc".match(patterns.staticPrefix), null);
     });
 
-    // All valid suffixes: " and / and ,
-    // suffix: /(["/,])$/,
-
-    it.skip("should match a suffix", function(){
-        assert.equal(" \t  ".match(patterns.suffix)[0], " \t  ");
-        assert.equal("   a".match(patterns.suffix), null);
+    it("should match a suffix", function(){
+        assert.equal("abc/".match(patterns.suffix)[1], "/");
+        assert.equal("abc\\".match(patterns.suffix), null);
     });
 
-    // Suffixes that can make an element static: " and /
-    // The forward slash makes an element self-closing, and therefore not capable of containing dynamic content.
-    // staticSuffix: /(["/,])$/,
-
-    it.skip("should match a static suffix", function(){
-        assert.equal(" \t  ".match(patterns.staticSuffix)[0], " \t  ");
-        assert.equal("   a".match(patterns.staticSuffix), null);
+    it("should match a static suffix", function(){
+        assert.equal("abc,".match(patterns.staticSuffix)[1], ",");
+        assert.equal("abc.".match(patterns.staticSuffix), null);
     });
-
-    // Cruxes not followed by content, such as "a"
-    // plainCrux: /^(.+)/,
 
     it.skip("should match a plain crux", function(){
-        assert.equal(" \t  ".match(patterns.plainCrux)[0], " \t  ");
-        assert.equal("   a".match(patterns.plainCrux), null);
+        assert.equal("abc".match(patterns.plainCrux)[0], "abc");
+        assert.equal("abc def".match(patterns.plainCrux), null);
     });
 
-    // Cruxes that are followed by content, such as "a b"
-    // modifiedCrux: /^(.+?)\s/,
-
-    it.skip("should match a modified crux", function(){
-        assert.equal(" \t  ".match(patterns.modifiedCrux)[0], " \t  ");
-        assert.equal("   a".match(patterns.modifiedCrux), null);
+    it("should match a modified crux", function(){
+        assert.equal("abc def".match(patterns.modifiedCrux)[1], "abc");
+        assert.equal("abc".match(patterns.modifiedCrux), null);
     });
 
-    // Shorthand cruxes that make their attribute static: > and # and .
-    // The first capture group gets the shorthand crux, the second capture group gets the fill.
-    // staticCrux: /^([>#\.]).*/,
-
-    it.skip("should match a static crux", function(){
-        assert.equal(" \t  ".match(patterns.staticCrux)[0], " \t  ");
-        assert.equal("   a".match(patterns.staticCrux), null);
+    it("should match a static crux", function(){
+        assert.equal(".abc".match(patterns.staticCrux)[1], ".");
+        assert.equal("abc.".match(patterns.staticCrux), null);
     });
 
-    // Crux of a Vue single-file component section.
-    // sectionCrux: /^(\w+),/,
-
-    it.skip("should match a section crux", function(){
-        assert.equal(" \t  ".match(patterns.sectionCrux)[0], " \t  ");
-        assert.equal("   a".match(patterns.sectionCrux), null);
+    it("should match a section crux", function(){
+        assert.equal("abc,".match(patterns.sectionCrux)[0], "abc,");
+        assert.equal("abc$".match(patterns.sectionCrux), null);
     });
 
-    // A normal fill, preceded by a space
-    // fill: /^.+?\s(.+)/,
-
-    it.skip("should match a fill", function(){
-        assert.equal(" \t  ".match(patterns.fill)[0], " \t  ");
-        assert.equal("   a".match(patterns.fill), null);
+    it("should match a fill", function(){
+        assert.equal("abc def".match(patterns.fill)[1], "def");
+        assert.equal("#def".match(patterns.fill), null);
     });
 
-    // A fill prepended by a static crux
-    // staticFill: /^[>#\.](.*)/,
-
-    it.skip("should match a staticfill", function(){
-        assert.equal(" \t  ".match(patterns.staticFill)[0], " \t  ");
-        assert.equal("   a".match(patterns.staticFill), null);
+    it("should match a staticfill", function(){
+        assert.equal("#def".match(patterns.staticFill)[1], "def");
+        assert.equal("abc def".match(patterns.staticFill), null);
     });
 
-    // A key is semantically what a line of Louk ultimately represents: A specific tag or a specific attribute.
-    // A key might be implied or it might have a shorthand. For example, "." is a crux, and "class" is its key.
-    // key: /^[":@-]*([\w\.-]+)/,
-
-    it.skip("should match a key", function(){
-        assert.equal(" \t  ".match(patterns.key)[0], " \t  ");
-        assert.equal("   a".match(patterns.key), null);
+    it("should match a key", function(){
+        assert.equal(":abc".match(patterns.key)[0], ":abc");
+        assert.equal("&abc".match(patterns.key), null);
     });
 
     // Louk attribute, for use while parsing sections

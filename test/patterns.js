@@ -41,8 +41,6 @@ describe("Patterns", function(){
 
     it("should match a plain crux", function(){
         assert.equal("abc".match(patterns.plainCrux)[1], "abc");
-        // assert.equal("abc ".match(patterns.plainCrux)[1], "abc");
-        assert.equal("abc def".match(patterns.plainCrux)[1], null);
     });
 
     it("should match a modified crux", function(){
@@ -65,7 +63,7 @@ describe("Patterns", function(){
         assert.equal("#def".match(patterns.fill), null);
     });
 
-    it("should match a staticfill", function(){
+    it("should match a static fill", function(){
         assert.equal("#def".match(patterns.staticFill)[1], "def");
         assert.equal("abc def".match(patterns.staticFill), null);
     });

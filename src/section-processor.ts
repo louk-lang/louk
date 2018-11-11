@@ -87,6 +87,7 @@ export function processSections(sections, options) {
         section.marker.lines = lineProcessor.objectifyLines(section.marker.lines);
 
         section.marker.lines = lineProcessor.determineProperties(section.marker.lines);
+        section.marker.lines = lineProcessor.deleteEmptyLines(section.marker.lines);
         section.marker.lines = lineProcessor.deleteComments(section.marker.lines);
 
         // Then turn those lines into element objects and begin to process them
@@ -113,6 +114,7 @@ export function processSections(sections, options) {
         if (section.isLouk) {
 
             section.body.lines = lineProcessor.objectifyLines(section.body.lines);
+            section.body.lines = lineProcessor.deleteEmptyLines(section.body.lines);
             section.body.lines = lineProcessor.determineProperties(section.body.lines);
             section.body.lines = lineProcessor.deleteComments(section.body.lines);
 

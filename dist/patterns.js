@@ -15,6 +15,7 @@ exports.default = {
     loukLangAttribute: /"lang louk/,
     unindentedElement: /^[\w<]/,
     comment: /^\/\/(.*)/,
+    emptyLine: /^(\s+)$/,
     html: /^([<])/,
     initialSpace: /^(\s)/,
     whitespace: /^(\s*)/,

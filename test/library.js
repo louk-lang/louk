@@ -156,4 +156,7 @@ describe("Louk", function(){
     it("should handle a top-level element next to a Vue section", function(){
         assert.equal(louk('template,\ndiv'),'<template></template>\n<div></div>');
     });
+    it("should remove a line with only whitespace", function(){
+        assert.equal(louk('template,\n '),'<template></template>');
+    });
 });

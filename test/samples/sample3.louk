@@ -1,0 +1,28 @@
+template,
+    div
+        textarea
+        -model input
+        "rows 10
+        "cols 100
+        div output
+
+script,
+    const louk = require("louk")
+    export default {
+        name: 'Sample',
+        data: function(){
+            return {
+                input: ""
+            }
+        },
+        computed: {
+            output(){
+                return louk(this.input)
+            }
+        }
+    }
+
+style,
+    body{
+            color: #123456;
+    }

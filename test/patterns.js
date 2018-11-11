@@ -39,9 +39,10 @@ describe("Patterns", function(){
         assert.equal("abc.".match(patterns.staticSuffix), null);
     });
 
-    it.skip("should match a plain crux", function(){
-        assert.equal("abc".match(patterns.plainCrux)[0], "abc");
-        assert.equal("abc def".match(patterns.plainCrux), null);
+    it("should match a plain crux", function(){
+        assert.equal("abc".match(patterns.plainCrux)[1], "abc");
+        // assert.equal("abc ".match(patterns.plainCrux)[1], "abc");
+        assert.equal("abc def".match(patterns.plainCrux)[1], null);
     });
 
     it("should match a modified crux", function(){
@@ -74,71 +75,42 @@ describe("Patterns", function(){
         assert.equal("&abc".match(patterns.key), null);
     });
 
-    // Louk attribute, for use while parsing sections
-    // loukLangAttribute: /"lang louk/,
-
-    it.skip("should match a Louk language attribute", function(){
-        assert.equal(" \t  ".match(patterns.loukLangAttribute)[0], " \t  ");
-        assert.equal("   a".match(patterns.loukLangAttribute), null);
+    it("should match a Louk language attribute", function(){
+        assert.equal("\"lang louk".match(patterns.loukLangAttribute)[0], "\"lang louk");
+        assert.equal("\"lang stylus".match(patterns.loukLangAttribute), null);
     });
 
-    // Used to recognize that something is an unindented Vue section marker, HTML tag, or HTML comment
-    // unindentedElement: /^[\w<]/,
-
-    it.skip("should match an unindented element", function(){
-        assert.equal(" \t  ".match(patterns.unindentedElement)[0], " \t  ");
-        assert.equal("   a".match(patterns.unindentedElement), null);
+    it("should match an unindented element", function(){
+        assert.equal("a".match(patterns.unindentedElement)[0], "a");
+        assert.equal(" a".match(patterns.unindentedElement), null);
     });
 
-    // Characters that indicate the line should be interpretted as a comment.
-    // The capture group captures the comment.
-    // comment: /^\/\/(.*)/,
-
-    it.skip("should match a comment", function(){
-        assert.equal(" \t  ".match(patterns.comment)[0], " \t  ");
-        assert.equal("   a".match(patterns.comment), null);
+    it("should match a comment", function(){
+        assert.equal("//abc".match(patterns.comment)[1], "abc");
+        assert.equal("/abc".match(patterns.comment), null);
     });
-
-    // Lines that consist only of whitespace characters. The capture group captures the full content.
-    // emptyLine: /^(\s+)$/,
 
     it("should match an empty line", function(){
         assert.equal(" \t  ".match(patterns.emptyLine)[0], " \t  ");
         assert.equal("   a".match(patterns.emptyLine), null);
     });
 
-    // Characters that indicate the line should be interpretted as HTML
-    // html: /^([<])/,
-
-    it.skip("should match an html line", function(){
-        assert.equal(" \t  ".match(patterns.html)[0], " \t  ");
-        assert.equal("   a".match(patterns.html), null);
+    it("should match an html line", function(){
+        assert.equal("<".match(patterns.html)[0], "<");
+        assert.equal("> ".match(patterns.html), null);
     });
 
-    // Used to identify whether we've hit the first non-space character of a line yet.
-    // initialSpace: /^(\s)/,
-
-    //initialSpace
-    it.skip("should match an initial space", function(){
-        assert.equal(" \t  ".match(patterns.initialSpace)[0], " \t  ");
-        assert.equal("   a".match(patterns.initialSpace), null);
+    it("should match an initial space", function(){
+        assert.equal(" abc".match(patterns.initialSpace)[0], " ");
+        assert.equal("abc".match(patterns.initialSpace), null);
     });
 
-    // Used to capture leading whitespace.
-    // whitespace: /^(\s*)/,
-
-    //whitespace
-    it.skip("should match whitespace", function(){
-        assert.equal(" \t  ".match(patterns.whitespace)[0], " \t  ");
-        assert.equal("   a".match(patterns.whitespace), null);
+    it("should match whitespace", function(){
+        assert.equal(" \ta".match(patterns.whitespace)[0], " \t");
     });
 
-    // Shows that the line is not indented.
-    // unindented: /^\S/,
-
-    //unindented
-    it.skip("should match an unindented line", function(){
-        assert.equal(" \t  ".match(patterns.unindented)[0], " \t  ");
-        assert.equal("   a".match(patterns.unindented), null);
+    it("should match an unindented line", function(){
+        assert.equal("a".match(patterns.unindented)[0], "a");
+        assert.equal(" a".match(patterns.unindented), null);
     });
 });

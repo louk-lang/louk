@@ -11,8 +11,8 @@ var sample1 = fs.readFileSync("./test/samples/sample1.louk", "utf8");
 var sample2 = fs.readFileSync("./test/samples/sample2.louk", "utf8");
 var sample3 = fs.readFileSync("./test/samples/sample3.louk", "utf8");
 
-describe("Louk", function(){
-    it("should not error on a real Louk file", function(){
+describe("Samples", function(){
+    it("should be processed without errors", function(){
         assert.notEqual(louk(sample1),'null');
         assert.notEqual(louk(sample2),'null');
         assert.notEqual(louk(sample3),'null');

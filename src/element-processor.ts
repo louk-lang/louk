@@ -115,7 +115,11 @@ export function assignMatches(elements) {
     remainingElements.reverse();
 
     for (const element of remainingElements) {
+
+        // Some levels will be undefined. (This is expected.)
+        if (element) {
             endElement.preceding.push((closingTag(element)));
+        }
     }
 
     // Add the special end element to the end

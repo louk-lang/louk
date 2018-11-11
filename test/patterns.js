@@ -16,4 +16,8 @@ describe("Patterns", function(){
             assert.equal(patterns[key] instanceof RegExp, true);
         });
     });
+    it("should match a whitespace-only line", function(){
+        assert.equal(" \t  ".match(patterns.emptyLine)[0], " \t  ");
+        assert.equal("   a".match(patterns.emptyLine), null);
+    });
 });

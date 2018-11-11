@@ -1,0 +1,76 @@
+template,
+
+    div
+    .hello
+        h1 tagline
+        div
+        -for section in sections
+            h2 section.name
+            li
+            -for link in section.links
+                a link.display
+                :href link.url
+                "rel noopener
+                "target _blank
+
+script,
+
+    export default {
+        name: 'Intro',
+        props: {
+            tagline: String
+        },
+        data: function(){
+            return {
+                sections: [
+                    {
+                        name: "Louk",
+                        links: [
+                            { url: "https://www.npmjs.com/package/louk", display: "Language" },
+                            { url: "https://www.npmjs.com/package/louk-loader", display: "Loader" },
+                            { url: "https://github.com/louk-lang/louk", display: "Contribute" }
+                        ]
+                    },
+                    {
+                        name: "Vue",
+                        links: [
+                            { url: "https://vuejs.org", display: "Core Docs" },
+                            { url: "https://forum.vuejs.org", display: "Forum" },
+                            { url: "https://chat.vuejs.org", display: "Community Chat" },
+                            { url: "https://twitter.com/vuejs", display: "Twitter" },
+                            { url: "https://vuejs.org", display: "News" },
+                        ]
+                    },
+                    {
+                        name: "Vue Extensions",
+                        links: [
+                            { url: "https://cli.vuejs.org", display: "vue-cli" },
+                            { url: "https://router.vuejs.org", display: "vue-router" },
+                            { url: "https://vuex.vuejs.org", display: "vuex" },
+                            { url: "https://github.com/vuejs/vue-devtools#vue-devtools", display: "vue-devtools" },
+                            { url: "https://vue-loader.vuejs.org", display: "vue-loader" },
+                            { url: "https://github.com/vuejs/awesome-vue", display: "awesome-vue" }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+
+style,
+
+    h1
+        max-width 500px
+        margin 50px auto
+
+    h2
+        font-size 22px
+        margin 40px 0 10px 0
+
+    ul
+        list-style-type none
+        padding 0
+
+    li
+        display inline-block
+        margin 0 10px

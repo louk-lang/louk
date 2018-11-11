@@ -1,3 +1,4 @@
+import patterns from "./patterns";
 import * as propertyDeterminer from "./property-determiner";
 
 export function breakLines(content) {
@@ -19,6 +20,17 @@ export function deleteComments(lines) {
 
     }
 
+    return prunedLines;
+}
+
+export function deleteEmptyLines(lines) {
+    const prunedLines = [];
+
+    for (const line of lines) {
+        if (line.raw !== "" && !line.raw.match(patterns.emptyLine) ) {
+            prunedLines.push(line);
+        }
+    }
     return prunedLines;
 }
 

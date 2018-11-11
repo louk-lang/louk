@@ -1,0 +1,48 @@
+template,
+
+    div
+    #app
+        img
+        "src ./assets/logo.png
+        #logo
+        Intro
+        "tagline Welcome to your Vue App, written in Louk.
+
+script,
+
+    import Intro from './components/Intro.louk'
+
+    export default {
+        name: 'app',
+            components: {
+            Intro
+        }
+    }
+
+style,
+
+    light = #f4f9f9
+    dark = #343535
+
+    body
+        background-color #343535
+
+    #app
+        font-family Poppins, Helvetica, sans-serif
+        margin-top 80px
+        color light
+        text-align center
+
+    #logo
+        width 120px
+
+    a
+        font-family 'Anonymous Pro'
+        color light
+        text-decoration none
+
+    a:hover
+        text-decoration underline
+
+    a:visited
+        color light

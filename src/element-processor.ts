@@ -22,20 +22,21 @@ export function assignAttributes(content) {
 
         } else if (element.classification === "attribute") {
 
-            // If attribute already exists, don't overwrite it
-            if (!current.attributes[element.key]) {
-                current.attributes[element.key] = {
-                    data: element.fill,
-                    directiveType: element.directiveType,
-                    interpretation: element.interpretation,
-                };
-            }
-        } else if (element.classification === "continuation") {
+            // Only process attributes if the current element is a tag
             if (current.classification === "tag") {
-                elements.push(current);
-            } else if (current.classification === "tag") {
-                elements.push(current);
+
+                // If attribute already exists, don't overwrite it
+                if (!current.attributes[element.key]) {
+                    current.attributes[element.key] = {
+                        data: element.fill,
+                        directiveType: element.directiveType,
+                        interpretation: element.interpretation,
+                    };
+                }
             }
+
+        } else if (element.classification === "continuation") {
+            elements.push(current);
             current = element;
         }
     }
@@ -183,4 +184,30 @@ export function insertMatches(nestedElements) {
 export function closingTag(element) {
     element.position = "closing";
     return element;
+}
+
+export function assignContinuations(elements) {
+    console.log(elements)
+    let currentLevel = 0;
+    const levelMap = {};
+    for (let index = 0; index < elements.length; index++) {
+        const element = elements[index];
+        if (element.classification === "tag") {
+            currentLevel = element.level;
+            levelMap[element.level] = index;
+        } else if (element.classification === "continuation") {
+            // console.log(content[index].continuations)
+            // console.log(element);
+            const target = levelMap[element.level];
+            elements[target].continuations.push(element);
+        }
+    }
+    const prunedElements = [];
+    for (const element of elements) {
+        if (element.classification !== "continuation") {
+            prunedElements.push(element);
+        }
+    }
+    // console.log(prunedElements[0]);
+    return prunedElements;
 }

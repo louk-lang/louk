@@ -32,11 +32,9 @@ function objectifyLines(lines) {
     var objectifiedLines = [];
     for (var _i = 0, lines_3 = lines; _i < lines_3.length; _i++) {
         var line = lines_3[_i];
-        if (line !== "") {
-            objectifiedLines.push({
-                raw: line,
-            });
-        }
+        objectifiedLines.push({
+            raw: line,
+        });
     }
     return objectifiedLines;
 }
@@ -59,6 +57,8 @@ function determineProperties(lines) {
         lines[index].fill = propertyDeterminer.determineFill(lines[index]);
         lines[index].directiveType = propertyDeterminer.determineDirectiveType(lines[index]);
         lines[index].preceding = [];
+        lines[index].continuations = [];
+        lines[index].extendedFill = null;
     }
     return lines;
 }

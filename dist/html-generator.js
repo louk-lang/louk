@@ -65,12 +65,15 @@ function generateHTML(elements, options) {
                     html = html + " /";
                 }
                 html = html + ">";
-                if (element.fill) {
-                    if (element.interpretation === "dynamic") {
-                        html = html + "{{" + element.fill + "}}";
+                if (element.fill || (element.continuations && element.continuations.length > 0)) {
+                    if (element.fill) {
+                        html = html + renderFill(element.fill, element.interpretation);
                     }
-                    else if (element.interpretation === "static") {
-                        html = html + element.fill;
+                    if (element.continuations && element.continuations.length > 0) {
+                        for (var _i = 0, _a = element.continuations; _i < _a.length; _i++) {
+                            var continuation = _a[_i];
+                            html = html + renderFill(continuation.fill, continuation.interpretation);
+                        }
                     }
                 }
                 else {
@@ -96,3 +99,12 @@ function generateHTML(elements, options) {
     return html;
 }
 exports.generateHTML = generateHTML;
+function renderFill(fill, interpretation) {
+    if (interpretation === "dynamic") {
+        return "{{" + fill + "}}";
+    }
+    else if (interpretation === "static") {
+        return fill;
+    }
+}
+exports.renderFill = renderFill;

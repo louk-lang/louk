@@ -40,15 +40,15 @@ export function generateHTML(elements, options) {
 
             html = html + "\n" + passthroughContentString + "\n";
 
-        } else if (element.classification === "continuation") {
-            // console.log(element)
-
-            // If the body should be interpreted dynamically, we wrap it in Vue curly brackets
-            if (element.interpretation === "dynamic") {
-                html = html + "{{" + element.fill + "}}";
-            } else if (element.interpretation === "static") {
-                html = html + element.fill;
-            }
+        // } else if (element.classification === "continuation") {
+        //     // console.log(element)
+        //
+        //     // If the body should be interpreted dynamically, we wrap it in Vue curly brackets
+        //     if (element.interpretation === "dynamic") {
+        //         html = html + "{{" + element.fill + "}}";
+        //     } else if (element.interpretation === "static") {
+        //         html = html + element.fill;
+        //     }
         } else {
             // Generate opening tags
             if (element.position === "opening" && element.key != null) {
@@ -94,14 +94,19 @@ export function generateHTML(elements, options) {
                 html = html + ">";
 
                 // If there's body content...
-                if (element.fill) {
+                if (element.fill || (element.continuations && element.continuations.length > 0)) {
 
-                    // If the body should be interpreted dynamically, we wrap it in Vue curly brackets
-                    if (element.interpretation === "dynamic") {
-                        html = html + "{{" + element.fill + "}}";
-                    } else if (element.interpretation === "static") {
-                        html = html + element.fill;
+                    if (element.fill) {
+                        // If the body should be interpreted dynamically, we wrap it in Vue curly brackets
+                        html = html + renderFill(element.fill, element.interpretation)
                     }
+
+                    if (element.continuations && element.continuations.length > 0) {
+                        for (const continuation of element.continuations) {
+                            html = html + renderFill(continuation.fill, continuation.interpretation)
+                        }
+                    }
+
                 } else {
                     if (keepWhitespace && element.containsElement) {
                         html = html +  "\n";
@@ -124,4 +129,13 @@ export function generateHTML(elements, options) {
         }
     }
     return html;
+}
+
+// Renders static and dynamic fills
+export function renderFill(fill, interpretation) {
+    if (interpretation === "dynamic") {
+        return "{{" + fill + "}}";
+    } else if (interpretation === "static") {
+        return fill;
+    }
 }

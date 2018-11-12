@@ -119,6 +119,8 @@ export function processSections(sections, options) {
             section.body.lines = lineProcessor.deleteComments(section.body.lines);
 
             section.body.elements = elementProcessor.assignAttributes(section.body.lines);
+            section.body.elements = elementProcessor.assignContinuations(section.body.elements);
+            // section.body.elements = elementProcessor.flattenFills(section.body.elements);
             section.elements = section.elements.concat(section.body.elements);
 
         } else {

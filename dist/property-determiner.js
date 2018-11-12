@@ -23,6 +23,9 @@ function determineClassification(line) {
     else if (line.prefix === ":") {
         return "attribute";
     }
+    else if (line.crux === "|") {
+        return "continuation";
+    }
     else {
         return "tag";
     }
@@ -72,7 +75,8 @@ function determineSelfClosing(line) {
 exports.determineSelfClosing = determineSelfClosing;
 function determineInterpretation(line) {
     if (line.lineType === "louk") {
-        if (line.classification === "tag" && line.suffix && line.suffix.match(patterns_1.default.staticSuffix)) {
+        if ((line.classification === "tag" || line.classification === "continuation")
+            && line.suffix && line.suffix.match(patterns_1.default.staticSuffix)) {
             return "static";
         }
         else if (line.crux && line.crux.match(patterns_1.default.staticCrux)) {
@@ -110,6 +114,9 @@ function determineCrux(line) {
         }
         else if (line.unindented.match(patterns_1.default.plainCrux)) {
             return line.unindented.match(patterns_1.default.plainCrux)[1];
+        }
+        else if (line.unindented.match(patterns_1.default.continuationCrux)) {
+            return line.unindented.match(patterns_1.default.continuationCrux)[1];
         }
     }
     else {
@@ -156,6 +163,9 @@ function determineKey(line) {
         }
         else if (line.crux === ">") {
             return "href";
+        }
+        else if (line.crux === "|") {
+            return "";
         }
         else if (line.unindented.match(patterns_1.default.key)) {
             return line.unindented.match(patterns_1.default.key)[1];

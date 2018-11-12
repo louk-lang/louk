@@ -9,6 +9,7 @@ exports.default = {
     modifiedCrux: /^(.+?)\s/,
     staticCrux: /^([>#\.]).*/,
     sectionCrux: /^(\w+),/,
+    continuationCrux: /^\|.*/,
     fill: /^.+?\s(.+)/,
     staticFill: /^[>#\.](.*)/,
     key: /^[":@-]*([\w\.-]+)/,

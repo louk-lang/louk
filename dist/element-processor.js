@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 function assignAttributes(content) {
     var elements = [];
-    var currentTag = {
+    var current = {
         attributes: {},
+        classification: null,
         matched: false,
         position: null,
     };
@@ -11,24 +12,32 @@ function assignAttributes(content) {
         var element = content[index];
         if (element.classification === "tag") {
             if (index > 0) {
-                elements.push(currentTag);
+                elements.push(current);
             }
-            currentTag = element;
-            currentTag.position = "opening";
-            currentTag.matched = false;
-            currentTag.attributes = {};
+            current = element;
+            current.position = "opening";
+            current.matched = false;
+            current.attributes = {};
         }
         else if (element.classification === "attribute") {
-            if (!currentTag.attributes[element.key]) {
-                currentTag.attributes[element.key] = {
-                    data: element.fill,
-                    directiveType: element.directiveType,
-                    interpretation: element.interpretation,
-                };
+            if (current.classification === "tag") {
+                if (!current.attributes[element.key]) {
+                    current.attributes[element.key] = {
+                        data: element.fill,
+                        directiveType: element.directiveType,
+                        interpretation: element.interpretation,
+                    };
+                }
             }
         }
+        else if (element.classification === "continuation") {
+            elements.push(current);
+            current = element;
+        }
     }
-    elements.push(currentTag);
+    if (current.classification !== null) {
+        elements.push(current);
+    }
     return elements;
 }
 exports.assignAttributes = assignAttributes;
@@ -125,3 +134,28 @@ function closingTag(element) {
     return element;
 }
 exports.closingTag = closingTag;
+function assignContinuations(elements) {
+    console.log(elements);
+    var currentLevel = 0;
+    var levelMap = {};
+    for (var index = 0; index < elements.length; index++) {
+        var element = elements[index];
+        if (element.classification === "tag") {
+            currentLevel = element.level;
+            levelMap[element.level] = index;
+        }
+        else if (element.classification === "continuation") {
+            var target = levelMap[element.level];
+            elements[target].continuations.push(element);
+        }
+    }
+    var prunedElements = [];
+    for (var _i = 0, elements_2 = elements; _i < elements_2.length; _i++) {
+        var element = elements_2[_i];
+        if (element.classification !== "continuation") {
+            prunedElements.push(element);
+        }
+    }
+    return prunedElements;
+}
+exports.assignContinuations = assignContinuations;

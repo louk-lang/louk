@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var patterns_1 = require("./patterns");
 var propertyDeterminer = require("./property-determiner");
 function breakLines(content) {
     return content.split("\n");
@@ -16,10 +17,21 @@ function deleteComments(lines) {
     return prunedLines;
 }
 exports.deleteComments = deleteComments;
-function objectifyLines(lines) {
-    var objectifiedLines = [];
+function deleteEmptyLines(lines) {
+    var prunedLines = [];
     for (var _i = 0, lines_2 = lines; _i < lines_2.length; _i++) {
         var line = lines_2[_i];
+        if (line.raw !== "" && !line.raw.match(patterns_1.default.emptyLine)) {
+            prunedLines.push(line);
+        }
+    }
+    return prunedLines;
+}
+exports.deleteEmptyLines = deleteEmptyLines;
+function objectifyLines(lines) {
+    var objectifiedLines = [];
+    for (var _i = 0, lines_3 = lines; _i < lines_3.length; _i++) {
+        var line = lines_3[_i];
         if (line !== "") {
             objectifiedLines.push({
                 raw: line,

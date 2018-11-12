@@ -69,6 +69,7 @@ function processSections(sections, options) {
         var section = sections_1[_i];
         section.marker.lines = lineProcessor.objectifyLines(section.marker.lines);
         section.marker.lines = lineProcessor.determineProperties(section.marker.lines);
+        section.marker.lines = lineProcessor.deleteEmptyLines(section.marker.lines);
         section.marker.lines = lineProcessor.deleteComments(section.marker.lines);
         section.marker.elements = elementProcessor.assignAttributes(section.marker.lines);
         if (options && options.langs && !section.marker.elements[0].attributes.lang) {
@@ -84,6 +85,7 @@ function processSections(sections, options) {
         section.elements = section.elements.concat(section.marker.elements);
         if (section.isLouk) {
             section.body.lines = lineProcessor.objectifyLines(section.body.lines);
+            section.body.lines = lineProcessor.deleteEmptyLines(section.body.lines);
             section.body.lines = lineProcessor.determineProperties(section.body.lines);
             section.body.lines = lineProcessor.deleteComments(section.body.lines);
             section.body.elements = elementProcessor.assignAttributes(section.body.lines);

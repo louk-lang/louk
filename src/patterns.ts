@@ -65,6 +65,9 @@ export default {
         // The capture group captures the comment.
         comment: /^\/\/(.*)/,
 
+        // Lines that consist only of whitespace characters. The capture group captures the full content.
+        emptyLine: /^(\s+)$/,
+
         // Characters that indicate the line should be interpretted as HTML
         html: /^([<])/,
 

@@ -3,7 +3,7 @@
 # Louk
 _Vue without the HTML_
 
-[![Build Status](https://img.shields.io/travis/louk-lang/louk.svg?style=flat-square)](https://travis-ci.org/louk-lang/louk)
+[![Build Status](https://img.shields.io/travis/louk-lang/louk.svg?branch=master&style=flat-square)](https://travis-ci.org/louk-lang/louk)
 [![Codecov](https://img.shields.io/codecov/c/github/louk-lang/louk.svg?style=flat-square)](https://codecov.io/gh/louk-lang/louk)
 [![Depfu](https://img.shields.io/depfu/louk-lang/louk.svg?style=flat-square)](https://depfu.com/repos/louk-lang/louk)
 [![Known Vulnerabilities](https://snyk.io/test/github/louk-lang/louk/badge.svg?targetFile=package.json&style=flat-square)](https://snyk.io/test/github/louk-lang/louk?targetFile=package.json)

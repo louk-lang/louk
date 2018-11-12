@@ -1,6 +1,6 @@
 {
     "name": "louk",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "Vue without the HTML",
     "main": "dist/index.js",
     "scripts": {

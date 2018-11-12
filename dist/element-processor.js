@@ -19,11 +19,13 @@ function assignAttributes(content) {
             currentTag.attributes = {};
         }
         else if (element.classification === "attribute") {
-            currentTag.attributes[element.key] = {
-                data: element.fill,
-                directiveType: element.directiveType,
-                interpretation: element.interpretation,
-            };
+            if (!currentTag.attributes[element.key]) {
+                currentTag.attributes[element.key] = {
+                    data: element.fill,
+                    directiveType: element.directiveType,
+                    interpretation: element.interpretation,
+                };
+            }
         }
     }
     elements.push(currentTag);

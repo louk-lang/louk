@@ -7,7 +7,7 @@ var louk = require(file("index.js"));
 var fs = require('fs');
 
 describe("Multiline", function(){
-    it.skip("should return a two-line element", function(){
+    it("should return a two-line element", function(){
         assert.equal(louk('a b\n| c'),'<a>{{b}}{{c}}</a>');
     });
     it.skip("should return a three-line element", function(){

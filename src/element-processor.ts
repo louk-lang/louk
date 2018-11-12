@@ -1,7 +1,8 @@
 export function assignAttributes(content) {
     const elements = [];
-    let currentTag = {
+    let current = {
         attributes: {},
+        classification: null,
         matched: false,
         position: null,
     };
@@ -12,26 +13,38 @@ export function assignAttributes(content) {
 
         if (element.classification === "tag") {
             if (index > 0) {
-                elements.push(currentTag);
+                elements.push(current);
             }
-            currentTag = element;
-            currentTag.position = "opening";
-            currentTag.matched = false;
-            currentTag.attributes = {};
+            current = element;
+            current.position = "opening";
+            current.matched = false;
+            current.attributes = {};
+
         } else if (element.classification === "attribute") {
 
             // If attribute already exists, don't overwrite it
-            if (!currentTag.attributes[element.key]) {
-                currentTag.attributes[element.key] = {
+            if (!current.attributes[element.key]) {
+                current.attributes[element.key] = {
                     data: element.fill,
                     directiveType: element.directiveType,
                     interpretation: element.interpretation,
                 };
             }
+        } else if (element.classification === "continuation") {
+            if (current.classification === "tag") {
+                elements.push(current);
+            } else if (current.classification === "tag") {
+                elements.push(current);
+            }
+            current = element;
         }
     }
 
-    elements.push(currentTag);
+    // Don't push the current tag if it's just the placeholder.
+    if (current.classification !== null) {
+        elements.push(current);
+    }
+    // console.log(elements)
     return elements;
 }
 

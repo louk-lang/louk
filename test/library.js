@@ -162,7 +162,10 @@ describe("Louk", function(){
     it("should remove a line with only whitespace", function(){
         assert.equal(louk('template,\n '),'<template></template>');
     });
-    it("should remove a line with only whitespace", function(){
+    it("should ignore duplicate attributes", function(){
+        assert.equal(louk('div\n"a b\n"a c'),'<div a="b"></div>');
+    });
+    it("should ignore duplicate shorthand attributes", function(){
         assert.equal(louk('div\n.abc\n.def'),'<div class="abc"></div>');
     });
 });

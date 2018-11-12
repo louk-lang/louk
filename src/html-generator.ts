@@ -2,7 +2,7 @@
 export function generateHTML(elements, options) {
 
     let html = "";
-
+    // console.log(elements)
     let keepWhitespace = true;
 
     if (options && options.whitespace != null) {
@@ -40,6 +40,15 @@ export function generateHTML(elements, options) {
 
             html = html + "\n" + passthroughContentString + "\n";
 
+        } else if (element.classification === "continuation") {
+            // console.log(element)
+
+            // If the body should be interpreted dynamically, we wrap it in Vue curly brackets
+            if (element.interpretation === "dynamic") {
+                html = html + "{{" + element.fill + "}}";
+            } else if (element.interpretation === "static") {
+                html = html + element.fill;
+            }
         } else {
             // Generate opening tags
             if (element.position === "opening" && element.key != null) {

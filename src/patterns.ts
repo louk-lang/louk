@@ -38,6 +38,9 @@ export default {
         // Crux of a Vue single-file component section.
         sectionCrux: /^(\w+),/,
 
+        // Cruxes that represent content wrapping from a previous line
+        continuationCrux: /^\|.*/,
+
         // FILLS
         // The fill is the "stuff" of the line: It's the content inside the element or the value of the attribute.
 

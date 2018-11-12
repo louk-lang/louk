@@ -39,13 +39,10 @@ export function objectifyLines(lines) {
     const objectifiedLines = [];
 
     for (const line of lines) {
-        if (line !== "") {
-            objectifiedLines.push({
-                raw: line,
-            });
-        }
+        objectifiedLines.push({
+            raw: line,
+        });
     }
-
     return objectifiedLines;
 }
 
@@ -69,6 +66,6 @@ export function determineProperties(lines) {
         lines[index].directiveType = propertyDeterminer.determineDirectiveType(lines[index]);
         lines[index].preceding = [];
     }
-
+    // console.log(lines)
     return lines;
 }

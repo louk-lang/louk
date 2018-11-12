@@ -116,6 +116,7 @@ export function assignMatches(elements) {
         }
 
     }
+
     // This is a special element we use to represent the end of the html
     const endElement = {
         preceding: [],
@@ -187,18 +188,17 @@ export function closingTag(element) {
 }
 
 export function assignContinuations(elements) {
-    console.log(elements)
     let currentLevel = 0;
     const levelMap = {};
     for (let index = 0; index < elements.length; index++) {
         const element = elements[index];
         if (element.classification === "tag") {
-            currentLevel = element.level;
-            levelMap[element.level] = index;
+            currentLevel = element.indent;
+            levelMap[element.indent] = index;
         } else if (element.classification === "continuation") {
             // console.log(content[index].continuations)
             // console.log(element);
-            const target = levelMap[element.level];
+            const target = levelMap[element.indent];
             elements[target].continuations.push(element);
         }
     }
@@ -208,6 +208,6 @@ export function assignContinuations(elements) {
             prunedElements.push(element);
         }
     }
-    // console.log(prunedElements[0]);
+    console.log(prunedElements);
     return prunedElements;
 }

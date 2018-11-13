@@ -49,23 +49,31 @@ export function assignAttributes(content) {
     return elements;
 }
 
-// Determines where matching closing tags need to be inserted
+/* Determines where matching closing tags need to be inserted, and stores those in the `preceding` property.
+Always returns an array that is one element longer than the input (with the last element being a special
+system element that includes the final closing tags. */
 export function assignMatches(elements) {
 
     // Temporarily stores the elements we know we need to insert when we reach the right point
     const elementsForInsertion = {};
+    // Level of the element we're currently looking at
     let level = 0;
+    // Maximum indentation level of unclosed element (not maximum level in document)
     let maxLevel = 0;
 
     for (const element of elements) {
 
-        let currentLevelElement = "";
+        // This is where the preceding elements will be temporarily stored.
+        element.preceding = [];
 
         // The level of indentation we're currently working at
         level = element.indent;
 
-        // If the level we're working at goes up, then the max level of open tags goes up.
-        // Note that it can jump up by more than 1 if indentation is improper
+        // The previous element at the same level as the element we're looking at.
+        let previousElementAtLevel = null;
+
+        /* If the level we're working at goes up, then the max level of open tags goes up.
+        Note that it can jump up by more than step at a time, depending on source indentation */
         if (level >= maxLevel) {
             maxLevel = level;
         }
@@ -73,12 +81,13 @@ export function assignMatches(elements) {
         // If there's already an element for insertion at this level, that means there's a previous element to close.
         if (elementsForInsertion[level]) {
             // We hold on to this element and push it into the preceding list later.
-            currentLevelElement = elementsForInsertion[level];
+            previousElementAtLevel = elementsForInsertion[level];
             delete elementsForInsertion[level];
         }
 
-        // For the element we're looking at, we remember we'll need to close it eventually.
-        if (!element.selfClosing) {
+        /* If the element we're currently looking at isn't self-closing and isn't a continuation line,
+        then we need to remember to close it eventually. */
+        if (!element.selfClosing && element.classification !== "continuation") {
             elementsForInsertion[level] = {
                 indent: element.indent,
                 key: element.key,
@@ -88,7 +97,9 @@ export function assignMatches(elements) {
             // Look for the next level of element (since levels can be skipped)
             for (let subindex = (level - 1); subindex >= 0; subindex--) {
                 if (elementsForInsertion[subindex]) {
-                    // Mark the closing tag one level up as containing an element.
+
+                    /* Mark the closing tag one level up as containing an element.
+                    This is used for determining where to put whitespace when constructing HTML. */
                     elementsForInsertion[subindex].containsElement = true;
                     break;
                 }
@@ -106,13 +117,8 @@ export function assignMatches(elements) {
             maxLevel--;
         }
 
-        // Just in case it doesn't exist for some elements
-        if (!element.preceding) {
-            element.preceding = [];
-        }
-
-        if (currentLevelElement) {
-            element.preceding.push(closingTag(currentLevelElement));
+        if (previousElementAtLevel) {
+            element.preceding.push(closingTag(previousElementAtLevel));
         }
 
     }
@@ -144,6 +150,7 @@ export function assignMatches(elements) {
     // Add the special end element to the end
     elements.push(endElement);
 
+    // Set contains element for all elements
     for (let index = 0; index < elements.length; index++) {
 
             // If we're not at the last element
@@ -157,6 +164,7 @@ export function assignMatches(elements) {
                 elements[index].containsElement = false;
             }
     }
+
     return elements;
 }
 

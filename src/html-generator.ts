@@ -29,6 +29,7 @@ export function generateHTML(elements, options) {
             // Do nothing; comments are completely discarded
         } else if (element.passthrough === true) {
 
+            // Passthrough elements are things like scripts and styles that should be left untouched.
             const passthroughContentArray = element.lines;
             if (passthroughContentArray[passthroughContentArray.length - 1] === "") {
                 passthroughContentArray.splice(-1, 1);
@@ -104,6 +105,8 @@ export function generateHTML(elements, options) {
                     }
                 }
 
+            } else if (element.classification === "continuation") {
+                html = html + renderFill(element.fill, element.interpretation);
             } else if (element.position === "closing" && element.key !== null) {
 
                 if (keepWhitespace && element.containsElement && element.whitespace) {

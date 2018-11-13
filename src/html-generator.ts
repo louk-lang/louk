@@ -86,18 +86,10 @@ export function generateHTML(elements, options) {
                 html = html + ">";
 
                 // If there's body content...
-                if (element.fill || (element.continuations && element.continuations.length > 0)) {
+                if (element.fill) {
 
-                    if (element.fill) {
-                        // If the body should be interpreted dynamically, we wrap it in Vue curly brackets
-                        html = html + renderFill(element.fill, element.interpretation)
-                    }
-
-                    if (element.continuations && element.continuations.length > 0) {
-                        for (const continuation of element.continuations) {
-                            html = html + renderFill(continuation.fill, continuation.interpretation)
-                        }
-                    }
+                    // If the body should be interpreted dynamically, we wrap it in Vue curly brackets
+                    html = html + renderFill(element.fill, element.interpretation);
 
                 } else {
                     if (keepWhitespace && element.containsElement) {

@@ -61,7 +61,13 @@ export function assignMatches(elements) {
     // Maximum indentation level of unclosed element (not maximum level in document)
     let maxLevel = 0;
 
-    for (const element of elements) {
+    for (let index = 0; index < elements.length; index++) {
+
+        const previousElement =  elements[index - 1] || null;
+
+        const element = elements[index];
+
+        const nextElement =  elements[index + 1] || null;
 
         // This is where the preceding elements will be temporarily stored.
         element.preceding = [];
@@ -78,8 +84,9 @@ export function assignMatches(elements) {
             maxLevel = level;
         }
 
-        // If there's already an element for insertion at this level, that means there's a previous element to close.
-        if (elementsForInsertion[level]) {
+        /* If there's already an element for insertion at this level and the current element is a tag,
+        that means there's a previous element to close. */
+        if (elementsForInsertion[level] && element.classification === "tag") {
             // We hold on to this element and push it into the preceding list later.
             previousElementAtLevel = elementsForInsertion[level];
             delete elementsForInsertion[level];
@@ -118,7 +125,10 @@ export function assignMatches(elements) {
         }
 
         if (previousElementAtLevel) {
-            element.preceding.push(closingTag(previousElementAtLevel));
+
+            if (element.classification === "tag") {
+                element.preceding.push(closingTag(previousElementAtLevel));
+            }
         }
 
     }
@@ -138,7 +148,6 @@ export function assignMatches(elements) {
 
     // We insert these elements in reverse
     remainingElements.reverse();
-
     for (const element of remainingElements) {
 
         // Some levels will be undefined. (This is expected.)
@@ -193,29 +202,4 @@ export function insertMatches(nestedElements) {
 export function closingTag(element) {
     element.position = "closing";
     return element;
-}
-
-export function assignContinuations(elements) {
-    let currentLevel = 0;
-    const levelMap = {};
-    for (let index = 0; index < elements.length; index++) {
-        const element = elements[index];
-        if (element.classification === "tag") {
-            currentLevel = element.indent;
-            levelMap[element.indent] = index;
-        } else if (element.classification === "continuation") {
-            // console.log(content[index].continuations)
-            // console.log(element);
-            const target = levelMap[element.indent];
-            elements[target].continuations.push(element);
-        }
-    }
-    const prunedElements = [];
-    for (const element of elements) {
-        if (element.classification !== "continuation") {
-            prunedElements.push(element);
-        }
-    }
-    console.log(prunedElements);
-    return prunedElements;
 }

@@ -106,7 +106,18 @@ export function generateHTML(elements, options) {
 
             } else if (element.classification === "continuation") {
 
-                html = html + element.whitespace + renderFill(element.fill, element.interpretation);
+                if (element.fill) {
+
+                    if (keepWhitespace) {
+                        html = html + "\n" +
+                        element.indentationUnit +
+                        renderFill(element.fill, element.interpretation) +
+                        "\n";
+                    } else {
+                        html = html + renderFill(element.fill, element.interpretation);
+                    }
+
+                }
 
             } else if (element.position === "closing" && element.key !== null) {
 

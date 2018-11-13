@@ -41,28 +41,28 @@ describe("Multiline", function(){
     it("should disregard attributes following continuations without whitespace", function(){
         assert.equal(louk('a\n| c\n#id',{whitespace:false}),'<a>{{c}}</a>');
     });
-    it.skip("should return a multiline element with a nested element with whitespace", function(){
+    it("should return a multiline element with a nested element with whitespace", function(){
         // console.log("<a>\n\t{{b}}\n\t<c>{{d}}</c>\n\t{{e}}\n</a>");
         assert.equal(louk('a b\n\tc d\n| e',{whitespace:true}),'<a>\n\t{{b}}\n\t<c>{{d}}</c>\n\t{{e}}\n</a>');
     });
     it("should return a multiline element with a nested element without whitespace", function(){
         assert.equal(louk('a b\n\tc d\n| e',{whitespace:false}),'<a>{{b}}<c>{{d}}</c>{{e}}</a>');
     });
-    it.skip("should return a multiline element with a multiline nested element with whitespace", function(){
+    it("should return a multiline element with a multiline nested element with whitespace", function(){
         // console.log("<a>\n\t{{b}}\n\t<c>{{d}}{{e}}</c>\n\t{{f}}\n</a>")
         assert.equal(louk('a b\n\tc d\n\t| e\n| f',{whitespace:true}),'<a>\n\t{{b}}\n\t<c>{{d}}{{e}}</c>\n\t{{f}}\n</a>');
     });
     it("should return a multiline element with a multiline nested element without whitespace", function(){
         assert.equal(louk('a b\n\tc d\n\t| e\n| f',{whitespace:false}),'<a>{{b}}<c>{{d}}{{e}}</c>{{f}}</a>');
     });
-    it.skip("should return a multiline element with two nested elements with whitespace", function(){
+    it("should return a multiline element with two nested elements with whitespace", function(){
         // console.log("<a>\n\t{{b}}\n\t<c>{{d}}{{e}}</c>\n\t<f>{{g}}</f>\n\t{{h}}\n</a>")
         assert.equal(louk('a b\n\tc d\n\t| e\n\tf g\n| h',{whitespace:true}),'<a>\n\t{{b}}\n\t<c>{{d}}{{e}}</c>\n\t<f>{{g}}</f>\n\t{{h}}\n</a>');
     });
     it("should return a multiline element with two nested elements without whitespace", function(){
         assert.equal(louk('a b\n\tc d\n\t| e\n\tf g\n| h',{whitespace:false}),'<a>{{b}}<c>{{d}}{{e}}</c><f>{{g}}</f>{{h}}</a>');
     });
-    it.skip("should handle multiline with multiple outdents with whitespace", function(){
+    it("should handle multiline with multiple outdents with whitespace", function(){
         // console.log("<a>\n\t<b>\n\t\t<c></c>\n\t</b>\n\t{{d}}\n</a>");
         assert.equal(louk('a\n\tb\n\t\tc\n| d',{whitespace:true}),'<a>\n\t<b>\n\t\t<c></c>\n\t</b>\n\t{{d}}\n</a>');
     });

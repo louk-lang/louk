@@ -2,9 +2,8 @@
 export function generateHTML(elements, options) {
 
     let html = "";
-    // console.log(elements)
-    let keepWhitespace = true;
 
+    let keepWhitespace = true;
     if (options && options.whitespace != null) {
         keepWhitespace = options.whitespace;
     }

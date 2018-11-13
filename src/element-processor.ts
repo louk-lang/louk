@@ -61,13 +61,7 @@ export function assignMatches(elements) {
     // Maximum indentation level of unclosed element (not maximum level in document)
     let maxLevel = 0;
 
-    for (let index = 0; index < elements.length; index++) {
-
-        const previousElement =  elements[index - 1] || null;
-
-        const element = elements[index];
-
-        const nextElement =  elements[index + 1] || null;
+    for (const element of elements) {
 
         // This is where the preceding elements will be temporarily stored.
         element.preceding = [];
@@ -124,11 +118,8 @@ export function assignMatches(elements) {
             maxLevel--;
         }
 
-        if (previousElementAtLevel) {
-
-            if (element.classification === "tag") {
-                element.preceding.push(closingTag(previousElementAtLevel));
-            }
+        if (previousElementAtLevel && element.classification === "tag") {
+            element.preceding.push(closingTag(previousElementAtLevel));
         }
 
     }

@@ -1,6 +1,7 @@
 // Turns the completed array of element objects into raw HTML
 export function generateHTML(elements, options) {
 
+    // As we iterate through the elements, the output will accumulate here.
     let html = "";
 
     let keepWhitespace = true;
@@ -41,6 +42,7 @@ export function generateHTML(elements, options) {
             html = html + "\n" + passthroughContentString + "\n";
 
         } else {
+
             // Generate opening tags
             if (element.position === "opening" && element.key != null) {
 
@@ -87,8 +89,14 @@ export function generateHTML(elements, options) {
                 // If there's body content...
                 if (element.fill) {
 
-                    // If the body should be interpreted dynamically, we wrap it in Vue curly brackets
-                    html = html + renderFill(element.fill, element.interpretation);
+                    if (keepWhitespace && element.containsElement) {
+                        html = html + "\n" +
+                        element.indentationUnit +
+                        renderFill(element.fill, element.interpretation) +
+                        "\n";
+                    } else {
+                        html = html + renderFill(element.fill, element.interpretation);
+                    }
 
                 } else {
                     if (keepWhitespace && element.containsElement) {
@@ -97,7 +105,9 @@ export function generateHTML(elements, options) {
                 }
 
             } else if (element.classification === "continuation") {
-                html = html + renderFill(element.fill, element.interpretation);
+
+                html = html + element.whitespace + renderFill(element.fill, element.interpretation);
+
             } else if (element.position === "closing" && element.key !== null) {
 
                 if (keepWhitespace && element.containsElement && element.whitespace) {

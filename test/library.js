@@ -60,6 +60,12 @@ describe("Louk", function(){
     it("should return an element with static content", function(){
         assert.equal(louk('a" b'),'<a>b</a>');
     });
+    it("should return an element with both a fill and a child element", function(){
+        assert.equal(louk('a b\n\tc'),'<a>\n\t{{b}}\n\t<c></c>\n</a>');
+    });
+    it("should return an element with both a fill and a child element without whitespace", function(){
+        assert.equal(louk('a b\n\tc',{whitespace:false}),'<a>{{b}}<c></c></a>');
+    });
     it("should return a self-closing element", function(){
         assert.equal(louk('a/'),'<a />');
     });

@@ -108,6 +108,9 @@ describe("Louk", function(){
     it("should pass through an HTML comment without whitespace", function(){
         assert.equal(louk('a\n<!-- b -->\nc',{whitespace:false}),'<a></a><!-- b --><c></c>');
     });
+    it("should handle skipped indentation levels", function(){
+        assert.equal(louk('a\n\t\t\tc',{whitespace:false}),'<a><c></c></a>');
+    });
     it("should process louk section content", function(){
         assert.equal(louk("template,\n\ta b\n\t.c"), '<template>\n\t<a class="c">{{b}}</a>\n</template>');
     });
@@ -158,5 +161,8 @@ describe("Louk", function(){
     });
     it("should remove a line with only whitespace", function(){
         assert.equal(louk('template,\n '),'<template></template>');
+    });
+    it("should remove a line with only whitespace", function(){
+        assert.equal(louk('div\n.abc\n.def'),'<div class="abc"></div>');
     });
 });

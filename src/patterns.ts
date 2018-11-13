@@ -32,7 +32,7 @@ export default {
         modifiedCrux: /^(.+?)\s/,
 
         // Shorthand cruxes that make their attribute static: > and # and .
-        // The first capture group gets the shorthand crux, the second capture group gets the fill.
+        // The capture group gets the shorthand crux.
         staticCrux: /^([>#\.]).*/,
 
         // Crux of a Vue single-file component section.

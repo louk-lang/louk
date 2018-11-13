@@ -19,11 +19,15 @@ export function assignAttributes(content) {
             currentTag.matched = false;
             currentTag.attributes = {};
         } else if (element.classification === "attribute") {
-            currentTag.attributes[element.key] = {
-                data: element.fill,
-                directiveType: element.directiveType,
-                interpretation: element.interpretation,
-            };
+
+            // If attribute already exists, don't overwrite it
+            if (!currentTag.attributes[element.key]) {
+                currentTag.attributes[element.key] = {
+                    data: element.fill,
+                    directiveType: element.directiveType,
+                    interpretation: element.interpretation,
+                };
+            }
         }
     }
 

@@ -52,6 +52,7 @@ export function determineProperties(lines) {
         lines[index].line = index;
         const indentInfo = propertyDeterminer.determineIndent(lines[index].raw);
         lines[index].whitespace = propertyDeterminer.determineWhitespace(lines[index]);
+        lines[index].indentationUnit = propertyDeterminer.determineIndentationUnit(lines[index]);
         lines[index].indent = indentInfo[0];
         lines[index].unindented = indentInfo[1];
         lines[index].lineType = propertyDeterminer.determineLineType(lines[index]);

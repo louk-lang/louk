@@ -180,6 +180,15 @@ export function determineLineType(line) {
     }
 }
 
+export function determineIndentationUnit(line) {
+    const whitespace = line.raw.match(patterns.whitespace)[1];
+    if (whitespace.length > 0) {
+        return whitespace[0];
+    } else {
+        return "\t";
+    }
+}
+
 export function determineWhitespace(line) {
     const whitespace = line.raw.match(patterns.whitespace)[1];
     return whitespace;

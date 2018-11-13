@@ -16,6 +16,11 @@ describe("Property Determiner", function(){
         assert.equal(propertyDeterminer.determineWhitespace({raw:'   a'}), '   ');
         assert.equal(propertyDeterminer.determineWhitespace({raw:'\t\tb'}), '\t\t');
     });
+    it("should determine indentation unit", function(){
+        assert.equal(propertyDeterminer.determineIndentationUnit({raw:'   a'}), ' ');
+        assert.equal(propertyDeterminer.determineIndentationUnit({raw:'\t\tb'}), '\t');
+        assert.equal(propertyDeterminer.determineIndentationUnit({raw:'c'}), '\t');
+    });
     it("should determine classifications", function(){
         assert.equal(propertyDeterminer.determineClassification({prefix:'@'}), 'attribute');
         assert.equal(propertyDeterminer.determineClassification({crux:'.'}), 'attribute');

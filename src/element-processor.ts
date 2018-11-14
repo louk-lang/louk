@@ -86,8 +86,8 @@ export function assignMatches(elements) {
             delete elementsForInsertion[level];
         }
 
-        if (element.classification === "continuation" && elementsForInsertion[level].containsElement) {
-            element.parentContainsElement = true;
+        if (element.classification === "continuation" && elementsForInsertion[level].containsTag) {
+            element.peerWithTag = true;
         }
 
         /* If the element we're currently looking at isn't self-closing and isn't a continuation line,
@@ -105,7 +105,7 @@ export function assignMatches(elements) {
 
                     /* Mark the closing tag one level up as containing an element.
                     This is used for determining where to put whitespace when constructing HTML. */
-                    elementsForInsertion[subindex].containsElement = true;
+                    elementsForInsertion[subindex].containsTag = true;
                     break;
                 }
             }
@@ -168,7 +168,7 @@ export function assignMatches(elements) {
                         elements[subindex].classification === "tag"
                         && elements[subindex].indent > elements[index].indent
                     ) {
-                        elements[index].containsElement = true;
+                        elements[index].containsTag = true;
                         break;
 
                     // If there's a tag that's at the same level or outdented, it definitely doesn't contain an element
@@ -176,13 +176,13 @@ export function assignMatches(elements) {
                         elements[subindex].classification === "tag"
                         && elements[subindex].indent <= elements[index].indent
                     ) {
-                        elements[index].containsElement = false;
+                        elements[index].containsTag = false;
                         break;
                     }
                 }
 
             } else {
-                elements[index].containsElement = false;
+                elements[index].containsTag = false;
             }
     }
     console.log(elements)

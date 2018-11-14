@@ -89,7 +89,7 @@ export function generateHTML(elements, options) {
                 // If there's body content...
                 if (element.fill) {
 
-                    if (keepWhitespace && element.containsElement) {
+                    if (keepWhitespace && element.containsTag) {
                         html = html + "\n" +
                         element.indentationUnit +
                         renderFill(element.fill, element.interpretation) +
@@ -99,7 +99,7 @@ export function generateHTML(elements, options) {
                     }
 
                 } else {
-                    if (keepWhitespace && element.containsElement) {
+                    if (keepWhitespace && element.containsTag) {
                         html = html +  "\n";
                     }
                 }
@@ -108,8 +108,8 @@ export function generateHTML(elements, options) {
 
                 if (element.fill) {
 
-                    if (keepWhitespace && element.parentContainsElement) {
-                        html = html + 
+                    if (keepWhitespace && element.peerWithTag) {
+                        html = html +
                         element.indentationUnit +
                         renderFill(element.fill, element.interpretation) +
                         "\n";
@@ -121,7 +121,7 @@ export function generateHTML(elements, options) {
 
             } else if (element.position === "closing" && element.key !== null) {
 
-                if (keepWhitespace && element.containsElement && element.whitespace) {
+                if (keepWhitespace && element.containsTag && element.whitespace) {
                     html = html + element.whitespace;
                 }
 

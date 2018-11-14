@@ -66,7 +66,8 @@ export function determineProperties(lines) {
         lines[index].fill = propertyDeterminer.determineFill(lines[index]);
         lines[index].directiveType = propertyDeterminer.determineDirectiveType(lines[index]);
         lines[index].preceding = [];
-        lines[index].continuations = [];
+        lines[index].containsElement = null;
+        lines[index].parentContainsElement = null;
     }
     // console.log(lines)
     return lines;

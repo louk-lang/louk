@@ -152,14 +152,31 @@ export function assignMatches(elements) {
 
     // Set contains element for all elements
     for (let index = 0; index < elements.length; index++) {
-
+            console.log(elements)
             // If we're not at the last element
             if (index < (elements.length - 1)) {
-                // If the element following the current one is indented farther than the current one
-                if (elements[index + 1].indent > elements[index].indent) {
-                    // Then the current element contains an element.
-                    elements[index].containsElement = true;
+
+                // We look through the elements following the current element
+                for (let subindex = index + 1; subindex < elements.length; subindex++) {
+
+                    // If there's a tag that's further indented, it definitively contains an element
+                    if (
+                        elements[subindex].classification === "tag"
+                        && elements[subindex].indent > elements[index].indent
+                    ) {
+                        elements[index].containsElement = true;
+                        break;
+
+                    // If there's a tag that's at the same level or outdented, it definitely doesn't contain an element
+                    } else if (
+                        elements[subindex].classification === "tag"
+                        && elements[subindex].indent <= elements[index].indent
+                    ) {
+                        elements[index].containsElement = false;
+                        break;
+                    }
                 }
+
             } else {
                 elements[index].containsElement = false;
             }

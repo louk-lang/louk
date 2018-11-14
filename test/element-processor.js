@@ -100,4 +100,116 @@ describe("Element Processor", function(){
     it("should assign the closing tag attribute", function(){
         assert.equal(elementProcessor.closingTag({}).position, "closing");
     });
+    it("should identify an element that contains another element", function(){
+        var input = [
+        { raw: 'div',
+          line: 0,
+          whitespace: '',
+          indent: 0,
+          unindented: 'div',
+          lineType: 'louk',
+          crux: 'div',
+          prefix: null,
+          classification: 'tag',
+          containsElement: false,
+          key: 'div',
+          interpretation: 'dynamic',
+          preceding: [] },
+        { raw: 'div',
+          line: 1,
+          whitespace: '\t',
+          indent: 1,
+          unindented: 'div',
+          lineType: 'louk',
+          crux: 'div',
+          prefix: null,
+          classification: 'tag',
+          containsElement: false,
+          key: 'div',
+          interpretation: 'dynamic',
+          preceding: [] }
+      ];
+      var processedElements = elementProcessor.assignMatches(input);
+      assert.equal(processedElements[1].containsElement, false);
+      assert.equal(processedElements[0].containsElement, true);
+      });
+      it("should identify an element that contains another element with a continuation", function(){
+          var input = [
+          { raw: 'div',
+            line: 0,
+            whitespace: '',
+            indent: 0,
+            unindented: 'div',
+            lineType: 'louk',
+            crux: 'div',
+            prefix: null,
+            classification: 'tag',
+            containsElement: false,
+            key: 'div',
+            interpretation: 'dynamic',
+            preceding: [] },
+          { raw: '| abc',
+            line: 1,
+            whitespace: '',
+            indent: 0,
+            unindented: '|',
+            lineType: 'louk',
+            crux: '|',
+            prefix: null,
+            classification: 'continuation',
+            containsElement: false,
+            key: '|',
+            interpretation: 'dynamic',
+            preceding: [] },
+          { raw: 'div',
+            line: 2,
+            whitespace: '\t',
+            indent: 1,
+            unindented: 'div',
+            lineType: 'louk',
+            crux: 'div',
+            prefix: null,
+            classification: 'tag',
+            containsElement: false,
+            key: 'div',
+            interpretation: 'dynamic',
+            preceding: [] }
+        ];
+        var processedElements = elementProcessor.assignMatches(input);
+        assert.equal(processedElements[2].containsElement, false);
+        assert.equal(processedElements[0].containsElement, true);
+        });
+        it("should identify an element that doesn't contain another element", function(){
+            var input = [
+            { raw: 'div',
+              line: 0,
+              whitespace: '\t',
+              indent: 1,
+              unindented: 'div',
+              lineType: 'louk',
+              crux: 'div',
+              prefix: null,
+              classification: 'tag',
+              containsElement: false,
+              key: 'div',
+              interpretation: 'dynamic',
+              preceding: [] },
+            { raw: 'div',
+              line: 1,
+              whitespace: '',
+              indent: 0,
+              unindented: 'div',
+              lineType: 'louk',
+              crux: 'div',
+              prefix: null,
+              classification: 'tag',
+              containsElement: false,
+              key: 'div',
+              interpretation: 'dynamic',
+              preceding: [] }
+          ];
+          var processedElements = elementProcessor.assignMatches(input);
+          assert.equal(processedElements[1].containsElement, false);
+          assert.equal(processedElements[0].containsElement, false);
+          });
 });

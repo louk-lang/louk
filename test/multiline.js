@@ -49,7 +49,7 @@ describe("Multiline", function(){
         assert.equal(louk('a b\n\tc d\n| e',{whitespace:false}),'<a>{{b}}<c>{{d}}</c>{{e}}</a>');
     });
     it("should return a multiline element with a multiline nested element with whitespace", function(){
-        // console.log("<a>\n\t{{b}}\n\t<c>{{d}}{{e}}</c>\n\t{{f}}\n</a>")
+        console.log("<a>\n\t{{b}}\n\t<c>{{d}}{{e}}</c>\n\t{{f}}\n</a>");
         assert.equal(louk('a b\n\tc d\n\t| e\n| f',{whitespace:true}),'<a>\n\t{{b}}\n\t<c>{{d}}{{e}}</c>\n\t{{f}}\n</a>');
     });
     it("should return a multiline element with a multiline nested element without whitespace", function(){

@@ -44,6 +44,7 @@ function determineProperties(lines) {
         lines[index].line = index;
         var indentInfo = propertyDeterminer.determineIndent(lines[index].raw);
         lines[index].whitespace = propertyDeterminer.determineWhitespace(lines[index]);
+        lines[index].indentationUnit = propertyDeterminer.determineIndentationUnit(lines[index]);
         lines[index].indent = indentInfo[0];
         lines[index].unindented = indentInfo[1];
         lines[index].lineType = propertyDeterminer.determineLineType(lines[index]);
@@ -57,8 +58,8 @@ function determineProperties(lines) {
         lines[index].fill = propertyDeterminer.determineFill(lines[index]);
         lines[index].directiveType = propertyDeterminer.determineDirectiveType(lines[index]);
         lines[index].preceding = [];
-        lines[index].continuations = [];
-        lines[index].extendedFill = null;
+        lines[index].containsTag = null;
+        lines[index].parentcontainsTag = null;
     }
     return lines;
 }

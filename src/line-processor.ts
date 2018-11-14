@@ -69,6 +69,6 @@ export function determineProperties(lines) {
         lines[index].containsTag = null;
         lines[index].parentcontainsTag = null;
     }
-    // console.log(lines)
+
     return lines;
 }

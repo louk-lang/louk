@@ -16,7 +16,7 @@ export function determineClassification(line) {
         return "attribute";
     } else if (line.prefix === ":") {
         return  "attribute";
-    } else if (line.crux === "|") {
+    } else if (line.crux === "|" || line.crux === '|"') {
         return  "continuation";
     } else {
         return  "tag";
@@ -104,14 +104,14 @@ export function determineIndent(line) {
 export function determineCrux(line) {
 
     if (line.lineType === "louk") {
-        if (line.unindented.match(patterns.staticCrux)) {
+        if (line.unindented.match(patterns.continuationCrux)) {
+            return line.unindented.match(patterns.continuationCrux)[1];
+        } else if (line.unindented.match(patterns.staticCrux)) {
             return line.unindented.match(patterns.staticCrux)[1];
         } else if (line.unindented.match(patterns.modifiedCrux)) {
             return line.unindented.match(patterns.modifiedCrux)[1];
         } else if (line.unindented.match(patterns.plainCrux)) {
             return line.unindented.match(patterns.plainCrux)[1];
-        } else if (line.unindented.match(patterns.continuationCrux)) {
-            return line.unindented.match(patterns.continuationCrux)[1];
         }
     } else {
         return null;

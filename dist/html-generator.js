@@ -65,25 +65,38 @@ function generateHTML(elements, options) {
                     html = html + " /";
                 }
                 html = html + ">";
-                if (element.fill || (element.continuations && element.continuations.length > 0)) {
-                    if (element.fill) {
-                        html = html + renderFill(element.fill, element.interpretation);
+                if (element.fill) {
+                    if (keepWhitespace && element.containsTag) {
+                        html = html + "\n" +
+                            element.indentationUnit +
+                            renderFill(element.fill, element.interpretation) +
+                            "\n";
                     }
-                    if (element.continuations && element.continuations.length > 0) {
-                        for (var _i = 0, _a = element.continuations; _i < _a.length; _i++) {
-                            var continuation = _a[_i];
-                            html = html + renderFill(continuation.fill, continuation.interpretation);
-                        }
+                    else {
+                        html = html + renderFill(element.fill, element.interpretation);
                     }
                 }
                 else {
-                    if (keepWhitespace && element.containsElement) {
+                    if (keepWhitespace && element.containsTag) {
                         html = html + "\n";
                     }
                 }
             }
+            else if (element.classification === "continuation") {
+                if (element.fill) {
+                    if (keepWhitespace && element.peerWithTag) {
+                        html = html +
+                            element.indentationUnit +
+                            renderFill(element.fill, element.interpretation) +
+                            "\n";
+                    }
+                    else {
+                        html = html + renderFill(element.fill, element.interpretation);
+                    }
+                }
+            }
             else if (element.position === "closing" && element.key !== null) {
-                if (keepWhitespace && element.containsElement && element.whitespace) {
+                if (keepWhitespace && element.containsTag && element.whitespace) {
                     html = html + element.whitespace;
                 }
                 html = html + "</" + element.key + ">";

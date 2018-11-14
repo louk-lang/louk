@@ -89,7 +89,6 @@ function processSections(sections, options) {
             section.body.lines = lineProcessor.determineProperties(section.body.lines);
             section.body.lines = lineProcessor.deleteComments(section.body.lines);
             section.body.elements = elementProcessor.assignAttributes(section.body.lines);
-            section.body.elements = elementProcessor.assignContinuations(section.body.elements);
             section.elements = section.elements.concat(section.body.elements);
         }
         else {

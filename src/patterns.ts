@@ -23,7 +23,8 @@ export default {
         // CRUXES
         // The crux is the string present in the source Louk that indicates what the line represents.
         // It is most commonly the same as the content before the first space or new line.
-        // However, shorthands like "#" and "." are important exceptions.
+        // However, shorthands like `#` and `.` are important exceptions.
+        // Cruxes include suffixes, such as `"`.
 
         // Cruxes not followed by content, such as "a"
         plainCrux: /^(.+)/,
@@ -39,7 +40,7 @@ export default {
         sectionCrux: /^(\w+),/,
 
         // Cruxes that represent content wrapping from a previous line
-        continuationCrux: /^\|.*/,
+        continuationCrux: /^(\|"?).*/,
 
         // FILLS
         // The fill is the "stuff" of the line: It's the content inside the element or the value of the attribute.

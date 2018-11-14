@@ -47,16 +47,20 @@ function assignMatches(elements) {
     var maxLevel = 0;
     for (var _i = 0, elements_1 = elements; _i < elements_1.length; _i++) {
         var element = elements_1[_i];
-        var currentLevelElement = "";
+        element.preceding = [];
         level = element.indent;
+        var previousElementAtLevel = null;
         if (level >= maxLevel) {
             maxLevel = level;
         }
-        if (elementsForInsertion[level]) {
-            currentLevelElement = elementsForInsertion[level];
+        if (elementsForInsertion[level] && element.classification === "tag") {
+            previousElementAtLevel = elementsForInsertion[level];
             delete elementsForInsertion[level];
         }
-        if (!element.selfClosing) {
+        if (element.classification === "continuation" && elementsForInsertion[level].containsTag) {
+            element.peerWithTag = true;
+        }
+        if (!element.selfClosing && element.classification !== "continuation") {
             elementsForInsertion[level] = {
                 indent: element.indent,
                 key: element.key,
@@ -64,7 +68,7 @@ function assignMatches(elements) {
             };
             for (var subindex = (level - 1); subindex >= 0; subindex--) {
                 if (elementsForInsertion[subindex]) {
-                    elementsForInsertion[subindex].containsElement = true;
+                    elementsForInsertion[subindex].containsTag = true;
                     break;
                 }
             }
@@ -76,11 +80,8 @@ function assignMatches(elements) {
             }
             maxLevel--;
         }
-        if (!element.preceding) {
-            element.preceding = [];
-        }
-        if (currentLevelElement) {
-            element.preceding.push(closingTag(currentLevelElement));
+        if (previousElementAtLevel && element.classification === "tag") {
+            element.preceding.push(closingTag(previousElementAtLevel));
         }
     }
     var endElement = {
@@ -101,12 +102,21 @@ function assignMatches(elements) {
     elements.push(endElement);
     for (var index = 0; index < elements.length; index++) {
         if (index < (elements.length - 1)) {
-            if (elements[index + 1].indent > elements[index].indent) {
-                elements[index].containsElement = true;
+            for (var subindex = index + 1; subindex < elements.length; subindex++) {
+                if (elements[subindex].classification === "tag"
+                    && elements[subindex].indent > elements[index].indent) {
+                    elements[index].containsTag = true;
+                    break;
+                }
+                else if (elements[subindex].classification === "tag"
+                    && elements[subindex].indent <= elements[index].indent) {
+                    elements[index].containsTag = false;
+                    break;
+                }
             }
         }
         else {
-            elements[index].containsElement = false;
+            elements[index].containsTag = false;
         }
     }
     return elements;
@@ -134,28 +144,3 @@ function closingTag(element) {
     return element;
 }
 exports.closingTag = closingTag;
-function assignContinuations(elements) {
-    console.log(elements);
-    var currentLevel = 0;
-    var levelMap = {};
-    for (var index = 0; index < elements.length; index++) {
-        var element = elements[index];
-        if (element.classification === "tag") {
-            currentLevel = element.level;
-            levelMap[element.level] = index;
-        }
-        else if (element.classification === "continuation") {
-            var target = levelMap[element.level];
-            elements[target].continuations.push(element);
-        }
-    }
-    var prunedElements = [];
-    for (var _i = 0, elements_2 = elements; _i < elements_2.length; _i++) {
-        var element = elements_2[_i];
-        if (element.classification !== "continuation") {
-            prunedElements.push(element);
-        }
-    }
-    return prunedElements;
-}
-exports.assignContinuations = assignContinuations;

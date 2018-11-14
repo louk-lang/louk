@@ -45,7 +45,6 @@ export function assignAttributes(content) {
     if (current.classification !== null) {
         elements.push(current);
     }
-    // console.log(elements)
     return elements;
 }
 
@@ -185,7 +184,7 @@ export function assignMatches(elements) {
                 elements[index].containsTag = false;
             }
     }
-    console.log(elements)
+
     return elements;
 }
 

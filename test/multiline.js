@@ -14,6 +14,9 @@ describe("Multiline", function(){
     it("should return a two-line element without whitespace", function(){
         assert.equal(louk('a b\n| c',{whitespace:false}),'<a>{{b}}{{c}}</a>');
     });
+    it("should return a two-line element with static content", function(){
+        assert.equal(louk('a" b\n|" c'),'<a>bc</a>');
+    });
     it("should return a two-line element and single-line element with whitespace", function(){
         assert.equal(louk('a b\n| c\nd e',{whitespace:true}),'<a>{{b}}{{c}}</a>\n<d>{{e}}</d>');
     });
@@ -45,7 +48,6 @@ describe("Multiline", function(){
         assert.equal(louk('a b\n\tc d\n| e',{whitespace:false}),'<a>{{b}}<c>{{d}}</c>{{e}}</a>');
     });
     it("should return a multiline element with a multiline nested element with whitespace", function(){
-        console.log("<a>\n\t{{b}}\n\t<c>{{d}}{{e}}</c>\n\t{{f}}\n</a>");
         assert.equal(louk('a b\n\tc d\n\t| e\n| f',{whitespace:true}),'<a>\n\t{{b}}\n\t<c>{{d}}{{e}}</c>\n\t{{f}}\n</a>');
     });
     it("should return a multiline element with a multiline nested element without whitespace", function(){

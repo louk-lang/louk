@@ -86,6 +86,22 @@ export function assignMatches(elements) {
             delete elementsForInsertion[level];
         }
 
+        if (element.classification === "continuation" && elementsForInsertion[level].containsElement) {
+            element.parentContainsElement = true;
+        } else {
+
+            // Look for the next level of element (since levels can be skipped)
+            for (let index = (level - 1); index >= 0; index--) {
+                if (elementsForInsertion[index] && elementsForInsertion[index].containsElement) {
+
+                    /* Mark that the parent of this item (which might be continuation)
+                    contains an actual element (i.e. a tag) */
+                    element.parentContainsElement = true;
+                    break;
+                }
+            }
+        }
+
         /* If the element we're currently looking at isn't self-closing and isn't a continuation line,
         then we need to remember to close it eventually. */
         if (!element.selfClosing && element.classification !== "continuation") {
@@ -152,7 +168,7 @@ export function assignMatches(elements) {
 
     // Set contains element for all elements
     for (let index = 0; index < elements.length; index++) {
-            console.log(elements)
+
             // If we're not at the last element
             if (index < (elements.length - 1)) {
 

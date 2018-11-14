@@ -108,8 +108,8 @@ export function generateHTML(elements, options) {
 
                 if (element.fill) {
 
-                    if (keepWhitespace) {
-                        html = html + "\n" +
+                    if (keepWhitespace && element.parentContainsElement) {
+                        html = html + 
                         element.indentationUnit +
                         renderFill(element.fill, element.interpretation) +
                         "\n";

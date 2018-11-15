@@ -2,11 +2,9 @@
 ------------------
 - Support for multiline content.
 
-1.1.0
+1.0.2
 ------------------
 - Always use the first attribute value declared for an element.
-- Update dependencies.
-- Increase test coverage.
 
 1.0.1
 ------------------

@@ -83,7 +83,7 @@ function generateHTML(elements, options) {
                 }
             }
             else if (element.classification === "continuation") {
-                if (element.fill) {
+                if (element.fill && element.anchored) {
                     if (keepWhitespace && element.peerWithTag) {
                         html = html +
                             element.indentationUnit +

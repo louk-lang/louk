@@ -57,7 +57,15 @@ function assignMatches(elements) {
             previousElementAtLevel = elementsForInsertion[level];
             delete elementsForInsertion[level];
         }
-        if (element.classification === "continuation" && elementsForInsertion[level].containsTag) {
+        if (element.classification === "continuation" && !elementsForInsertion[level]) {
+            element.anchored = false;
+        }
+        else {
+            element.anchored = true;
+        }
+        if (element.classification === "continuation" &&
+            elementsForInsertion[level] &&
+            elementsForInsertion[level].containsTag) {
             element.peerWithTag = true;
         }
         if (!element.selfClosing && element.classification !== "continuation") {

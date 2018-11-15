@@ -25,7 +25,7 @@ describe("Section Processor", function(){
     it("should identify the body of a section", function(){
         assert.equal(sectionProcessor.findSections(["template,",'\t"a'])[0].body.lines[0], '\t"a');
     });
-    it("Process sections", function(){
+    it("should process the lines in section markers and bodies", function(){
         var unprocessedSections = [{
             body: { elements: [], lines: ["\ta","\t\tb"] },
             elements: [],
@@ -39,7 +39,7 @@ describe("Section Processor", function(){
         // And two elements in the body ("a" and "b")
         assert.equal(processedSections[0].body.elements.length, 2);
     });
-    it("Flatten element", function(){
+    it("should flatten nested elements", function(){
         assert.equal(sectionProcessor.flattenElements([{elements:[1,2]},{elements:[3,4]}]).length, 4);
     });
 });

@@ -65,4 +65,7 @@ describe("Multiline", function(){
     it("should handle multiline with multiple outdents without whitespace", function(){
         assert.equal(louk('a\n\tb\n\t\tc\n| d',{whitespace:false}),'<a><b><c></c></b>{{d}}</a>');
     });
+    it("should ignore an unparented continuation", function(){
+        assert.equal(louk('a\n\t| b',{whitespace:false}),'<a></a>');
+    });
 });

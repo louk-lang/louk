@@ -106,7 +106,8 @@ export function generateHTML(elements, options) {
 
             } else if (element.classification === "continuation") {
 
-                if (element.fill) {
+                // If the continuation has a fill and is anchored to an element...
+                if (element.fill && element.anchored) {
 
                     if (keepWhitespace && element.peerWithTag) {
                         html = html +

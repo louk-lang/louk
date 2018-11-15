@@ -85,7 +85,20 @@ export function assignMatches(elements) {
             delete elementsForInsertion[level];
         }
 
-        if (element.classification === "continuation" && elementsForInsertion[level].containsTag) {
+        // If a continuation doesn't have a parent, mark it as unanchored.
+        if (
+            element.classification === "continuation" && !elementsForInsertion[level]) {
+            element.anchored = false;
+        } else {
+            element.anchored = true;
+        }
+
+        // If a continuation's parent has an element, record this for use when determining whitespace later.
+        if (
+            element.classification === "continuation" &&
+            elementsForInsertion[level] &&
+            elementsForInsertion[level].containsTag
+        ) {
             element.peerWithTag = true;
         }
 

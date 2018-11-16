@@ -68,4 +68,7 @@ describe("Multiline", function(){
     it("should ignore an unparented continuation", function(){
         assert.equal(louk('a\n\t| b',{whitespace:false}),'<a></a>');
     });
+    it.skip("should handle an indented element following a continuation", function(){
+        assert.equal(louk('div\n| a\n\tdiv'),'<div>\n\t{{a}}\n\t<div></div>\n<div></div>');
+    });
 });

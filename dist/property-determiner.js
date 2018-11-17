@@ -11,6 +11,9 @@ function determineClassification(line) {
     else if (line.crux === ">") {
         return "attribute";
     }
+    else if (line.prefix === "'") {
+        return "attribute";
+    }
     else if (line.prefix === '"') {
         return "attribute";
     }
@@ -22,6 +25,9 @@ function determineClassification(line) {
     }
     else if (line.prefix === ":") {
         return "attribute";
+    }
+    else if (line.crux === "|" || line.crux === '|"') {
+        return "continuation";
     }
     else {
         return "tag";
@@ -72,7 +78,8 @@ function determineSelfClosing(line) {
 exports.determineSelfClosing = determineSelfClosing;
 function determineInterpretation(line) {
     if (line.lineType === "louk") {
-        if (line.classification === "tag" && line.suffix && line.suffix.match(patterns_1.default.staticSuffix)) {
+        if ((line.classification === "tag" || line.classification === "continuation") &&
+            line.suffix && line.suffix.match(patterns_1.default.staticSuffix)) {
             return "static";
         }
         else if (line.crux && line.crux.match(patterns_1.default.staticCrux)) {
@@ -102,7 +109,10 @@ function determineIndent(line) {
 exports.determineIndent = determineIndent;
 function determineCrux(line) {
     if (line.lineType === "louk") {
-        if (line.unindented.match(patterns_1.default.staticCrux)) {
+        if (line.unindented.match(patterns_1.default.continuationCrux)) {
+            return line.unindented.match(patterns_1.default.continuationCrux)[1];
+        }
+        else if (line.unindented.match(patterns_1.default.staticCrux)) {
             return line.unindented.match(patterns_1.default.staticCrux)[1];
         }
         else if (line.unindented.match(patterns_1.default.modifiedCrux)) {
@@ -157,6 +167,9 @@ function determineKey(line) {
         else if (line.crux === ">") {
             return "href";
         }
+        else if (line.crux === "|") {
+            return "";
+        }
         else if (line.unindented.match(patterns_1.default.key)) {
             return line.unindented.match(patterns_1.default.key)[1];
         }
@@ -178,6 +191,16 @@ function determineLineType(line) {
     }
 }
 exports.determineLineType = determineLineType;
+function determineIndentationUnit(line) {
+    var whitespace = line.raw.match(patterns_1.default.whitespace)[1];
+    if (whitespace.length > 0) {
+        return whitespace[0];
+    }
+    else {
+        return "\t";
+    }
+}
+exports.determineIndentationUnit = determineIndentationUnit;
 function determineWhitespace(line) {
     var whitespace = line.raw.match(patterns_1.default.whitespace)[1];
     return whitespace;

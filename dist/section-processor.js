@@ -49,8 +49,13 @@ function findSections(lines) {
         }
         else if (line.match(patterns_1.default.unindented) && section.isMarked) {
             section.marker.lines.push(line);
-            if (line.match(patterns_1.default.loukLangAttribute)) {
-                section.isLouk = true;
+            if (line.match(patterns_1.default.langAttribute)) {
+                if (line.match(patterns_1.default.langAttribute)[1] === "louk") {
+                    section.isLouk = true;
+                }
+                else {
+                    section.isLouk = false;
+                }
             }
         }
         else if (section.isLouk) {

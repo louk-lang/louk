@@ -39,48 +39,69 @@ function generateHTML(elements, options) {
                 }
                 html = html + "<";
                 html = html + element.key;
-                Object.keys(element.attributes).forEach(function (key) {
-                    var attributeInfo = element.attributes[key];
-                    var attribute = "";
-                    if (attributeInfo.interpretation === "dynamic") {
-                        if (attributeInfo.directiveType === "simple") {
-                            attribute = "v-" + key;
+                if (element.attributes) {
+                    Object.keys(element.attributes).forEach(function (key) {
+                        var attributeInfo = element.attributes[key];
+                        var attribute = "";
+                        if (attributeInfo.interpretation === "dynamic") {
+                            if (attributeInfo.directiveType === "simple") {
+                                attribute = "v-" + key;
+                            }
+                            else if (attributeInfo.directiveType === "action") {
+                                attribute = "v-on:" + key;
+                            }
+                            else if (attributeInfo.directiveType === "bind") {
+                                attribute = "v-bind:" + key;
+                            }
                         }
-                        else if (attributeInfo.directiveType === "action") {
-                            attribute = "v-on:" + key;
+                        else if (attributeInfo.interpretation === "static") {
+                            attribute = key;
                         }
-                        else if (attributeInfo.directiveType === "bind") {
-                            attribute = "v-bind:" + key;
+                        html = html + " " + attribute;
+                        if (attributeInfo.data) {
+                            html = html + "=\"" + attributeInfo.data + "\"";
                         }
-                    }
-                    else if (attributeInfo.interpretation === "static") {
-                        attribute = key;
-                    }
-                    html = html + " " + attribute;
-                    if (attributeInfo.data) {
-                        html = html + "=\"" + attributeInfo.data + "\"";
-                    }
-                });
+                    });
+                }
                 if (element.selfClosing) {
                     html = html + " /";
                 }
                 html = html + ">";
+                if (element.selfClosing && keepWhitespace && index < (elements.length - 1)) {
+                    html = html + "\n";
+                }
                 if (element.fill) {
-                    if (element.interpretation === "dynamic") {
-                        html = html + "{{" + element.fill + "}}";
+                    if (keepWhitespace && element.containsTag) {
+                        html = html + "\n" +
+                            element.indentationUnit +
+                            renderFill(element.fill, element.interpretation) +
+                            "\n";
                     }
-                    else if (element.interpretation === "static") {
-                        html = html + element.fill;
+                    else {
+                        html = html + renderFill(element.fill, element.interpretation);
                     }
                 }
                 else {
-                    if (keepWhitespace && element.containsElement) {
+                    if (keepWhitespace && element.containsTag) {
                         html = html + "\n";
                     }
                 }
             }
+            else if (element.classification === "continuation") {
+                if (element.fill && element.anchored) {
+                    if (keepWhitespace && element.peerWithTag) {
+                        html = html +
+                            element.indentationUnit +
+                            renderFill(element.fill, element.interpretation) +
+                            "\n";
+                    }
+                    else {
+                        html = html + renderFill(element.fill, element.interpretation);
+                    }
+                }
+            }
             else if (element.position === "closing" && element.key !== null) {
-                if (keepWhitespace && element.containsElement && element.whitespace) {
+                if (keepWhitespace && element.containsTag && element.whitespace) {
                     html = html + element.whitespace;
                 }
                 html = html + "</" + element.key + ">";
@@ -96,3 +117,12 @@ function generateHTML(elements, options) {
     return html;
 }
 exports.generateHTML = generateHTML;
+function renderFill(fill, interpretation) {
+    if (interpretation === "dynamic") {
+        return "{{" + fill + "}}";
+    }
+    else if (interpretation === "static") {
+        return fill;
+    }
+}
+exports.renderFill = renderFill;

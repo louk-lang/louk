@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 function assignAttributes(content) {
     var elements = [];
-    var currentTag = {
+    var current = {
         attributes: {},
+        classification: null,
         matched: false,
         position: null,
     };
@@ -11,24 +12,32 @@ function assignAttributes(content) {
         var element = content[index];
         if (element.classification === "tag") {
             if (index > 0) {
-                elements.push(currentTag);
+                elements.push(current);
             }
-            currentTag = element;
-            currentTag.position = "opening";
-            currentTag.matched = false;
-            currentTag.attributes = {};
+            current = element;
+            current.position = "opening";
+            current.matched = false;
+            current.attributes = {};
         }
         else if (element.classification === "attribute") {
-            if (!currentTag.attributes[element.key]) {
-                currentTag.attributes[element.key] = {
-                    data: element.fill,
-                    directiveType: element.directiveType,
-                    interpretation: element.interpretation,
-                };
+            if (current.classification === "tag") {
+                if (!current.attributes[element.key]) {
+                    current.attributes[element.key] = {
+                        data: element.fill,
+                        directiveType: element.directiveType,
+                        interpretation: element.interpretation,
+                    };
+                }
             }
         }
+        else if (element.classification === "continuation") {
+            elements.push(current);
+            current = element;
+        }
     }
-    elements.push(currentTag);
+    if (current.classification !== null) {
+        elements.push(current);
+    }
     return elements;
 }
 exports.assignAttributes = assignAttributes;
@@ -38,24 +47,36 @@ function assignMatches(elements) {
     var maxLevel = 0;
     for (var _i = 0, elements_1 = elements; _i < elements_1.length; _i++) {
         var element = elements_1[_i];
-        var currentLevelElement = "";
+        element.preceding = [];
         level = element.indent;
+        var previousElementAtLevel = null;
         if (level >= maxLevel) {
             maxLevel = level;
         }
-        if (elementsForInsertion[level]) {
-            currentLevelElement = elementsForInsertion[level];
+        if (elementsForInsertion[level] && element.classification === "tag") {
+            previousElementAtLevel = elementsForInsertion[level];
             delete elementsForInsertion[level];
         }
-        if (!element.selfClosing) {
+        if (element.classification === "continuation" && !elementsForInsertion[level]) {
+            element.anchored = false;
+        }
+        else {
+            element.anchored = true;
+        }
+        if (element.classification === "continuation" &&
+            elementsForInsertion[level] &&
+            elementsForInsertion[level].containsTag) {
+            element.peerWithTag = true;
+        }
+        if (!element.selfClosing && element.classification !== "continuation") {
             elementsForInsertion[level] = {
                 indent: element.indent,
                 key: element.key,
                 whitespace: element.whitespace,
             };
-            for (var subindex = (level - 1); subindex >= 0; subindex--) {
-                if (elementsForInsertion[subindex]) {
-                    elementsForInsertion[subindex].containsElement = true;
+            for (var subindexA = (level - 1); subindexA >= 0; subindexA--) {
+                if (elementsForInsertion[subindexA]) {
+                    elementsForInsertion[subindexA].containsTag = true;
                     break;
                 }
             }
@@ -67,11 +88,8 @@ function assignMatches(elements) {
             }
             maxLevel--;
         }
-        if (!element.preceding) {
-            element.preceding = [];
-        }
-        if (currentLevelElement) {
-            element.preceding.push(closingTag(currentLevelElement));
+        if (previousElementAtLevel && element.classification === "tag") {
+            element.preceding.push(closingTag(previousElementAtLevel));
         }
     }
     var endElement = {
@@ -92,12 +110,21 @@ function assignMatches(elements) {
     elements.push(endElement);
     for (var index = 0; index < elements.length; index++) {
         if (index < (elements.length - 1)) {
-            if (elements[index + 1].indent > elements[index].indent) {
-                elements[index].containsElement = true;
+            for (var subindexB = index + 1; subindexB < elements.length; subindexB++) {
+                if (elements[subindexB].classification === "tag" &&
+                    elements[subindexB].indent > elements[index].indent) {
+                    elements[index].containsTag = true;
+                    break;
+                }
+                else if (elements[subindexB].classification === "tag" &&
+                    elements[subindexB].indent <= elements[index].indent) {
+                    elements[index].containsTag = false;
+                    break;
+                }
             }
         }
         else {
-            elements[index].containsElement = false;
+            elements[index].containsTag = false;
         }
     }
     return elements;

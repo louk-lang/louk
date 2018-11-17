@@ -3,12 +3,12 @@ export default {
         // PREFIXES
         // Prefixes are nonalphabetic modifiers that precede the key.
 
-        // All valid prefixes: " and : and @ and -
+        // All valid prefixes: ' and : and @ and - (and previously ")
         // Shorthands like . and # are not prefixes, they are cruxes.
-        prefix: /^([":@-])/,
+        prefix: /^(['":@-])/,
 
-        // Prefixes that can make an attribute static: "
-        staticPrefix: /^(["])/,
+        // Prefixes that can make an attribute static: ' (and previously ")
+        staticPrefix: /^(['"])/,
 
         // SUFFIXES
         // Suffixes are nonalphabetic modifiers that follow the key.
@@ -23,7 +23,8 @@ export default {
         // CRUXES
         // The crux is the string present in the source Louk that indicates what the line represents.
         // It is most commonly the same as the content before the first space or new line.
-        // However, shorthands like "#" and "." are important exceptions.
+        // However, shorthands like `#` and `.` are important exceptions.
+        // Cruxes include suffixes, such as `"`.
 
         // Cruxes not followed by content, such as "a"
         plainCrux: /^(.+)/,
@@ -38,6 +39,9 @@ export default {
         // Crux of a Vue single-file component section.
         sectionCrux: /^(\w+),/,
 
+        // Cruxes that represent content wrapping from a previous line
+        continuationCrux: /^(\|"?).*/,
+
         // FILLS
         // The fill is the "stuff" of the line: It's the content inside the element or the value of the attribute.
 
@@ -51,12 +55,12 @@ export default {
         // A key is semantically what a line of Louk ultimately represents: A specific tag or a specific attribute.
         // A key might be implied or it might have a shorthand. For example, "." is a crux, and "class" is its key.
 
-        key: /^[":@-]*([\w\.-]+)/,
+        key: /^['":@-]*([\w\.-]+)/,
 
         // OTHER
 
         // Louk attribute, for use while parsing sections
-        loukLangAttribute: /"lang louk/,
+        langAttribute: /['"]lang (.*)\s?/,
 
         // Used to recognize that something is an unindented Vue section marker, HTML tag, or HTML comment
         unindentedElement: /^[\w<]/,

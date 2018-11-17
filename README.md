@@ -103,11 +103,11 @@ Action directives are denoted by a leading at sign.
 
 ### Escaping & Statics
 
-Content can be made static by escaping the tag with a trailing quote mark.
+Content can be made static by escaping the tag with a trailing double quote mark.
 
 `p" Hello world!` becomes `<p>Hello world!</p>`
 
-Attributes can be made static by escaping the attribute name with a leading quote mark.
+Attributes can be made static by escaping the attribute name with a leading single quote mark.
 
 `"type text/css` becomes `type="text/css"`
 
@@ -119,11 +119,33 @@ Additionally, the `class`, `id`, and `href` attributes can be made static by esc
 
 `>https://example.org` becomes `href="https://example.org"`
 
+### Multiline
+
+Element content can extend to additional lines by beginning the line with a vertical pipe and space, at the same indentation level as the element tag, before any directives or attributes.
+
+```html
+//louk
+div a
+.outer
+    span b
+    .inner
+| c
+
+//html
+<div class="outer">
+    {{a}}
+    <span class="inner">{{b}}</span>
+    {{c}}
+</div>
+```
+
+Multiline content can be made static by following the vertical pipe with a double quote mark (`|"`).
+
 ### Component Sections
 
 Single file component sections are denoted with a trailing comma, and must be unindented. Only the `template` section will have its contents parsed as Louk.
 
-```
+```html
 //louk
 template,
     <!-- Template goes here -->

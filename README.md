@@ -109,7 +109,7 @@ Content can be made static by escaping the tag with a trailing double quote mark
 
 Attributes can be made static by escaping the attribute name with a leading single quote mark.
 
-`"type text/css` becomes `type="text/css"`
+`'type text/css` becomes `type="text/css"`
 
 Additionally, the `class`, `id`, and `href` attributes can be made static by escaping the attribute value with a leading period, pound sign, or closing angle bracket, respectively.
 
@@ -121,21 +121,31 @@ Additionally, the `class`, `id`, and `href` attributes can be made static by esc
 
 ### Multiline
 
-Element content can extend to additional lines by beginning the line with a vertical pipe and space, at the same indentation level as the element tag, before any directives or attributes.
+Element content can extend to additional lines by beginning the additional lines with a vertical pipe and space, at the same indentation level as the element tag, after any directives or attributes.
 
 ```html
 //louk
 div a
-.outer
+.xyz
+| b
+
+//html
+<div class="xyz">{{a}}{{b}}</div>
+```
+
+Elements can be nested inside multiline content.
+
+```html
+//louk
+div a
     span b
-    .inner
 | c
 
 //html
-<div class="outer">
-    {{a}}
-    <span class="inner">{{b}}</span>
-    {{c}}
+<div>
+	{{a}}
+    <span>{{b}}</span>
+	{{c}}
 </div>
 ```
 
@@ -220,7 +230,7 @@ template,
         @click greet
 
 script,
-"lang ts
+'lang ts
 
     export default {
       methods:{
@@ -232,7 +242,7 @@ script,
     }
 
 style,
-"scoped
+'scoped
 
     button{
         background-color: blue;

@@ -13,7 +13,7 @@ exports.default = {
     fill: /^.+?\s(.+)/,
     staticFill: /^[>#\.](.*)/,
     key: /^['":@-]*([\w\.-]+)/,
-    loukLangAttribute: /"lang louk/,
+    langAttribute: /['"]lang (.*)\s?/,
     unindentedElement: /^[\w<]/,
     comment: /^\/\/(.*)/,
     emptyLine: /^(\s+)$/,

@@ -39,32 +39,37 @@ function generateHTML(elements, options) {
                 }
                 html = html + "<";
                 html = html + element.key;
-                Object.keys(element.attributes).forEach(function (key) {
-                    var attributeInfo = element.attributes[key];
-                    var attribute = "";
-                    if (attributeInfo.interpretation === "dynamic") {
-                        if (attributeInfo.directiveType === "simple") {
-                            attribute = "v-" + key;
+                if (element.attributes) {
+                    Object.keys(element.attributes).forEach(function (key) {
+                        var attributeInfo = element.attributes[key];
+                        var attribute = "";
+                        if (attributeInfo.interpretation === "dynamic") {
+                            if (attributeInfo.directiveType === "simple") {
+                                attribute = "v-" + key;
+                            }
+                            else if (attributeInfo.directiveType === "action") {
+                                attribute = "v-on:" + key;
+                            }
+                            else if (attributeInfo.directiveType === "bind") {
+                                attribute = "v-bind:" + key;
+                            }
                         }
-                        else if (attributeInfo.directiveType === "action") {
-                            attribute = "v-on:" + key;
+                        else if (attributeInfo.interpretation === "static") {
+                            attribute = key;
                         }
-                        else if (attributeInfo.directiveType === "bind") {
-                            attribute = "v-bind:" + key;
+                        html = html + " " + attribute;
+                        if (attributeInfo.data) {
+                            html = html + "=\"" + attributeInfo.data + "\"";
                         }
-                    }
-                    else if (attributeInfo.interpretation === "static") {
-                        attribute = key;
-                    }
-                    html = html + " " + attribute;
-                    if (attributeInfo.data) {
-                        html = html + "=\"" + attributeInfo.data + "\"";
-                    }
-                });
+                    });
+                }
                 if (element.selfClosing) {
                     html = html + " /";
                 }
                 html = html + ">";
+                if (element.selfClosing && keepWhitespace && index < (elements.length - 1)) {
+                    html = html + "\n";
+                }
                 if (element.fill) {
                     if (keepWhitespace && element.containsTag) {
                         html = html + "\n" +

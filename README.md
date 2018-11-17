@@ -141,9 +141,9 @@ div a
 ```
 ```html
 <div>
-	{{a}}
+    {{a}}
     <span>{{b}}</span>
-	{{c}}
+    {{c}}
 </div>
 ```
 

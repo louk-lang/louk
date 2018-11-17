@@ -5,6 +5,7 @@ function assignAttributes(content) {
     var current = {
         attributes: {},
         classification: null,
+        indent: null,
         matched: false,
         position: null,
     };
@@ -20,7 +21,7 @@ function assignAttributes(content) {
             current.attributes = {};
         }
         else if (element.classification === "attribute") {
-            if (current.classification === "tag") {
+            if (current.classification === "tag" && current.indent === element.indent) {
                 if (!current.attributes[element.key]) {
                     current.attributes[element.key] = {
                         data: element.fill,

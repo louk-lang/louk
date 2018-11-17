@@ -3,6 +3,7 @@ export function assignAttributes(content) {
     let current = {
         attributes: {},
         classification: null,
+        indent: null,
         matched: false,
         position: null,
     };
@@ -23,7 +24,7 @@ export function assignAttributes(content) {
         } else if (element.classification === "attribute") {
 
             // Only process attributes if the current element is a tag
-            if (current.classification === "tag") {
+            if (current.classification === "tag" && current.indent === element.indent) {
 
                 // If attribute already exists, don't overwrite it
                 if (!current.attributes[element.key]) {
@@ -86,8 +87,7 @@ export function assignMatches(elements) {
         }
 
         // If a continuation doesn't have a parent, mark it as unanchored.
-        if (
-            element.classification === "continuation" && !elementsForInsertion[level]) {
+        if (element.classification === "continuation" && !elementsForInsertion[level]) {
             element.anchored = false;
         } else {
             element.anchored = true;

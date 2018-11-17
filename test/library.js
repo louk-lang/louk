@@ -174,4 +174,8 @@ describe("Louk", function(){
     it("should ignore duplicate shorthand attributes", function(){
         assert.equal(louk('div\n.abc\n.def'),'<div class="abc"></div>');
     });
+    it("should ignore unanchored attributes", function(){
+        assert.equal(louk('div\n\t.class'),'<div></div>');
+        assert.equal(louk('div\n\tdiv\n.class'),'<div>\n\t<div></div>\n</div>');
+    });
 });

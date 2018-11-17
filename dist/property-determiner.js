@@ -75,8 +75,8 @@ function determineSelfClosing(line) {
 exports.determineSelfClosing = determineSelfClosing;
 function determineInterpretation(line) {
     if (line.lineType === "louk") {
-        if ((line.classification === "tag" || line.classification === "continuation")
-            && line.suffix && line.suffix.match(patterns_1.default.staticSuffix)) {
+        if ((line.classification === "tag" || line.classification === "continuation") &&
+            line.suffix && line.suffix.match(patterns_1.default.staticSuffix)) {
             return "static";
         }
         else if (line.crux && line.crux.match(patterns_1.default.staticCrux)) {

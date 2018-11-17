@@ -8,6 +8,8 @@ export function determineClassification(line) {
         return "attribute";
     } else if (line.crux === ">") {
         return "attribute";
+    } else if (line.prefix === "'") {
+        return  "attribute";
     } else if (line.prefix === '"') {
         return  "attribute";
     } else if (line.prefix === "-") {
@@ -26,7 +28,6 @@ export function determineClassification(line) {
 export function determinePrefix(line) {
 
     if (line.lineType === "louk") {
-
         const matches = line.crux.match(patterns.prefix);
         if (matches) {
             return matches[1];

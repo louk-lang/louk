@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
-    prefix: /^([":@-])/,
-    staticPrefix: /^(["])/,
+    prefix: /^(['":@-])/,
+    staticPrefix: /^(['"])/,
     suffix: /(["/,])$/,
     staticSuffix: /(["/,])$/,
     plainCrux: /^(.+)/,
@@ -12,7 +12,7 @@ exports.default = {
     continuationCrux: /^(\|"?).*/,
     fill: /^.+?\s(.+)/,
     staticFill: /^[>#\.](.*)/,
-    key: /^[":@-]*([\w\.-]+)/,
+    key: /^['":@-]*([\w\.-]+)/,
     loukLangAttribute: /"lang louk/,
     unindentedElement: /^[\w<]/,
     comment: /^\/\/(.*)/,

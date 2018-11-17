@@ -1,6 +1,6 @@
 {
     "name": "louk",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "description": "Vue without the HTML",
     "main": "dist/index.js",
     "scripts": {
@@ -27,10 +27,10 @@
         "markunit": "^1.0.0",
         "mocha": "^5.2.0",
         "nyc": "^13.1.0",
+        "stryker-javascript-mutator": "^0.11.4",
         "stryker": "^0.32.0",
         "stryker-api": "^0.21.5",
         "stryker-html-reporter": "^0.16.7",
-        "stryker-javascript-mutator": "^0.11.2",
         "stryker-mocha-framework": "^0.12.5",
         "stryker-mocha-runner": "^0.15.0",
         "stryker-typescript": "^0.15.4",

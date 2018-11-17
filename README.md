@@ -103,11 +103,11 @@ Action directives are denoted by a leading at sign.
 
 ### Escaping & Statics
 
-Content can be made static by escaping the tag with a trailing quote mark.
+Content can be made static by escaping the tag with a trailing double quote mark.
 
 `p" Hello world!` becomes `<p>Hello world!</p>`
 
-Attributes can be made static by escaping the attribute name with a leading quote mark.
+Attributes can be made static by escaping the attribute name with a leading single quote mark.
 
 `"type text/css` becomes `type="text/css"`
 
@@ -139,7 +139,7 @@ div a
 </div>
 ```
 
-Multiline content can be made static by following the vertical pipe with a quote mark (`|"`).
+Multiline content can be made static by following the vertical pipe with a double quote mark (`|"`).
 
 ### Component Sections
 

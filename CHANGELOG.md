@@ -1,3 +1,7 @@
+2.0.3
+------------------
+- Documentation legibility is improved.
+
 2.0.2
 ------------------
 - Unanchored attributes (attributes whose indentation don't match a preceding tag) are now properly discarded.

@@ -74,9 +74,9 @@ function assignMatches(elements) {
                 key: element.key,
                 whitespace: element.whitespace,
             };
-            for (var subindex = (level - 1); subindex >= 0; subindex--) {
-                if (elementsForInsertion[subindex]) {
-                    elementsForInsertion[subindex].containsTag = true;
+            for (var subindexA = (level - 1); subindexA >= 0; subindexA--) {
+                if (elementsForInsertion[subindexA]) {
+                    elementsForInsertion[subindexA].containsTag = true;
                     break;
                 }
             }
@@ -110,14 +110,14 @@ function assignMatches(elements) {
     elements.push(endElement);
     for (var index = 0; index < elements.length; index++) {
         if (index < (elements.length - 1)) {
-            for (var subindex = index + 1; subindex < elements.length; subindex++) {
-                if (elements[subindex].classification === "tag"
-                    && elements[subindex].indent > elements[index].indent) {
+            for (var subindexB = index + 1; subindexB < elements.length; subindexB++) {
+                if (elements[subindexB].classification === "tag" &&
+                    elements[subindexB].indent > elements[index].indent) {
                     elements[index].containsTag = true;
                     break;
                 }
-                else if (elements[subindex].classification === "tag"
-                    && elements[subindex].indent <= elements[index].indent) {
+                else if (elements[subindexB].classification === "tag" &&
+                    elements[subindexB].indent <= elements[index].indent) {
                     elements[index].containsTag = false;
                     break;
                 }

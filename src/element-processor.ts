@@ -112,12 +112,12 @@ export function assignMatches(elements) {
             };
 
             // Look for the next level of element (since levels can be skipped)
-            for (let subindex = (level - 1); subindex >= 0; subindex--) {
-                if (elementsForInsertion[subindex]) {
+            for (let subindexA = (level - 1); subindexA >= 0; subindexA--) {
+                if (elementsForInsertion[subindexA]) {
 
                     /* Mark the closing tag one level up as containing an element.
                     This is used for determining where to put whitespace when constructing HTML. */
-                    elementsForInsertion[subindex].containsTag = true;
+                    elementsForInsertion[subindexA].containsTag = true;
                     break;
                 }
             }
@@ -173,20 +173,20 @@ export function assignMatches(elements) {
             if (index < (elements.length - 1)) {
 
                 // We look through the elements following the current element
-                for (let subindex = index + 1; subindex < elements.length; subindex++) {
+                for (let subindexB = index + 1; subindexB < elements.length; subindexB++) {
 
                     // If there's a tag that's further indented, it definitively contains an element
                     if (
-                        elements[subindex].classification === "tag"
-                        && elements[subindex].indent > elements[index].indent
+                        elements[subindexB].classification === "tag" &&
+                        elements[subindexB].indent > elements[index].indent
                     ) {
                         elements[index].containsTag = true;
                         break;
 
                     // If there's a tag that's at the same level or outdented, it definitely doesn't contain an element
                     } else if (
-                        elements[subindex].classification === "tag"
-                        && elements[subindex].indent <= elements[index].indent
+                        elements[subindexB].classification === "tag" &&
+                        elements[subindexB].indent <= elements[index].indent
                     ) {
                         elements[index].containsTag = false;
                         break;

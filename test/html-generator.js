@@ -80,4 +80,32 @@ describe("HTML Generator", function(){
         ];
         assert.equal(htmlGenerator.generateHTML(input), '<a class="b"></a>');
     });
+    it("should follow a self-closing element with a newline", function(){
+        var input = [
+            {
+                unindented: 'img',
+                lineType: 'louk',
+                crux: 'img',
+                selfClosing: true,
+                key: 'img',
+                interpretation: 'static',
+                fill: '',
+                directiveType: '',
+                position: 'opening',
+            },
+            {
+                unindented: 'a',
+                lineType: 'louk',
+                crux: 'a',
+                selfClosing: false,
+                key: 'a',
+                interpretation: 'dynamic',
+                fill: '',
+                directiveType: '',
+                position: 'opening',
+            },
+            { key: 'a', position: 'closing' }
+        ];
+        assert.equal(htmlGenerator.generateHTML(input, {keepWhitespace: true}), '<img />\n<a></a>');
+    });
 });

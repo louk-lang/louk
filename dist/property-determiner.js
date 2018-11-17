@@ -11,6 +11,9 @@ function determineClassification(line) {
     else if (line.crux === ">") {
         return "attribute";
     }
+    else if (line.prefix === "'") {
+        return "attribute";
+    }
     else if (line.prefix === '"') {
         return "attribute";
     }

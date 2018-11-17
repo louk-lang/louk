@@ -23,7 +23,7 @@ describe("Patterns", function(){
     it("should match a static prefix", function(){
         assert.equal("\"abc".match(patterns.staticPrefix)[1], "\"");
         assert.equal("\'abc".match(patterns.staticPrefix)[1], "\'");
-        assert.equal("\&abc".match(patterns.staticPrefix)[1], null);
+        assert.equal("\&abc".match(patterns.staticPrefix), null);
     });
     it("should match a suffix", function(){
         assert.equal("abc/".match(patterns.suffix)[1], "/");

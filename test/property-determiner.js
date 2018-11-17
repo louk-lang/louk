@@ -30,6 +30,7 @@ describe("Property Determiner", function(){
     it("should determine prefixes", function(){
         assert.equal(propertyDeterminer.determinePrefix({lineType:'comment'}), null);
         assert.equal(propertyDeterminer.determinePrefix({lineType:'louk',crux:'@click'}), '@');
+        assert.equal(propertyDeterminer.determinePrefix({lineType:'louk',crux:"'a"}), "'");
     });
     it("should determine suffixes", function(){
         assert.equal(propertyDeterminer.determineSuffix({lineType:'comment'}), null);
@@ -58,7 +59,8 @@ describe("Property Determiner", function(){
         assert.equal(propertyDeterminer.determineInterpretation({lineType:'comment'}), null);
         assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',classification:'tag',suffix:'"'}), "static");
         assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',crux:'.a'}), "static");
-        assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',classification:'attribute',crux:'#a'}), "static");
+        assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',prefix:"#",classification:'attribute',crux:'#a'}), "static");
+        assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',prefix:"'",classification:'attribute'}), "static");
         assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',classification:'continuation',crux:'|'}), "dynamic");
         assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',classification:'continuation',crux:'|"',suffix:'"'}), "static");
         assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk'}), "dynamic");

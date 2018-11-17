@@ -4,7 +4,7 @@
 
 2.0.1
 ------------------
-- Documentation improvements
+- Documentation examples are improved.
 
 2.0.0
 ------------------

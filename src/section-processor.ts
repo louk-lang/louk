@@ -38,7 +38,6 @@ export function findSections(lines) {
             section.isMarked = true;
 
             section.marker.lines.push(line);
-
             // Pull out the section type
             section.marker.tag = line.match(patterns.sectionCrux)[1];
 
@@ -64,8 +63,12 @@ export function findSections(lines) {
         } else if (line.match(patterns.unindented) && section.isMarked) {
 
             section.marker.lines.push(line);
-            if (line.match(patterns.loukLangAttribute)) {
-                section.isLouk = true;
+            if (line.match(patterns.langAttribute)) {
+                if (line.match(patterns.langAttribute)[1] === "louk") {
+                    section.isLouk = true;
+                } else {
+                    section.isLouk = false;
+                }
             }
         } else if (section.isLouk) {
             section.body.lines.push(line);

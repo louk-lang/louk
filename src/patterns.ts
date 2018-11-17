@@ -60,7 +60,7 @@ export default {
         // OTHER
 
         // Louk attribute, for use while parsing sections
-        loukLangAttribute: /"lang louk/,
+        langAttribute: /['"]lang (.*)\s?/,
 
         // Used to recognize that something is an unindented Vue section marker, HTML tag, or HTML comment
         unindentedElement: /^[\w<]/,

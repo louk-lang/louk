@@ -7,7 +7,7 @@ var elementProcessor = require(file("element-processor"));
 
 var fs = require('fs');
 
-describe("Multiline", function(){
+describe("Louk (multiline)", function(){
     it("should return a two-line element with whitespace", function(){
         assert.equal(louk('a b\n| c',{whitespace:true}),'<a>{{b}}{{c}}</a>');
     });

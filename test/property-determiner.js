@@ -23,6 +23,8 @@ describe("Property Determiner", function(){
     });
     it("should determine classifications", function(){
         assert.equal(propertyDeterminer.determineClassification({prefix:'@'}), 'attribute');
+        assert.equal(propertyDeterminer.determineClassification({prefix:'\''}), 'attribute');
+        assert.equal(propertyDeterminer.determineClassification({prefix:'-'}), 'attribute');
         assert.equal(propertyDeterminer.determineClassification({crux:'.'}), 'attribute');
         assert.equal(propertyDeterminer.determineClassification({crux:'|'}), 'continuation');
         assert.equal(propertyDeterminer.determineClassification({raw: 'a'}), 'tag');

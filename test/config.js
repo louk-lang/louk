@@ -1,4 +1,4 @@
-var testTarget = "../src/";
+var testTarget = "../dist/";
 
 var chai = require("chai");
 var assert = chai.assert;

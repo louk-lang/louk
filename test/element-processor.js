@@ -50,7 +50,7 @@ describe("Element Processor", function(){
     it("should mark the last element as not containing any elements", function(){
         var input = [{},{}];
         var processedElements = elementProcessor.assignMatches(input);
-        assert.equal(processedElements[processedElements.length-1].containsElement, false);
+        assert.equal(processedElements[processedElements.length-1].containsTag, false);
     });
     it("should insert matches", function(){
         var input = [
@@ -94,10 +94,122 @@ describe("Element Processor", function(){
             attributes: {} },
           { preceding: [ [] ],
             system: 'end',
-            containsElement: false } ];
+            containsTag: false } ];
             assert.equal(elementProcessor.insertMatches(input).length, 4);
         });
     it("should assign the closing tag attribute", function(){
         assert.equal(elementProcessor.closingTag({}).position, "closing");
     });
+    it("should identify an element that contains another element", function(){
+        var input = [
+        { raw: 'div',
+          line: 0,
+          whitespace: '',
+          indent: 0,
+          unindented: 'div',
+          lineType: 'louk',
+          crux: 'div',
+          prefix: null,
+          classification: 'tag',
+          containsTag: false,
+          key: 'div',
+          interpretation: 'dynamic',
+          preceding: [] },
+        { raw: 'div',
+          line: 1,
+          whitespace: '\t',
+          indent: 1,
+          unindented: 'div',
+          lineType: 'louk',
+          crux: 'div',
+          prefix: null,
+          classification: 'tag',
+          containsTag: false,
+          key: 'div',
+          interpretation: 'dynamic',
+          preceding: [] }
+      ];
+      var processedElements = elementProcessor.assignMatches(input);
+      assert.equal(processedElements[1].containsTag, false);
+      assert.equal(processedElements[0].containsTag, true);
+      });
+      it("should identify an element that contains another element with a continuation", function(){
+          var input = [
+          { raw: 'div',
+            line: 0,
+            whitespace: '',
+            indent: 0,
+            unindented: 'div',
+            lineType: 'louk',
+            crux: 'div',
+            prefix: null,
+            classification: 'tag',
+            containsTag: false,
+            key: 'div',
+            interpretation: 'dynamic',
+            preceding: [] },
+          { raw: '| abc',
+            line: 1,
+            whitespace: '',
+            indent: 0,
+            unindented: '|',
+            lineType: 'louk',
+            crux: '|',
+            prefix: null,
+            classification: 'continuation',
+            containsTag: false,
+            key: '|',
+            interpretation: 'dynamic',
+            preceding: [] },
+          { raw: 'div',
+            line: 2,
+            whitespace: '\t',
+            indent: 1,
+            unindented: 'div',
+            lineType: 'louk',
+            crux: 'div',
+            prefix: null,
+            classification: 'tag',
+            containsTag: false,
+            key: 'div',
+            interpretation: 'dynamic',
+            preceding: [] }
+        ];
+        var processedElements = elementProcessor.assignMatches(input);
+        assert.equal(processedElements[2].containsTag, false);
+        assert.equal(processedElements[0].containsTag, true);
+        });
+        it("should identify an element that doesn't contain another element", function(){
+            var input = [
+            { raw: 'div',
+              line: 0,
+              whitespace: '\t',
+              indent: 1,
+              unindented: 'div',
+              lineType: 'louk',
+              crux: 'div',
+              prefix: null,
+              classification: 'tag',
+              containsTag: false,
+              key: 'div',
+              interpretation: 'dynamic',
+              preceding: [] },
+            { raw: 'div',
+              line: 1,
+              whitespace: '',
+              indent: 0,
+              unindented: 'div',
+              lineType: 'louk',
+              crux: 'div',
+              prefix: null,
+              classification: 'tag',
+              containsTag: false,
+              key: 'div',
+              interpretation: 'dynamic',
+              preceding: [] }
+          ];
+          var processedElements = elementProcessor.assignMatches(input);
+          assert.equal(processedElements[1].containsTag, false);
+          assert.equal(processedElements[0].containsTag, false);
+          });
 });

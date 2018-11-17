@@ -1,3 +1,7 @@
+2.0.0
+------------------
+- Support for multiline content.
+
 1.0.2
 ------------------
 - Always use the first attribute value declared for an element.

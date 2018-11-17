@@ -47,6 +47,11 @@ describe("Patterns", function(){
         assert.equal("abc,".match(patterns.sectionCrux)[0], "abc,");
         assert.equal("abc$".match(patterns.sectionCrux), null);
     });
+    it("should match a continuation crux", function(){
+        assert.equal("| abc".match(patterns.continuationCrux)[1], "|");
+        assert.equal('|" abc'.match(patterns.continuationCrux)[1], "|\"");
+        assert.equal("abc|".match(patterns.continuationCrux), null);
+    });
     it("should match a fill", function(){
         assert.equal("abc def".match(patterns.fill)[1], "def");
         assert.equal("#def".match(patterns.fill), null);

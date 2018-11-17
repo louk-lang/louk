@@ -1,7 +1,8 @@
 export function assignAttributes(content) {
     const elements = [];
-    let currentTag = {
+    let current = {
         attributes: {},
+        classification: null,
         matched: false,
         position: null,
     };
@@ -12,59 +13,98 @@ export function assignAttributes(content) {
 
         if (element.classification === "tag") {
             if (index > 0) {
-                elements.push(currentTag);
+                elements.push(current);
             }
-            currentTag = element;
-            currentTag.position = "opening";
-            currentTag.matched = false;
-            currentTag.attributes = {};
+            current = element;
+            current.position = "opening";
+            current.matched = false;
+            current.attributes = {};
+
         } else if (element.classification === "attribute") {
 
-            // If attribute already exists, don't overwrite it
-            if (!currentTag.attributes[element.key]) {
-                currentTag.attributes[element.key] = {
-                    data: element.fill,
-                    directiveType: element.directiveType,
-                    interpretation: element.interpretation,
-                };
+            // Only process attributes if the current element is a tag
+            if (current.classification === "tag") {
+
+                // If attribute already exists, don't overwrite it
+                if (!current.attributes[element.key]) {
+                    current.attributes[element.key] = {
+                        data: element.fill,
+                        directiveType: element.directiveType,
+                        interpretation: element.interpretation,
+                    };
+                }
             }
+
+        } else if (element.classification === "continuation") {
+            elements.push(current);
+            current = element;
         }
     }
 
-    elements.push(currentTag);
+    // Don't push the current tag if it's just the placeholder.
+    if (current.classification !== null) {
+        elements.push(current);
+    }
     return elements;
 }
 
-// Determines where matching closing tags need to be inserted
+/* Determines where matching closing tags need to be inserted, and stores those in the `preceding` property.
+Always returns an array that is one element longer than the input (with the last element being a special
+system element that includes the final closing tags. */
 export function assignMatches(elements) {
 
     // Temporarily stores the elements we know we need to insert when we reach the right point
     const elementsForInsertion = {};
+    // Level of the element we're currently looking at
     let level = 0;
+    // Maximum indentation level of unclosed element (not maximum level in document)
     let maxLevel = 0;
 
     for (const element of elements) {
 
-        let currentLevelElement = "";
+        // This is where the preceding elements will be temporarily stored.
+        element.preceding = [];
 
         // The level of indentation we're currently working at
         level = element.indent;
 
-        // If the level we're working at goes up, then the max level of open tags goes up.
-        // Note that it can jump up by more than 1 if indentation is improper
+        // The previous element at the same level as the element we're looking at.
+        let previousElementAtLevel = null;
+
+        /* If the level we're working at goes up, then the max level of open tags goes up.
+        Note that it can jump up by more than step at a time, depending on source indentation */
         if (level >= maxLevel) {
             maxLevel = level;
         }
 
-        // If there's already an element for insertion at this level, that means there's a previous element to close.
-        if (elementsForInsertion[level]) {
+        /* If there's already an element for insertion at this level and the current element is a tag,
+        that means there's a previous element to close. */
+        if (elementsForInsertion[level] && element.classification === "tag") {
             // We hold on to this element and push it into the preceding list later.
-            currentLevelElement = elementsForInsertion[level];
+            previousElementAtLevel = elementsForInsertion[level];
             delete elementsForInsertion[level];
         }
 
-        // For the element we're looking at, we remember we'll need to close it eventually.
-        if (!element.selfClosing) {
+        // If a continuation doesn't have a parent, mark it as unanchored.
+        if (
+            element.classification === "continuation" && !elementsForInsertion[level]) {
+            element.anchored = false;
+        } else {
+            element.anchored = true;
+        }
+
+        // If a continuation's parent has an element, record this for use when determining whitespace later.
+        if (
+            element.classification === "continuation" &&
+            elementsForInsertion[level] &&
+            elementsForInsertion[level].containsTag
+        ) {
+            element.peerWithTag = true;
+        }
+
+        /* If the element we're currently looking at isn't self-closing and isn't a continuation line,
+        then we need to remember to close it eventually. */
+        if (!element.selfClosing && element.classification !== "continuation") {
             elementsForInsertion[level] = {
                 indent: element.indent,
                 key: element.key,
@@ -72,10 +112,12 @@ export function assignMatches(elements) {
             };
 
             // Look for the next level of element (since levels can be skipped)
-            for (let subindex = (level - 1); subindex >= 0; subindex--) {
-                if (elementsForInsertion[subindex]) {
-                    // Mark the closing tag one level up as containing an element.
-                    elementsForInsertion[subindex].containsElement = true;
+            for (let subindexA = (level - 1); subindexA >= 0; subindexA--) {
+                if (elementsForInsertion[subindexA]) {
+
+                    /* Mark the closing tag one level up as containing an element.
+                    This is used for determining where to put whitespace when constructing HTML. */
+                    elementsForInsertion[subindexA].containsTag = true;
                     break;
                 }
             }
@@ -92,16 +134,12 @@ export function assignMatches(elements) {
             maxLevel--;
         }
 
-        // Just in case it doesn't exist for some elements
-        if (!element.preceding) {
-            element.preceding = [];
-        }
-
-        if (currentLevelElement) {
-            element.preceding.push(closingTag(currentLevelElement));
+        if (previousElementAtLevel && element.classification === "tag") {
+            element.preceding.push(closingTag(previousElementAtLevel));
         }
 
     }
+
     // This is a special element we use to represent the end of the html
     const endElement = {
         preceding: [],
@@ -117,7 +155,6 @@ export function assignMatches(elements) {
 
     // We insert these elements in reverse
     remainingElements.reverse();
-
     for (const element of remainingElements) {
 
         // Some levels will be undefined. (This is expected.)
@@ -129,19 +166,38 @@ export function assignMatches(elements) {
     // Add the special end element to the end
     elements.push(endElement);
 
+    // Set contains element for all elements
     for (let index = 0; index < elements.length; index++) {
 
             // If we're not at the last element
             if (index < (elements.length - 1)) {
-                // If the element following the current one is indented farther than the current one
-                if (elements[index + 1].indent > elements[index].indent) {
-                    // Then the current element contains an element.
-                    elements[index].containsElement = true;
+
+                // We look through the elements following the current element
+                for (let subindexB = index + 1; subindexB < elements.length; subindexB++) {
+
+                    // If there's a tag that's further indented, it definitively contains an element
+                    if (
+                        elements[subindexB].classification === "tag" &&
+                        elements[subindexB].indent > elements[index].indent
+                    ) {
+                        elements[index].containsTag = true;
+                        break;
+
+                    // If there's a tag that's at the same level or outdented, it definitely doesn't contain an element
+                    } else if (
+                        elements[subindexB].classification === "tag" &&
+                        elements[subindexB].indent <= elements[index].indent
+                    ) {
+                        elements[index].containsTag = false;
+                        break;
+                    }
                 }
+
             } else {
-                elements[index].containsElement = false;
+                elements[index].containsTag = false;
             }
     }
+
     return elements;
 }
 

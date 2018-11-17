@@ -16,9 +16,15 @@ describe("Property Determiner", function(){
         assert.equal(propertyDeterminer.determineWhitespace({raw:'   a'}), '   ');
         assert.equal(propertyDeterminer.determineWhitespace({raw:'\t\tb'}), '\t\t');
     });
+    it("should determine indentation unit", function(){
+        assert.equal(propertyDeterminer.determineIndentationUnit({raw:'   a'}), ' ');
+        assert.equal(propertyDeterminer.determineIndentationUnit({raw:'\t\tb'}), '\t');
+        assert.equal(propertyDeterminer.determineIndentationUnit({raw:'c'}), '\t');
+    });
     it("should determine classifications", function(){
         assert.equal(propertyDeterminer.determineClassification({prefix:'@'}), 'attribute');
         assert.equal(propertyDeterminer.determineClassification({crux:'.'}), 'attribute');
+        assert.equal(propertyDeterminer.determineClassification({crux:'|'}), 'continuation');
         assert.equal(propertyDeterminer.determineClassification({raw: 'a'}), 'tag');
     });
     it("should determine prefixes", function(){
@@ -29,6 +35,7 @@ describe("Property Determiner", function(){
         assert.equal(propertyDeterminer.determineSuffix({lineType:'comment'}), null);
         assert.equal(propertyDeterminer.determineSuffix({lineType:'louk',crux:'br/'}), '/');
         assert.equal(propertyDeterminer.determineSuffix({lineType:'louk',crux:'a'}), null);
+        assert.equal(propertyDeterminer.determineSuffix({lineType:'louk',crux:'|"'}), '"');
     });
     it("should identify self-closing elements", function(){
         assert.equal(propertyDeterminer.determineSelfClosing({suffix:'/'}), true);
@@ -45,12 +52,15 @@ describe("Property Determiner", function(){
         assert.equal(propertyDeterminer.determineFill({crux:"a", unindented:"a"}), null);
         assert.equal(propertyDeterminer.determineFill({crux:"a", unindented:"a b"}), "b");
         assert.equal(propertyDeterminer.determineFill({crux:'"a c', unindented:'"a c'}), "c");
+        assert.equal(propertyDeterminer.determineFill({crux:'|', unindented:'| b'}), "b");
     });
     it("should determine interpretation", function(){
         assert.equal(propertyDeterminer.determineInterpretation({lineType:'comment'}), null);
         assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',classification:'tag',suffix:'"'}), "static");
         assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',crux:'.a'}), "static");
         assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',classification:'attribute',crux:'#a'}), "static");
+        assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',classification:'continuation',crux:'|'}), "dynamic");
+        assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk',classification:'continuation',crux:'|"',suffix:'"'}), "static");
         assert.equal(propertyDeterminer.determineInterpretation({lineType:'louk'}), "dynamic");
     });
     it("should determine cruxes", function(){
@@ -58,6 +68,7 @@ describe("Property Determiner", function(){
         assert.equal(propertyDeterminer.determineCrux({lineType:'louk',unindented:'.a'}), ".");
         assert.equal(propertyDeterminer.determineCrux({lineType:'louk',unindented:'a b'}), "a");
         assert.equal(propertyDeterminer.determineCrux({lineType:'louk',unindented:'c'}), "c");
+        assert.equal(propertyDeterminer.determineCrux({lineType:'louk',unindented:'| abc'}), "|");
     });
     it("should determine directive types", function(){
         assert.equal(propertyDeterminer.determineDirectiveType({lineType:'comment'}), null);
@@ -70,6 +81,7 @@ describe("Property Determiner", function(){
         assert.equal(propertyDeterminer.determineKey({lineType:'louk',crux:'.'}), "class");
         assert.equal(propertyDeterminer.determineKey({lineType:'louk',crux:'#'}), "id");
         assert.equal(propertyDeterminer.determineKey({lineType:'louk',crux:'>'}), "href");
+        assert.equal(propertyDeterminer.determineKey({lineType:'louk',crux:'|'}), "");
         assert.equal(propertyDeterminer.determineKey({lineType:'louk',crux:'a',unindented:'a'}), "a");
     });
 });

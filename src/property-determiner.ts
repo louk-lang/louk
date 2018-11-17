@@ -1,6 +1,6 @@
 import patterns from "./patterns";
 
-// Determines whether each line represents an attribute or a tag
+// Determines whether each line represents an attribute, tag, or continuation
 export function determineClassification(line) {
     if (line.crux === "#") {
         return "attribute";
@@ -16,6 +16,8 @@ export function determineClassification(line) {
         return "attribute";
     } else if (line.prefix === ":") {
         return  "attribute";
+    } else if (line.crux === "|" || line.crux === '|"') {
+        return  "continuation";
     } else {
         return  "tag";
     }
@@ -69,7 +71,10 @@ or statically (as plain HTML) */
 export function determineInterpretation(line) {
 
     if (line.lineType === "louk") {
-        if (line.classification === "tag" && line.suffix && line.suffix.match(patterns.staticSuffix)) {
+        if (
+            (line.classification === "tag" || line.classification === "continuation") &&
+            line.suffix && line.suffix.match(patterns.staticSuffix)
+        ) {
             return "static";
         } else if (line.crux && line.crux.match(patterns.staticCrux)) {
             return "static";
@@ -99,7 +104,9 @@ export function determineIndent(line) {
 export function determineCrux(line) {
 
     if (line.lineType === "louk") {
-        if (line.unindented.match(patterns.staticCrux)) {
+        if (line.unindented.match(patterns.continuationCrux)) {
+            return line.unindented.match(patterns.continuationCrux)[1];
+        } else if (line.unindented.match(patterns.staticCrux)) {
             return line.unindented.match(patterns.staticCrux)[1];
         } else if (line.unindented.match(patterns.modifiedCrux)) {
             return line.unindented.match(patterns.modifiedCrux)[1];
@@ -153,6 +160,8 @@ export function determineKey(line) {
             return "id";
         } else if (line.crux === ">") {
             return "href";
+        } else if (line.crux === "|") {
+            return "";
         } else if (line.unindented.match(patterns.key)) {
             return line.unindented.match(patterns.key)[1];
         }
@@ -168,6 +177,15 @@ export function determineLineType(line) {
         return "html";
     } else {
         return "louk";
+    }
+}
+
+export function determineIndentationUnit(line) {
+    const whitespace = line.raw.match(patterns.whitespace)[1];
+    if (whitespace.length > 0) {
+        return whitespace[0];
+    } else {
+        return "\t";
     }
 }
 

@@ -3,12 +3,12 @@ export default {
         // PREFIXES
         // Prefixes are nonalphabetic modifiers that precede the key.
 
-        // All valid prefixes: " and : and @ and -
+        // All valid prefixes: ' and : and @ and - (and previously ")
         // Shorthands like . and # are not prefixes, they are cruxes.
-        prefix: /^([":@-])/,
+        prefix: /^(['":@-])/,
 
-        // Prefixes that can make an attribute static: "
-        staticPrefix: /^(["])/,
+        // Prefixes that can make an attribute static: ' (and previously ")
+        staticPrefix: /^(['"])/,
 
         // SUFFIXES
         // Suffixes are nonalphabetic modifiers that follow the key.
@@ -55,12 +55,12 @@ export default {
         // A key is semantically what a line of Louk ultimately represents: A specific tag or a specific attribute.
         // A key might be implied or it might have a shorthand. For example, "." is a crux, and "class" is its key.
 
-        key: /^[":@-]*([\w\.-]+)/,
+        key: /^['":@-]*([\w\.-]+)/,
 
         // OTHER
 
         // Louk attribute, for use while parsing sections
-        loukLangAttribute: /"lang louk/,
+        langAttribute: /['"]lang (.*)\s?/,
 
         // Used to recognize that something is an unindented Vue section marker, HTML tag, or HTML comment
         unindentedElement: /^[\w<]/,

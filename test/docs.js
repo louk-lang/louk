@@ -31,7 +31,7 @@ describe("README", function(){
 
 describe("Documentation examples", function(){
     it("should be correct", function(){
-        assert.equal(louk('h1\ndiv\n\tbr/'),'<h1></h1>\n<div>\n\t<br /></div>');
+        assert.equal(louk('h1\ndiv\n\tbr/'),'<h1></h1>\n<div>\n\t<br />\n</div>');
         assert.equal(louk('div string'),'<div>{{string}}</div>');
         assert.equal(louk('ul\n:class focus\n\tli\n\t-for item in items'),'<ul v-bind:class="focus">\n\t<li v-for="item in items"></li>\n</ul>');
         assert.equal(louk('p" Hello world!'),'<p>Hello world!</p>');

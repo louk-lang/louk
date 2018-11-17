@@ -22,7 +22,8 @@ describe("Patterns", function(){
     });
     it("should match a static prefix", function(){
         assert.equal("\"abc".match(patterns.staticPrefix)[1], "\"");
-        assert.equal("\'abc".match(patterns.staticPrefix), null);
+        assert.equal("\'abc".match(patterns.staticPrefix)[1], "\'");
+        assert.equal("\&abc".match(patterns.staticPrefix), null);
     });
     it("should match a suffix", function(){
         assert.equal("abc/".match(patterns.suffix)[1], "/");
@@ -64,9 +65,9 @@ describe("Patterns", function(){
         assert.equal(":abc".match(patterns.key)[0], ":abc");
         assert.equal("&abc".match(patterns.key), null);
     });
-    it("should match a Louk language attribute", function(){
-        assert.equal("\"lang louk".match(patterns.loukLangAttribute)[0], "\"lang louk");
-        assert.equal("\"lang stylus".match(patterns.loukLangAttribute), null);
+    it("should match language attributes", function(){
+        assert.equal("\'lang louk".match(patterns.langAttribute)[0], "\'lang louk");
+        assert.equal("\'lang stylus".match(patterns.langAttribute)[0], "\'lang stylus");
     });
     it("should match an unindented element", function(){
         assert.equal("a".match(patterns.unindentedElement)[0], "a");

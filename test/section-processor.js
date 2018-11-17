@@ -14,7 +14,7 @@ describe("Section Processor", function(){
         assert.equal(sectionProcessor.findSections(["template,"])[0].isLouk, true);
     });
     it("should find a section marker attribute", function(){
-        assert.equal(sectionProcessor.findSections(["layout,",'"lang louk'])[0].isLouk, true);
+        assert.equal(sectionProcessor.findSections(["layout,",'\'lang louk'])[0].isLouk, true);
     });
     it("should identify a non-louk section", function(){
         assert.equal(sectionProcessor.findSections(["script,"])[0].isLouk, false);

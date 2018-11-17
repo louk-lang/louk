@@ -54,37 +54,47 @@ export function generateHTML(elements, options) {
                 html = html + element.key;
 
                 // Loop over all of the element's attributes
-                Object.keys(element.attributes).forEach((key) => {
+                if (element.attributes) {
+                    Object.keys(element.attributes).forEach((key) => {
 
-                    const attributeInfo = element.attributes[key];
-                    let attribute = "";
+                        const attributeInfo = element.attributes[key];
+                        let attribute = "";
 
-                    // If the attribute should be interpretted dynamically...
-                    if (attributeInfo.interpretation === "dynamic") {
-                        if (attributeInfo.directiveType === "simple") {
-                            attribute = "v-" + key;
-                        } else if (attributeInfo.directiveType === "action") {
-                            attribute = "v-on:" + key;
-                        } else if (attributeInfo.directiveType === "bind") {
-                            attribute = "v-bind:" + key;
+                        // If the attribute should be interpretted dynamically...
+                        if (attributeInfo.interpretation === "dynamic") {
+                            if (attributeInfo.directiveType === "simple") {
+                                attribute = "v-" + key;
+                            } else if (attributeInfo.directiveType === "action") {
+                                attribute = "v-on:" + key;
+                            } else if (attributeInfo.directiveType === "bind") {
+                                attribute = "v-bind:" + key;
+                            }
+                        } else if (attributeInfo.interpretation === "static") {
+                            attribute = key;
                         }
-                    } else if (attributeInfo.interpretation === "static") {
-                        attribute = key;
-                    }
 
-                    // Put the above defined attribute and value into the HTML
-                    html = html + " " + attribute;
+                        // Put the above defined attribute and value into the HTML
+                        html = html + " " + attribute;
 
-                    // If the attribute is boolean, no explicit value is needed
-                    if (attributeInfo.data) {
-                        html = html + "=\"" + attributeInfo.data + "\"";
-                    }
-                });
+                        // If the attribute is boolean, no explicit value is needed
+                        if (attributeInfo.data) {
+                            html = html + "=\"" + attributeInfo.data + "\"";
+                        }
+                    });
+                }
 
+                // If the element is self-closing, add a closing slash
                 if (element.selfClosing) {
                     html = html + " /";
                 }
+
                 html = html + ">";
+
+                /* If the element is self closing, and we're keeping whitespace, and it's not the last element,
+                then add a new line */
+                if (element.selfClosing && keepWhitespace && index < (elements.length - 1)) {
+                    html = html +  "\n";
+                }
 
                 // If there's body content...
                 if (element.fill) {

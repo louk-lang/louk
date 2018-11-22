@@ -28,7 +28,7 @@
         "mocha": "^5.2.0",
         "nyc": "^13.1.0",
         "stryker-javascript-mutator": "^0.11.4",
-        "stryker": "^0.32.0",
+        "stryker": "^0.32.1",
         "stryker-api": "^0.21.5",
         "stryker-html-reporter": "^0.16.7",
         "stryker-mocha-framework": "^0.12.5",

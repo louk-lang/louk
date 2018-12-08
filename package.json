@@ -34,7 +34,7 @@
         "stryker-mocha-framework": "^0.13.2",
         "stryker-mocha-runner": "^0.15.0",
         "stryker-typescript": "^0.16.1",
-        "typescript": "^3.2.1"
+        "typescript": "^3.2.2"
     },
     "repository": {
         "type": "git",

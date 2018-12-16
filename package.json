@@ -1,48 +1,41 @@
 {
-    "name": "louk",
-    "version": "2.0.3",
-    "description": "Vue without the HTML",
-    "main": "dist/index.js",
-    "scripts": {
-        "test": "nyc gulp test",
-        "build": "gulp build",
-        "watch": "gulp watch"
-    },
-    "homepage": "https://louk-lang.org",
-    "keywords": [
-        "vue"
-    ],
-    "author": "Alex Gorischek",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/louk-lang/louk/issues"
-    },
-    "dependencies": {},
-    "devDependencies": {
-        "@types/underscore": "^1.8.9",
-        "chai": "^4.2.0",
-        "gulp": "^4.0.0",
-        "gulp-mocha": "^6.0.0",
-        "gulp-typescript": "^5.0.0",
-        "markunit": "^1.0.0",
-        "mocha": "^5.2.0",
-        "nyc": "^13.1.0",
-        "stryker-javascript-mutator": "^0.12.1",
-        "stryker": "^0.33.1",
-        "stryker-api": "^0.22.0",
-        "stryker-html-reporter": "^0.16.9",
-        "stryker-mocha-framework": "^0.13.2",
-        "stryker-mocha-runner": "^0.15.2",
-        "stryker-typescript": "^0.16.1",
-        "typescript": "^3.2.2"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/louk-lang/louk.git"
-    },
-    "nyc": {
-        "include": [
-            "dist/**/*.js"
-        ]
-    }
+  "name": "louk",
+  "version": "2.0.4",
+  "description": "Vue without the HTML",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "nyc gulp test",
+    "build": "gulp build",
+    "watch": "gulp watch"
+  },
+  "homepage": "https://louk-lang.org",
+  "keywords": [
+    "vue"
+  ],
+  "author": "Alex Gorischek",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/louk-lang/louk/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/underscore": "^1.8.9",
+    "chai": "^4.2.0",
+    "gulp": "^4.0.0",
+    "gulp-mocha": "^6.0.0",
+    "gulp-typescript": "^5.0.0",
+    "markunit": "^1.0.0",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "typescript": "^3.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/louk-lang/louk.git"
+  },
+  "nyc": {
+    "include": [
+      "dist/**/*.js"
+    ]
+  }
 }

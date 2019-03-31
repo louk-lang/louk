@@ -1,6 +1,6 @@
 {
   "name": "louk",
-  "version": "2.0.4",
+  "version": "2.0.6",
   "description": "Vue without the HTML",
   "main": "dist/index.js",
   "scripts": {
@@ -17,16 +17,18 @@
   "bugs": {
     "url": "https://github.com/louk-lang/louk/issues"
   },
-  "dependencies": {},
+  "dependencies": {
+    "vue-template-compiler": "^2.5.22"
+  },
   "devDependencies": {
     "@types/underscore": "^1.8.9",
     "chai": "^4.2.0",
     "gulp": "^4.0.0",
     "gulp-mocha": "^6.0.0",
     "gulp-typescript": "^5.0.0",
-    "markunit": "^1.0.0",
+    "markunit": "^1.0.1",
     "mocha": "^5.2.0",
-    "nyc": "^13.1.0",
+    "nyc": "^13.3.0",
     "typescript": "^3.2.2"
   },
   "repository": {

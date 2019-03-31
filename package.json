@@ -21,15 +21,11 @@
     "vue-template-compiler": "^2.5.22"
   },
   "devDependencies": {
-    "@types/underscore": "^1.8.9",
+    "@types/underscore": "^1.8.13",
     "chai": "^4.2.0",
     "gulp": "^4.0.0",
     "gulp-mocha": "^6.0.0",
-    "gulp-typescript": "^5.0.0",
-    "markunit": "^1.0.1",
-    "mocha": "^5.2.0",
-    "nyc": "^13.3.0",
-    "typescript": "^3.2.2"
+    "markunit": "^1.0.1"
   },
   "repository": {
     "type": "git",

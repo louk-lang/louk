@@ -1,9 +1,10 @@
 <img width="90" src="img/logo.png" alt="Louk logo" />
 
 # Louk
+
 _Vue without the HTML_
 
-[![Build Status](https://img.shields.io/travis/louk-lang/louk.svg?branch=master&style=flat-square)](https://travis-ci.org/louk-lang/louk)
+[![Build Status](https://img.shields.io/travis/com/louk-lang/louk.svg?branch=master&style=flat-square)](https://travis-ci.com/louk-lang/louk)
 [![Codecov](https://img.shields.io/codecov/c/github/louk-lang/louk.svg?style=flat-square)](https://codecov.io/gh/louk-lang/louk)
 [![Depfu](https://img.shields.io/depfu/louk-lang/louk.svg?style=flat-square)](https://depfu.com/repos/louk-lang/louk)
 [![Known Vulnerabilities](https://snyk.io/test/github/louk-lang/louk/badge.svg?targetFile=package.json&style=flat-square)](https://snyk.io/test/github/louk-lang/louk?targetFile=package.json)
@@ -28,7 +29,6 @@ npm install -D louk louk-loader
 
 To get syntax highlighting, install the editor extension for [Atom](http://atom.io/packages/language-louk), [Sublime](https://packagecontrol.io/packages/Louk), or [VS Code](https://marketplace.visualstudio.com/items?itemName=louk-lang.louk).
 
-
 ## Notation
 
 All notation examples show Louk input followed by HTML output.
@@ -42,11 +42,10 @@ h1
 div
     br/
 ```
+
 ```html
 <h1></h1>
-<div>
-    <br />
-</div>
+<div><br /></div>
 ```
 
 Element content follows the tag on the same line, separated by a space. Content is interpreted as dynamic by default.
@@ -54,6 +53,7 @@ Element content follows the tag on the same line, separated by a space. Content 
 ```louk
 div string
 ```
+
 ```html
 <div>{{string}}</div>
 ```
@@ -68,9 +68,10 @@ ul
     li
     -for item in items
 ```
+
 ```html
 <ul v-bind:class="focus">
-    <li v-for="item in items"></li>
+  <li v-for="item in items"></li>
 </ul>
 ```
 
@@ -82,7 +83,6 @@ Simple directives are denoted by a leading hyphen.
 
 `-model` becomes `v-model`
 
-
 Binding directives are denoted by a leading colon.
 
 `:id` becomes `v-bind:id`
@@ -91,7 +91,6 @@ Binding directives are denoted by a leading colon.
 
 `:href` becomes `v-bind:href`
 
-
 Action directives are denoted by a leading at sign.
 
 `@click` becomes `v-on:click`
@@ -99,7 +98,6 @@ Action directives are denoted by a leading at sign.
 `@submit` becomes `v-on:submit`
 
 `@keyup.enter` becomes `v-on:keyup.enter`
-
 
 ### Escaping & Statics
 
@@ -128,6 +126,7 @@ div a
 .xyz
 | b
 ```
+
 ```html
 <div class="xyz">{{a}}{{b}}</div>
 ```
@@ -139,12 +138,9 @@ div a
     span b
 | c
 ```
+
 ```html
-<div>
-    {{a}}
-    <span>{{b}}</span>
-    {{c}}
-</div>
+<div>{{a}} <span>{{b}}</span> {{c}}</div>
 ```
 
 Multiline content can be made static by following the vertical pipe with a double quote mark (`|"`).
@@ -161,15 +157,16 @@ script,
 style,
     /* Style goes here */
 ```
+
 ```html
 <template>
-    <!-- Template goes here -->
+  <!-- Template goes here -->
 </template>
 <script>
-    // Script goes here
+  // Script goes here
 </script>
 <style>
-    /* Style goes here */
+  /* Style goes here */
 </style>
 ```
 
@@ -182,9 +179,11 @@ div save
 //Triggers dialog
 @click confirm
 ```
+
 ```html
 <div v-on:click="confirm">{{save}}</div>
 ```
+
 Raw HTML will be passed through unmodified. Louk notation can be included on new lines between HTML tags.
 
 ```louk
@@ -194,23 +193,26 @@ Raw HTML will be passed through unmodified. Louk notation can be included on new
     #title
 </div>
 ```
+
 ```html
 <div>
-    <!-- A comment -->
-    <h1 id="title">{{title}}</h1>
+  <!-- A comment -->
+  <h1 id="title">{{title}}</h1>
 </div>
 ```
 
 ## Options
 
 Indentation and newlines are kept by default, but can be removed with the `whitespace` option.
+
 ```js
-louk(content, {whitespace: false})
+louk(content, { whitespace: false });
 ```
 
 Sections can be assigned default `lang` attributes. Setting these explicitly in the component will override defaults.
+
 ```js
-louk(content, {langs: {style: "stylus"}})
+louk(content, { langs: { style: "stylus" } });
 ```
 
 ## Example
@@ -242,25 +244,26 @@ style,
         background-color: blue;
     }
 ```
+
 ```html
 <template>
-    <div id="main">
-        <button v-on:click="greet">{{string}}</button>
-    </div>
+  <div id="main"><button v-on:click="greet">{{string}}</button></div>
 </template>
 <script lang="ts">
-    export default {
-      methods:{
-          greet: function(){alert('Hello!')}
-      },
-      data: function(){
-        return {string: 'Greet'}
+  export default {
+    methods: {
+      greet: function() {
+        alert("Hello!");
       }
+    },
+    data: function() {
+      return { string: "Greet" };
     }
+  };
 </script>
 <style scoped>
-    button{
-        background-color: blue;
-    }
+  button {
+    background-color: blue;
+  }
 </style>
 ```

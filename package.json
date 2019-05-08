@@ -21,7 +21,7 @@
   "devDependencies": {
     "@types/underscore": "^1.8.14",
     "chai": "^4.2.0",
-    "gulp": "^4.0.0",
+    "gulp": "^4.0.2",
     "gulp-mocha": "^6.0.0",
     "gulp-typescript": "^5.0.1",
     "markunit": "^1.0.1",

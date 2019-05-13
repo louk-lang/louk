@@ -21,13 +21,13 @@
   "devDependencies": {
     "@types/underscore": "^1.8.14",
     "chai": "^4.2.0",
-    "gulp": "^4.0.0",
+    "gulp": "^4.0.2",
     "gulp-mocha": "^6.0.0",
     "gulp-typescript": "^5.0.1",
-    "markunit": "^1.0.1",
+    "markunit": "^1.0.2",
     "mocha": "^6.1.4",
     "nyc": "^13.3.0",
-    "typescript": "^3.4.4"
+    "typescript": "^3.4.5"
   },
   "repository": {
     "type": "git",

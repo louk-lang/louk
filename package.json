@@ -1,6 +1,6 @@
 {
   "name": "louk",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "Vue without the HTML",
   "main": "dist/index.js",
   "scripts": {
@@ -25,8 +25,8 @@
     "gulp-mocha": "^6.0.0",
     "gulp-typescript": "^5.0.1",
     "markunit": "^1.0.1",
-    "mocha": "^6.1.3",
-    "nyc": "^13.3.0",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
     "typescript": "^3.4.3"
   },
   "repository": {

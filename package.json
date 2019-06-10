@@ -27,7 +27,7 @@
     "markunit": "^1.0.2",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
-    "typescript": "^3.4.5"
+    "typescript": "^3.5.1"
   },
   "repository": {
     "type": "git",

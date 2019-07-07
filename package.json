@@ -1,6 +1,6 @@
 {
   "name": "louk",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "Vue without the HTML",
   "main": "dist/index.js",
   "scripts": {
@@ -19,7 +19,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/underscore": "^1.8.14",
+    "@types/underscore": "^1.9.2",
     "chai": "^4.2.0",
     "gulp": "^4.0.0",
     "gulp-mocha": "^6.0.0",
@@ -27,7 +27,7 @@
     "markunit": "^1.0.1",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
-    "typescript": "^3.4.3"
+    "typescript": "^3.5.2"
   },
   "repository": {
     "type": "git",

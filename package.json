@@ -1,12 +1,13 @@
 {
   "name": "louk",
-  "version": "2.0.10",
+  "version": "2.0.11",
   "description": "Vue without the HTML",
   "main": "dist/index.js",
   "scripts": {
     "test": "nyc gulp test",
     "build": "gulp build",
-    "watch": "gulp watch"
+    "watch": "gulp watch",
+    "dep-up": "ncu -u && npm i && npm audit fix --force && npm test"
   },
   "homepage": "https://louk-lang.org",
   "keywords": [
@@ -17,17 +18,17 @@
   "bugs": {
     "url": "https://github.com/louk-lang/louk/issues"
   },
-  "dependencies": {},
   "devDependencies": {
     "@types/underscore": "^1.9.2",
     "chai": "^4.2.0",
     "gulp": "^4.0.2",
-    "gulp-mocha": "^6.0.0",
+    "gulp-mocha": "^7.0.1",
     "gulp-typescript": "^5.0.1",
     "markunit": "^1.0.2",
-    "mocha": "^6.1.4",
+    "mocha": "^6.2.0",
+    "npm-check-updates": "^3.1.21",
     "nyc": "^14.1.1",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.2"
   },
   "repository": {
     "type": "git",

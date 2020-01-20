@@ -28,7 +28,7 @@
     "mocha": "^6.2.2",
     "npm-check-updates": "^3.2.2",
     "nyc": "^14.1.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.5"
   },
   "repository": {
     "type": "git",

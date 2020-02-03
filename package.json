@@ -24,7 +24,7 @@
     "gulp": "^4.0.2",
     "gulp-mocha": "^7.0.2",
     "gulp-typescript": "^5.0.1",
-    "markunit": "^1.0.3",
+    "markunit": "^1.0.4",
     "mocha": "^6.2.2",
     "npm-check-updates": "^3.2.2",
     "nyc": "^14.1.1",

@@ -63,3 +63,4 @@ typings/
 # Stryker
 .stryker-tmp
 reports
+.DS_Store

@@ -1,0 +1,30 @@
+trigger: none
+
+pr:
+  - master
+
+pool:
+  vmImage: "ubuntu-latest"
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "12.x"
+    displayName: "Install Node"
+
+  - task: Npm@1
+    inputs:
+      command: "ci"
+    displayName: "Install dependencies"
+
+  - task: Npm@1
+    inputs:
+      command: "custom"
+      customCommand: "build"
+    displayName: "Build"
+
+  - task: Npm@1
+    inputs:
+      command: "custom"
+      customCommand: "test"
+    displayName: "Run tests"

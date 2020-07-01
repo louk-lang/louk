@@ -4,7 +4,7 @@
 
 _Vue without the HTML_
 
-[![Build Status](https://img.shields.io/travis/com/louk-lang/louk.svg?branch=master&style=flat-square)](https://travis-ci.com/louk-lang/louk)
+[![Build Status](https://dev.azure.com/agorischek/packages/_apis/build/status/Louk/Louk%20CI?branchName=master)](https://dev.azure.com/agorischek/packages/_build?definitionScope=%5CLouk)
 [![Codecov](https://img.shields.io/codecov/c/github/louk-lang/louk.svg?style=flat-square)](https://codecov.io/gh/louk-lang/louk)
 [![Depfu](https://img.shields.io/depfu/louk-lang/louk.svg?style=flat-square)](https://depfu.com/repos/louk-lang/louk)
 [![Known Vulnerabilities](https://snyk.io/test/github/louk-lang/louk/badge.svg?targetFile=package.json&style=flat-square)](https://snyk.io/test/github/louk-lang/louk?targetFile=package.json)
@@ -252,13 +252,13 @@ style,
 <script lang="ts">
   export default {
     methods: {
-      greet: function() {
+      greet: function () {
         alert("Hello!");
-      }
+      },
     },
-    data: function() {
+    data: function () {
       return { string: "Greet" };
-    }
+    },
   };
 </script>
 <style scoped>

@@ -4,46 +4,49 @@ trigger:
 pr: none
 
 pool:
-  vmImage: "ubuntu-latest"
+  vmImage: ubuntu-latest
 
 steps:
+  - checkout: self
+    displayName: Check out repo
+
   - task: NodeTool@0
     inputs:
-      versionSpec: "12.x"
-    displayName: "Install Node"
+      versionSpec: 12.x
+    displayName: Install Node
 
   - task: Npm@1
     inputs:
-      command: "ci"
-    displayName: "Install dependencies"
+      command: ci
+    displayName: Install dependencies
 
   - task: Npm@1
     inputs:
-      command: "custom"
-      customCommand: "build"
-    displayName: "Build"
+      command: custom
+      customCommand: build
+    displayName: Build
 
   - task: Npm@1
     inputs:
-      command: "custom"
-      customCommand: "test"
-    displayName: "Run tests"
+      command: custom
+      customCommand: test
+    displayName: Run tests
 
   - script: cd $(Build.BinariesDirectory) && npm pack $(Build.Repository.LocalPath)
-    displayName: "Create package"
+    displayName: Create package
 
   - task: ArchiveFiles@2
     inputs:
-      rootFolderOrFile: "$(Build.BinariesDirectory)"
+      rootFolderOrFile: $(Build.BinariesDirectory)
       includeRootFolder: false
-      archiveType: "zip"
-      archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip"
+      archiveType: zip
+      archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       replaceExistingArchive: true
-    displayName: "Archive package"
+    displayName: Archive package
 
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip"
-      ArtifactName: "output"
-      publishLocation: "Container"
-    displayName: "Upload package"
+      PathtoPublish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      ArtifactName: output
+      publishLocation: Container
+    displayName: Upload package

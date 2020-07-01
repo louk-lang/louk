@@ -5,11 +5,11 @@
 _Vue without the HTML_
 
 [![Build Status](https://dev.azure.com/agorischek/packages/_apis/build/status/Louk/Louk%20CI?branchName=master)](https://dev.azure.com/agorischek/packages/_build?definitionScope=%5CLouk)
-[![Codecov](https://img.shields.io/codecov/c/github/louk-lang/louk.svg?style=flat-square)](https://codecov.io/gh/louk-lang/louk)
-[![Depfu](https://img.shields.io/depfu/louk-lang/louk.svg?style=flat-square)](https://depfu.com/repos/louk-lang/louk)
-[![Known Vulnerabilities](https://snyk.io/test/github/louk-lang/louk/badge.svg?targetFile=package.json&style=flat-square)](https://snyk.io/test/github/louk-lang/louk?targetFile=package.json)
-[![Version](https://img.shields.io/npm/v/louk.svg?style=flat-square)](https://www.npmjs.com/package/louk)
-[![License](https://img.shields.io/github/license/louk-lang/louk.svg?style=flat-square)](https://github.com/louk-lang/louk/blob/master/LICENSE)
+[![Codecov](https://img.shields.io/codecov/c/github/louk-lang/louk.svg)](https://codecov.io/gh/louk-lang/louk)
+[![Depfu](https://img.shields.io/depfu/louk-lang/louk.svg)](https://depfu.com/repos/louk-lang/louk)
+[![Known Vulnerabilities](https://snyk.io/test/github/louk-lang/louk/badge.svg?targetFile=package.json)](https://snyk.io/test/github/louk-lang/louk?targetFile=package.json)
+[![Version](https://img.shields.io/npm/v/louk.svg)](https://www.npmjs.com/package/louk)
+[![License](https://img.shields.io/github/license/louk-lang/louk.svg)](https://github.com/louk-lang/louk/blob/master/LICENSE)
 
 ## Intro
 

@@ -1,0 +1,59 @@
+variables:
+  - name: artifactPipelineId
+    value: 12
+    readonly: true
+
+trigger: none
+
+pr: none
+
+pool:
+  vmImage: "ubuntu-latest"
+
+steps:
+  - checkout: none
+
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "12.x"
+    displayName: "Install Node"
+
+  - task: DownloadBuildArtifacts@0
+    inputs:
+      buildType: "specific"
+      project: "e4d45739-24d8-450c-b29b-8eef684c3f17"
+      pipeline: "${{variables.artifactPipelineId}}"
+      buildVersionToDownload: "latestFromBranch"
+      branchName: "refs/heads/master"
+      downloadType: "specific"
+      downloadPath: "$(System.ArtifactsDirectory)"
+    displayName: "Download build output"
+
+  - task: ExtractFiles@1
+    inputs:
+      archiveFilePatterns: "$(System.ArtifactsDirectory)/output/*.zip"
+      destinationFolder: "$(System.ArtifactsDirectory)/extracted"
+      cleanDestinationFolder: true
+    displayName: "Extract build output"
+
+  - task: ExtractFiles@1
+    inputs:
+      archiveFilePatterns: "$(System.ArtifactsDirectory)/extracted/*.tgz"
+      destinationFolder: "$(System.ArtifactsDirectory)/unpacked"
+      cleanDestinationFolder: true
+    displayName: "Unpack build output"
+
+  - script: |
+      cd $(System.ArtifactsDirectory)/unpacked/package
+      echo "Package contents:"
+      dir
+      echo "Packge details:"
+      cat package.json
+    displayName: "Print package info"
+
+  - task: Npm@1
+    inputs:
+      command: "publish"
+      workingDir: "$(System.ArtifactsDirectory)/unpacked/package"
+      publishEndpoint: npm
+    displayName: "Publish to npm"

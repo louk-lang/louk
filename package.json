@@ -19,16 +19,16 @@
     "url": "https://github.com/louk-lang/louk/issues"
   },
   "devDependencies": {
-    "@types/underscore": "^1.9.4",
+    "@types/underscore": "^1.10.2",
     "chai": "^4.2.0",
     "gulp": "^4.0.2",
     "gulp-mocha": "^7.0.2",
     "gulp-typescript": "^5.0.1",
     "markunit": "^1.0.4",
-    "mocha": "^6.2.2",
-    "npm-check-updates": "^3.2.2",
-    "nyc": "^14.1.1",
-    "typescript": "^3.7.5"
+    "mocha": "^8.0.1",
+    "npm-check-updates": "^7.0.1",
+    "nyc": "^15.1.0",
+    "typescript": "^3.9.6"
   },
   "repository": {
     "type": "git",

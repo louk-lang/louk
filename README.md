@@ -4,7 +4,7 @@
 
 _Vue without the HTML_
 
-[![Build Status](https://dev.azure.com/agorischek/packages/_apis/build/status/Louk/Louk%20CI?branchName=master)](https://dev.azure.com/agorischek/packages/_build?definitionScope=%5CLouk)
+[![Build Status](https://dev.azure.com/agorischek/packages/_apis/build/status/Louk/Louk%20CI?branchName=master)](https://dev.azure.com/louk-lang/louk-packages/_build?definitionScope=%5CLouk)
 [![Codecov](https://img.shields.io/codecov/c/github/louk-lang/louk.svg)](https://codecov.io/gh/louk-lang/louk)
 [![Depfu](https://img.shields.io/depfu/louk-lang/louk.svg)](https://depfu.com/repos/louk-lang/louk)
 [![Known Vulnerabilities](https://snyk.io/test/github/louk-lang/louk/badge.svg?targetFile=package.json)](https://snyk.io/test/github/louk-lang/louk?targetFile=package.json)

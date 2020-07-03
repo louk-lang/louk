@@ -1,6 +1,6 @@
 variables:
   - name: artifactPipelineId
-    value: 12
+    value: 3
     readonly: true
 
 trigger: none
@@ -21,7 +21,7 @@ steps:
   - task: DownloadBuildArtifacts@0
     inputs:
       buildType: specific
-      project: e4d45739-24d8-450c-b29b-8eef684c3f17
+      project: fd8c7c84-cd77-4296-b4ef-bbfbf354ee1b
       pipeline: ${{variables.artifactPipelineId}}
       buildVersionToDownload: latestFromBranch
       branchName: refs/heads/master

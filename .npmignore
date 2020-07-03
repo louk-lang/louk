@@ -71,3 +71,6 @@ stryker.conf.js
 tsconfig.json
 tslint.json
 wallaby.js
+pipelines/
+src/
+test/
